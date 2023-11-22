@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gifty/presentation/welcome_screen/onboarding_screen.dart';
 import 'presentation/splash_screen/splash_screen.dart';
 
 void main() {
@@ -13,7 +14,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/splash', // Initial route can be your splash screen
       routes: {
         '/splash': (context) => SplashScreen(),
-        // Add other routes here
+        '/onboarding': (context) => OnBoardingScreen(),
+
       },
     );
   }
