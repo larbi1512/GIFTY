@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gifty/config/font.config.dart';
+import 'package:gifty/presentation/welcome_screen/onboarding_screen.dart';
 import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
 
@@ -19,6 +21,28 @@ class _SplashScreenState extends State<SplashScreen>
       duration: Duration(seconds: 2),
     );
     _fadeController.forward();
+    _fadeController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+      Navigator.of(context).pushReplacement(
+          PageRouteBuilder(
+            pageBuilder: (_, __, ___) => OnBoardingScreen(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              const begin = Offset(0.0, 0.5); 
+              const end = Offset.zero;
+              const curve = Curves.easeInOut;
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+              var offsetAnimation = animation.drive(tween);
+              return SlideTransition(
+                position: offsetAnimation,
+                child: child,
+              );
+            },
+          ),
+        );
+      }
+    });
   }
 
   @override
@@ -35,10 +59,14 @@ class _SplashScreenState extends State<SplashScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
+                    Hero(
+                      tag: 'logoHero',
+                    child: Image.asset(
                       Assets.images.logoWhite,
                       height: 150,
                       width: 150,
+                      //Add a tag
+                    ),
                     ),
                   ],
                 ),
@@ -50,12 +78,10 @@ class _SplashScreenState extends State<SplashScreen>
               left: 0,
               right: 0,
               child: Center(
-                child: Text(
-                  'Copyright Gifty. All rights reserved',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
+                child: 
+                Text(
+                  ' © Copyright Gifty. All rights reserved',
+                  style: AppTextStyles.CopyRightText,
                 ),
               ),
             ),
