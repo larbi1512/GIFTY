@@ -20,6 +20,7 @@ class AppTextStyles {
       fontWeight: FontWeight.normal,
       color: Color.fromARGB(255, 41, 50, 54));
 
+
   static TextStyle get title => _title;
   static TextStyle get subtitle => _subtitle;
   static TextStyle get text => _text;
