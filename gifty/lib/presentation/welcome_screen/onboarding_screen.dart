@@ -127,7 +127,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>  with TickerProvide
                   margin: EdgeInsets.only(top: 20, bottom: 20),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/login');
+                      Navigator.pushNamed(context, '/home');
                     },
                     child: Text('Login',
                       style: AppTextStyles.ButtonText,
