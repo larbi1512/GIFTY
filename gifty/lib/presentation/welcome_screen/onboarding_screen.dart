@@ -124,12 +124,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>  with TickerProvide
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 20, bottom: 20),
+                  margin: const EdgeInsets.only(top: 20, bottom: 20),
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/home');
                     },
-                    child: Text('Login',
+                    child:  Text('Login',
                       style: AppTextStyles.ButtonText,
                       textAlign: TextAlign.center),
                     style: ElevatedButton.styleFrom(

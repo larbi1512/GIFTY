@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gifty/presentation/home/SeeMore.dart';
 import 'package:gifty/presentation/home/homeWidgets.dart';
 
 void main() => runApp(Home());
@@ -24,12 +25,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
-
+  
   final List<Widget> _tabs = [
     HomeScreen(),
     SearchScreen(),
     FavoritesScreen(),
     ProfileScreen(),
+    SeeMore(seeMoreImagePaths:  const [
+                'assets/images/flower.jpeg',
+                'assets/images/flower.jpeg',
+                'assets/images/flower.jpeg',
+                'assets/images/flower.jpeg',
+                // Add more image paths as needed
+              ]),
   ];
 
   @override

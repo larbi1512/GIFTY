@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gifty/presentation/home/SeeMore.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -75,6 +76,7 @@ class _SearchBarAppState extends State<SearchBarApp> {
             onPressed: () => _searchController.clear(),
           ),
           prefixIcon: Container(
+            margin: EdgeInsets.only(right: 15.0),
             height: 50,
             width: 65,
             decoration: const BoxDecoration(
@@ -151,7 +153,51 @@ class _SearchBarAppState extends State<SearchBarApp> {
             },
           ),
         ),
-        SizedBox(height: 20.0,)
+        Align(
+            alignment: Alignment.centerRight,
+              child: ElevatedButton(
+                    onPressed:  () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>  SeeMore(seeMoreImagePaths: const [
+                                    'assets/images/pic.jpg',
+                                    'assets/images/pic.jpg',
+                                    'assets/images/pic.jpg',
+                                    'assets/images/pic.jpg',
+                                    'assets/images/pic.jpg',
+                                    'assets/images/pic.jpg',
+                                    'assets/images/pic.jpg',
+                                    'assets/images/pic.jpg',
+                                    'assets/images/pic.jpg',
+                                    'assets/images/pic.jpg',
+                                    'assets/images/pic.jpg',
+                                    'assets/images/pic.jpg',
+                                    'assets/images/pic.jpg',
+                                    'assets/images/pic.jpg',
+                                  ])),
+                      );
+                    },
+                     style: ElevatedButton.styleFrom(
+                     primary: Colors.transparent, // Background color
+                     elevation: 0, // Elevation
+                     shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0), // Radius
+                      ),
+                    ),
+                    child:  const Text('See more',
+                    style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Luxembourg',
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                    decoration: TextDecoration.underline,
+                    ),
+                      textAlign: TextAlign.center),
+                     
+                  ),
+            
+           ),
+        SizedBox(height: 20.0),
       ],
     );
   }
