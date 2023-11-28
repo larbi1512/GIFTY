@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gifty/config/assets.config.dart';
 import 'package:gifty/config/colors.config.dart';
 import 'package:gifty/config/font.config.dart';
-import 'package:gifty/presentation/welcome_screen/intro_page_1.dart';
-import 'package:gifty/presentation/welcome_screen/intro_page_2.dart';
-import 'package:gifty/presentation/welcome_screen/intro_page_3.dart';
+import 'package:gifty/presentation/onboarding_screen/intro_page_1.dart';
+import 'package:gifty/presentation/onboarding_screen/intro_page_2.dart';
+import 'package:gifty/presentation/onboarding_screen/intro_page_3.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoardingScreen extends StatefulWidget {
