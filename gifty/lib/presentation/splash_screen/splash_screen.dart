@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gifty/config/font.config.dart';
-import 'package:gifty/presentation/welcome_screen/onboarding_screen.dart';
+import 'package:gifty/presentation/onboarding_screen/onboarding_screen.dart';
 import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
+
 
 class SplashScreen extends StatefulWidget {
   @override

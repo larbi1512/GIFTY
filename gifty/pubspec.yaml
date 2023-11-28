@@ -88,7 +88,7 @@ flutter:
         - asset: fonts/Louis George Cafe.ttf
           weight: 700
 
-    - family: Luxemborg
+    - family: Luxembourg
       fonts:
         - asset: fonts/Luxembourg_1910.ttf
           
