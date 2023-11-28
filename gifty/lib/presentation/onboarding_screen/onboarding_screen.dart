@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gifty/config/assets.config.dart';
 import 'package:gifty/config/colors.config.dart';
 import 'package:gifty/config/font.config.dart';
-import 'package:gifty/presentation/welcome_screen/intro_page_1.dart';
-import 'package:gifty/presentation/welcome_screen/intro_page_2.dart';
-import 'package:gifty/presentation/welcome_screen/intro_page_3.dart';
+import 'package:gifty/presentation/onboarding_screen/intro_page_1.dart';
+import 'package:gifty/presentation/onboarding_screen/intro_page_2.dart';
+import 'package:gifty/presentation/onboarding_screen/intro_page_3.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -124,12 +124,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>  with TickerProvide
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 20, bottom: 20),
+                  margin: const EdgeInsets.only(top: 20, bottom: 20),
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/login');
                     },
-                    child: Text('Login',
+                    child:  Text('Login',
                       style: AppTextStyles.ButtonText,
                       textAlign: TextAlign.center),
                     style: ElevatedButton.styleFrom(

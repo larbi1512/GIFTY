@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gifty/presentation/auth/login/login_screen.dart';
+import 'package:gifty/presentation/onboarding_screen/onboarding_screen.dart';
 import 'presentation/card_screen/card_screen.dart';
 import 'presentation/providers_list/providers_list_screen.dart';
-import 'package:gifty/presentation/welcome_screen/onboarding_screen.dart';
 import 'presentation/splash_screen/splash_screen.dart';
+import 'package:gifty/presentation/home/homeScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,8 +21,9 @@ class MyApp extends StatelessWidget {
         '/splash': (context) => SplashScreen(),
         '/card': (context) => CardScreen(),
         '/providers': (context) => ProvidersList(),
-        // Add other routes here
+        '/home': (context) => Home(),
         '/onboarding': (context) => OnBoardingScreen(),
+        '/login': (context) => LoginScreen(),
       },
     );
   }
