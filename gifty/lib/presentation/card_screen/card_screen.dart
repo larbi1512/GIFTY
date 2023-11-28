@@ -30,6 +30,7 @@ class _CardScreenState extends State<CardScreen> {
   @override
   Widget build(BuildContext context) {
     // mediaQueryData = MediaQuery.of(context);
+    var size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
           floatingActionButton: const GoBackButton(),
