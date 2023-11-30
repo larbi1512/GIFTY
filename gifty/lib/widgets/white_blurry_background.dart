@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:blurrycontainer/blurrycontainer.dart';
 
 class WhiteBlurryBackground extends StatelessWidget {
   final double height;
@@ -11,19 +12,14 @@ class WhiteBlurryBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: height,
-        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 17),
-        decoration: BoxDecoration(
-          color: Color.fromRGBO(255, 250, 250, 0.7),
-          borderRadius: BorderRadius.circular(20),
-          // boxShadow: [
-          //   BoxShadow(
-          //       color: Colors.white.withOpacity(0.7),
-          //       blurRadius: 20,
-          //       blurStyle: BlurStyle.inner),
-          // ],
-        ),
-        child: child);
+    return BlurryContainer(
+      blur: 3,
+      height: height,
+      elevation: 0,
+      color: Colors.white.withOpacity(0.4),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 17),
+      borderRadius: BorderRadius.circular(20),
+      child: child,
+    );
   }
 }

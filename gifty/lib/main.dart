@@ -18,8 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'My Flutter App',
-      initialRoute:
-          '/splash', // Initial route can be your splash screen
+      initialRoute: '/splash', // Initial route can be your splash screen
       routes: {
         '/splash': (context) => SplashScreen(),
         '/card': (context) => CardScreen(),
