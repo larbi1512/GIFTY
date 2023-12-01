@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gifty/presentation/cartScreen/cartPage.dart';
 import 'package:gifty/presentation/home/SeeMore.dart';
 import 'package:gifty/presentation/home/homeWidgets.dart';
 
@@ -65,7 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Color.fromRGBO(255, 242, 238, 1.0),
                 ),
                 tooltip: 'Go to the next page',
-                onPressed: () {
+                onPressed: () { Navigator.push( context , MaterialPageRoute(builder: (context) => CartPage()),);
+
                 },
               ),
           ),

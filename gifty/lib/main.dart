@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gifty/presentation/auth/login/login_screen.dart';
+import 'package:gifty/presentation/cartScreen/cartPage.dart';
 import 'package:gifty/presentation/onboarding_screen/onboarding_screen.dart';
 import 'presentation/card_screen/card_screen.dart';
 import 'presentation/providers_list/providers_list_screen.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => Home(),
         '/onboarding': (context) => OnBoardingScreen(),
         '/login': (context) => LoginScreen(),
+        '/cart' : (context) =>  CartPage(),
       },
     );
   }

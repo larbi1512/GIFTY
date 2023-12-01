@@ -47,7 +47,7 @@ class LoginScreen extends StatelessWidget {
                     style: AppTextStyles.loginText,
                   ),
                   SizedBox(height: 20),
-                  Padding(
+                  const Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: TextField(
                       
@@ -57,7 +57,7 @@ class LoginScreen extends StatelessWidget {
                         filled: true,
 
                         hintText: 'Email',
-                         border: const OutlineInputBorder(
+                         border:  OutlineInputBorder(
                             borderSide: BorderSide(color: AppColor.main),
                             borderRadius: BorderRadius.all(Radius.circular(25)),
                           ),
@@ -99,7 +99,7 @@ class LoginScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {  Navigator.pushNamed(context, '/home');},
                     child: Text('Login'),
                   ),
                   TextButton(

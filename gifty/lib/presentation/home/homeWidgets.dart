@@ -128,13 +128,13 @@ class _SearchBarAppState extends State<SearchBarApp> {
             style: const TextStyle(
             shadows: [
               Shadow(
-                color: Color.fromRGBO(0, 0, 0, 0.3), // You can change the shadow color
-                offset: Offset(1.0, 3.0), // You can change the shadow offset
-                blurRadius: 5.0, // You can change the blur radius
+                color: Color.fromRGBO(0, 0, 0, 0.3),
+                offset: Offset(1.0, 3.0),
+                blurRadius: 5.0, 
               ),
             ],
             fontSize: 24,
-            fontFamily: 'Luxembourg',
+            fontFamily: 'inter',
             fontWeight: FontWeight.w600,
             color: Color.fromRGBO(133, 88, 111, 1.0) ),
             
@@ -148,7 +148,7 @@ class _SearchBarAppState extends State<SearchBarApp> {
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: HomeItem(imagePath: imagePaths[index]),
+                child: HomeItem(imagePath: imagePaths[index] , size: 120 , border:8.0),
               );
             },
           ),
@@ -187,7 +187,7 @@ class _SearchBarAppState extends State<SearchBarApp> {
                     child:  const Text('See more',
                     style: TextStyle(
                     fontSize: 14,
-                    fontFamily: 'Luxembourg',
+                    fontFamily: 'inter',
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
                     decoration: TextDecoration.underline,
@@ -206,16 +206,20 @@ class _SearchBarAppState extends State<SearchBarApp> {
 
 class HomeItem extends StatelessWidget {
   final String imagePath;
+  final double size; 
+  final double border;
 
-  const HomeItem({required this.imagePath, Key? key}) : super(key: key);
+  const HomeItem({required this.imagePath, required this.size, required this.border, Key? key})
+      : super(key: key);
+  
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 120,
-      height: 140,
+      width: size,
+      height: size,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
+        borderRadius: BorderRadius.circular(10), // Adjust the radius as needed
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
@@ -226,7 +230,7 @@ class HomeItem extends StatelessWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(8.0), // Use the same radius as in the box decoration
+        borderRadius: BorderRadius.circular(border), // Use the same radius as in the box decoration
         child: Image.asset(
           imagePath,
           fit: BoxFit.cover,
