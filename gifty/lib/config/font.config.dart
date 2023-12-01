@@ -20,6 +20,13 @@ class AppTextStyles {
       fontWeight: FontWeight.normal,
       color: Color.fromARGB(255, 41, 50, 54));
 
+  static const TextStyle _inter_heading = TextStyle(
+    fontSize: 20,
+    fontFamily: 'Inter',
+    fontWeight: FontWeight.w500,
+    color: AppColor.main,
+  );
+
   static const TextStyle _inter_title = TextStyle(
     fontSize: 16,
     fontFamily: 'Inter',
@@ -44,6 +51,7 @@ class AppTextStyles {
   static TextStyle get title => _title;
   static TextStyle get subtitle => _subtitle;
   static TextStyle get text => _text;
+  static TextStyle get interHeading => _inter_heading;
 
   static TextStyle get CopyRightText => _text.copyWith(color: Colors.white, fontSize: 16);
   static TextStyle get Onboardingdescription => _subtitle.copyWith(color: Colors.white, fontSize: 16);
@@ -53,7 +61,6 @@ class AppTextStyles {
   static TextStyle get loginText2 => _text.copyWith(fontSize: 16, fontWeight: FontWeight.w400);
   static TextStyle get Hello => _text.copyWith(color:AppColor.main, fontWeight: FontWeight.w500);
   
-
 
   static TextStyle get interTitle => _inter_title;
   static TextStyle get interSubitle => _inter_subtitle;
