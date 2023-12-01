@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gifty/config/font.config.dart';
+import 'package:gifty/widgets/profile_image_setup.dart';
 
 import '../../../config/assets.config.dart';
-import '../../../widgets/Profile_image.dart';
+import '../../../widgets/profile_image_setup.dart';
 import '../../../widgets/background_image.dart';
 
 class signupUserfinal extends StatelessWidget {
@@ -36,7 +37,7 @@ class signupUserfinal extends StatelessWidget {
                     ),
                     SizedBox(height:40),
                     Center(
-                      child: ProfileImage(),
+                      child: ProfileImageSetup(),
                     ),
                   ],
                 ),

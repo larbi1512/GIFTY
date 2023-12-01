@@ -5,7 +5,7 @@ class ProfileImage extends StatelessWidget {
   final String imagePath;
 
   const ProfileImage({
-    required this.imagePath,
+     required this.imagePath,
   });
 
   @override
