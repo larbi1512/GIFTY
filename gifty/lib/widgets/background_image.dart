@@ -6,11 +6,17 @@ class BackgroundImage extends StatelessWidget {
   final String imagePathBottomLeft;
   final String logoPath;
   final Widget child;
+   final double logoTop;
+  final double logoLeft;
+  final double logoRight;
 
   const BackgroundImage({
     required this.imagePathTopRight,
     required this.imagePathBottomLeft,
     required this.logoPath,
+     this.logoTop = 100,
+    this.logoLeft = 0,
+    this.logoRight = 0,
     required this.child,
   });
 
@@ -37,9 +43,9 @@ class BackgroundImage extends StatelessWidget {
           alignment: Alignment(-1.2, 1.1),
         ),
         Positioned(
-          top: 100,
-          left: 0,
-          right: 0,
+         top: logoTop,
+          left: logoLeft,
+          right: logoRight,
           child: Center(
             child: Image.asset(
               logoPath,

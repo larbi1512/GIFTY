@@ -31,6 +31,7 @@ class AppTextStyles {
   static TextStyle get welcomeText => _text.copyWith(color: Colors.white, fontWeight: FontWeight.bold);
   static TextStyle get loginText => _title.copyWith(fontSize: 32, fontWeight: FontWeight.w400);
   static TextStyle get loginText2 => _text.copyWith(fontSize: 16, fontWeight: FontWeight.w400);
+  static TextStyle get Hello => _text.copyWith(color:AppColor.main, fontWeight: FontWeight.w500);
   
 
 

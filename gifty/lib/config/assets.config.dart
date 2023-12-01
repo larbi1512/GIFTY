@@ -12,5 +12,6 @@ class Images {
   String valentineBouquet = "assets/images/Valentine's bouquet with a card-bro.png";
   String flowersUpper = "assets/images/flowersupper.png";
   String flowersLower = "assets/images/flowersbottom.png";
+  String ProfilePicture = "assets/images/Profile.png";
   
 }
