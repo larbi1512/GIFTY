@@ -20,6 +20,13 @@ class AppTextStyles {
       fontWeight: FontWeight.normal,
       color: Color.fromARGB(255, 41, 50, 54));
 
+  static const TextStyle _inter_heading = TextStyle(
+    fontSize: 20,
+    fontFamily: 'Inter',
+    fontWeight: FontWeight.w500,
+    color: AppColor.main,
+  );
+
   static const TextStyle _inter_title = TextStyle(
     fontSize: 16,
     fontFamily: 'Inter',
@@ -44,6 +51,7 @@ class AppTextStyles {
   static TextStyle get title => _title;
   static TextStyle get subtitle => _subtitle;
   static TextStyle get text => _text;
+  static TextStyle get interHeading => _inter_heading;
   static TextStyle get interTitle => _inter_title;
   static TextStyle get interSubitle => _inter_subtitle;
 

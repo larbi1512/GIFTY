@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gifty/presentation/auth/login/login_screen.dart';
 import 'package:gifty/presentation/onboarding_screen/onboarding_screen.dart';
+import 'presentation/add_item_screen/add_item_screen.dart';
 import 'presentation/card_screen/card_screen.dart';
 import 'presentation/profile/provider_contact.dart';
 import 'presentation/profile/user_profile.dart';
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'My Flutter App',
-      initialRoute: '/splash', // Initial route can be your splash screen
+      initialRoute:
+          '/Add_item_screen', // Initial route can be your splash screen
       routes: {
         '/splash': (context) => SplashScreen(),
         '/card': (context) => CardScreen(),
@@ -28,6 +30,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/user_profile': (context) => UserProfile(),
         '/provider_contact': (context) => ProviderContact(),
+        '/Add_item_screen': (context) => AddItemScreen(),
       },
     );
   }
