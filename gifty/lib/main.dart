@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gifty/presentation/auth/login/login_screen.dart';
+import 'package:gifty/presentation/cartScreen/cartPage.dart';
 import 'package:gifty/presentation/auth/sign_up/finish_signup_user.dart';
 import 'package:gifty/presentation/auth/sign_up/signup1.dart';
 import 'package:gifty/presentation/auth/sign_up/signup_provider.dart';
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
         '/home': (context) => Home(),
         '/onboarding': (context) => OnBoardingScreen(),
         '/login': (context) => LoginScreen(),
+
+        '/cart' : (context) =>  CartPage(),
+
         '/signup': (context) => signup1(),
         '/signup_provider': (context) => signupProvider(),
         '/signup_user': (context) => signupUser(),
@@ -40,6 +44,7 @@ class MyApp extends StatelessWidget {
         '/user_profile': (context) => UserProfile(),
         '/provider_contact': (context) => ProviderContact(),
         '/Add_item_screen': (context) => AddItemScreen(),
+
       },
     );
   }

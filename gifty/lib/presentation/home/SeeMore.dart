@@ -72,7 +72,7 @@ class SeeMore extends StatelessWidget {
                   children: [
                     // Create HomeItem widgets using the seeMoreImagePaths
                     for (String imagePath in seeMoreImagePaths)
-                      HomeItem(imagePath: imagePath),
+                      HomeItem(imagePath: imagePath , size: 120  , border: 8.0,),
                   ],
                 ),
               ),
