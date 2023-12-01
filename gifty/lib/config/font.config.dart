@@ -52,6 +52,16 @@ class AppTextStyles {
   static TextStyle get subtitle => _subtitle;
   static TextStyle get text => _text;
   static TextStyle get interHeading => _inter_heading;
+
+  static TextStyle get CopyRightText => _text.copyWith(color: Colors.white, fontSize: 16);
+  static TextStyle get Onboardingdescription => _subtitle.copyWith(color: Colors.white, fontSize: 16);
+  static TextStyle get ButtonText => _subtitle.copyWith(color: Colors.white, fontFamily: 'Google Sans');
+  static TextStyle get welcomeText => _text.copyWith(color: Colors.white, fontWeight: FontWeight.bold);
+  static TextStyle get loginText => _title.copyWith(fontSize: 32, fontWeight: FontWeight.w400);
+  static TextStyle get loginText2 => _text.copyWith(fontSize: 16, fontWeight: FontWeight.w400);
+  static TextStyle get Hello => _text.copyWith(color:AppColor.main, fontWeight: FontWeight.w500);
+  
+
   static TextStyle get interTitle => _inter_title;
   static TextStyle get interSubitle => _inter_subtitle;
 
