@@ -4,6 +4,7 @@ import '../../config/colors.config.dart';
 import '../../config/font.config.dart';
 import '../../widgets/background_image_no_logo.dart';
 import '../../widgets/white_blurry_background.dart';
+import '../../widgets/searchPageWidgets.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -61,7 +62,19 @@ class _SearchPageState extends State<SearchPage> {
                                       fontSize: 13,
                                     ),
                                   ),
-                                  // ListView(),
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                        SearchWidget("Event type :" ,false ),
+                                        SearchWidget("Gift’s receiver :" ,false ),
+                                        SearchWidget("prefered color :" ,false ),
+                                        SearchWidget("Receiver’s age :" ,false ),
+                                        SearchWidget("Additional tags : " ,true ),
+                                      ],
+                                      ),
+                                    ),
+                                  ),
                                   SizedBox(height: 20),
                                   Align(
                                     alignment: Alignment.bottomRight,
@@ -111,7 +124,7 @@ class _SearchPageState extends State<SearchPage> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 25),
+                                  SizedBox(height: 15),
                                 ])))))));
   }
 }
