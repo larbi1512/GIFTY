@@ -3,11 +3,11 @@ import 'package:gifty/config/font.config.dart';
 import 'package:gifty/widgets/profile_image_setup.dart';
 
 import '../../../config/assets.config.dart';
-import '../../../widgets/profile_image_setup.dart';
+import '../../../config/colors.config.dart';
 import '../../../widgets/background_image.dart';
 
-class signupUserfinal extends StatelessWidget {
-  const signupUserfinal({super.key});
+class SignupUserFinal extends StatelessWidget {
+  const SignupUserFinal({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +30,53 @@ class signupUserfinal extends StatelessWidget {
                       child: Text(
                         'hello, soumia',
                         style: AppTextStyles.Hello,
-                        //add alignment
-                      
                       ),
                       alignment: Alignment.topLeft,
                     ),
-                    SizedBox(height:40),
+                    SizedBox(height: 40),
                     Center(
-                      child: ProfileImageSetup(),
+                      child: ProfileImageSetup(hintText: "Please upload a profile pic"),
                     ),
                   ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                         style: ElevatedButton.styleFrom(
+                          primary: AppColor.peachLighter,
+                          onPrimary: AppColor.mainLighter,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/home');
+                        },
+                        child: Text('Skip'),
+                      ),
+                      ElevatedButton(
+                         style: ElevatedButton.styleFrom(
+                          primary: AppColor.mainLighter,
+                          onPrimary: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/home');
+                        },
+                        child: Text('Next'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

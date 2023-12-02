@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import '../config/colors.config.dart';
+import '../../config/colors.config.dart';
 
-class WilayaField extends StatelessWidget {
+class Socialsfield extends StatelessWidget {
+  final IconData prefixIcon;
+  final String hintText;
+
+  Socialsfield({required this.prefixIcon, required this.hintText});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -10,8 +15,8 @@ class WilayaField extends StatelessWidget {
         decoration: InputDecoration(
           fillColor: Colors.white,
           filled: true,
-          prefixIcon: Icon(Icons.place_rounded, color: AppColor.main),
-          hintText: 'Wilaya',
+          prefixIcon: Icon(prefixIcon, color: AppColor.main),
+          hintText: hintText,
           border: const OutlineInputBorder(
             borderSide: BorderSide(color: AppColor.main),
             borderRadius: BorderRadius.all(Radius.circular(25)),

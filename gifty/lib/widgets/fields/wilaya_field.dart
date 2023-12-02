@@ -1,14 +1,7 @@
-
 import 'package:flutter/material.dart';
+import '../../config/colors.config.dart';
 
-import '../config/colors.config.dart';
-
-class UsernameField extends StatelessWidget {
-  final String hintText; 
-
-  UsernameField(
-      {required this.hintText}); 
-
+class WilayaField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -17,9 +10,8 @@ class UsernameField extends StatelessWidget {
         decoration: InputDecoration(
           fillColor: Colors.white,
           filled: true,
-          prefixIcon:
-              Icon(Icons.person_add_alt_1_rounded, color: AppColor.main),
-          hintText: hintText, 
+          prefixIcon: Icon(Icons.place_rounded, color: AppColor.main),
+          hintText: 'Wilaya',
           border: const OutlineInputBorder(
             borderSide: BorderSide(color: AppColor.main),
             borderRadius: BorderRadius.all(Radius.circular(25)),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gifty/config/colors.config.dart';
 import 'package:gifty/config/font.config.dart';
-import 'package:gifty/widgets/phone_number_field.dart';
-import 'package:gifty/widgets/username_field.dart';
-import 'package:gifty/widgets/wilaya_field.dart';
+import 'package:gifty/widgets/fields/phone_number_field.dart';
+import 'package:gifty/widgets/fields/username_field.dart';
+import 'package:gifty/widgets/fields/wilaya_field.dart';
 import '../../../config/assets.config.dart';
-import '../../../widgets/TagsInput.dart';
+import '../../../widgets/fields/TagsInput.dart';
 import '../../../widgets/background_image.dart';
-import '../../../widgets/categoryDropdown.dart';
+import '../../../widgets/fields/categoryDropdown.dart';
 import '../../../widgets/rounded_container.dart';
 
 class signupProvider extends StatefulWidget {
@@ -92,7 +92,7 @@ return Scaffold(
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/home');
+                        Navigator.pushReplacementNamed(context, '/finish_signup_provider');
                       },
                       child: Text('Sign up'),
                     ),

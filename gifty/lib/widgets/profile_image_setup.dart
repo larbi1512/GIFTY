@@ -6,6 +6,10 @@ import '../config/assets.config.dart';
 import '../config/colors.config.dart';
 
 class ProfileImageSetup extends StatelessWidget {
+  final String hintText;
+
+  ProfileImageSetup({required this.hintText});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -17,15 +21,15 @@ class ProfileImageSetup extends StatelessWidget {
         ),
         SizedBox(height: 20.0),
         Text(
-          "Please upload a profile picture",
+          hintText,
           style: AppTextStyles.Hello,
         ),
         SizedBox(height: 20.0),
         InkWell(
-          
           onTap: () {
-            showModalBottomSheet(context: context, 
-            builder: ((builder) => bottomSheet()),
+            showModalBottomSheet(
+              context: context,
+              builder: ((builder) => bottomSheet()),
             );
           },
           child: Container(
@@ -33,7 +37,6 @@ class ProfileImageSetup extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColor.mainLighter,
               borderRadius: BorderRadius.circular(30),
-              
             ),
             padding: EdgeInsets.all(12),
             child: Icon(
@@ -43,7 +46,6 @@ class ProfileImageSetup extends StatelessWidget {
             ),
           ),
         ),
-
       ],
     );
   }
