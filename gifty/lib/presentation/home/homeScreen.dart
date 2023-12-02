@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gifty/presentation/cartScreen/cartPage.dart';
+import 'package:gifty/presentation/wishlist/favorites.dart';
 import 'package:gifty/presentation/home/SeeMore.dart';
 import 'package:gifty/presentation/home/homeWidgets.dart';
 
@@ -146,9 +147,7 @@ class SearchScreen extends StatelessWidget {
 class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Favorites Screen'),
-    );
+    return wishList();
   }
 }
 
