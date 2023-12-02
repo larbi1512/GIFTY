@@ -1,7 +1,14 @@
-import 'package:flutter/material.dart';
-import '../config/colors.config.dart';
 
-class PhoneNumberField extends StatelessWidget {
+import 'package:flutter/material.dart';
+
+import '../../config/colors.config.dart';
+
+class UsernameField extends StatelessWidget {
+  final String hintText; 
+
+  UsernameField(
+      {required this.hintText}); 
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -10,8 +17,9 @@ class PhoneNumberField extends StatelessWidget {
         decoration: InputDecoration(
           fillColor: Colors.white,
           filled: true,
-          prefixIcon: Icon(Icons.phone_enabled_rounded, color: AppColor.main),
-          hintText: 'Phone number ',
+          prefixIcon:
+              Icon(Icons.person_add_alt_1_rounded, color: AppColor.main),
+          hintText: hintText, 
           border: const OutlineInputBorder(
             borderSide: BorderSide(color: AppColor.main),
             borderRadius: BorderRadius.all(Radius.circular(25)),

@@ -1,8 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:gifty/widgets/rounded_container.dart';
-import '../config/colors.config.dart';
+import '../../config/colors.config.dart';
 
 class CategoryDropdown extends StatelessWidget {
   final List<String> categories;
