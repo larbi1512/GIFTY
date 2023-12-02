@@ -36,6 +36,7 @@ dependencies:
   blurrycontainer: ^1.0.2
   dotted_border: 2.0.0+3
   social_media_flutter: ^0.0.2
+  get: ^4.6.6
   flutter_launcher_icons: ^0.13.1
 
 flutter_launcher_icons:

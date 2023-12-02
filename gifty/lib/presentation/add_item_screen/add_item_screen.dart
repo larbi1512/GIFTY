@@ -1,11 +1,9 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:gifty/widgets/back_button.dart';
-
 import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
-import '../../config/font.config.dart';
-import '../../widgets/bottom_navbar/provider_navbar.dart';
 import 'continue_add_screen.dart';
 
 class AddItemScreen extends StatelessWidget {
@@ -21,256 +19,225 @@ class AddItemScreen extends StatelessWidget {
         child: Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.peachLightest,
-      appBar: AppBar(
-        title: const Text(
-          'Add New Item',
-        ),
-        centerTitle: true,
-        titleTextStyle: AppTextStyles.interHeading,
-        elevation: 0,
-        backgroundColor: AppColor.peachLightest,
-        leading: Container(padding: EdgeInsets.all(8), child: GoBackButton()),
-      ),
-      body: Container(
-          width: double.maxFinite,
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: AppColor.mainLighter,
-                width: 1,
+      body: SingleChildScrollView(
+        child: Container(
+            width: double.maxFinite,
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: AppColor.mainLighter,
+                  width: 1,
+                ),
               ),
             ),
-          ),
-          child: Column(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child: SizedBox(
-                        width: size.width * 0.48,
-                        child: Divider(
-                          color: AppColor.greenMain,
-                          indent: 0,
-                          thickness: 3,
-                        ))),
-                Align(
-                    alignment: Alignment.centerRight,
-                    child: SizedBox(
-                        width: size.width * 0.48,
-                        child: Divider(
-                          color: AppColor.greenLighter,
-                          endIndent: 0,
-                          thickness: 3,
-                        ))),
-              ],
-            ),
-            SizedBox(height: 5),
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                child: DottedBorder(
-                    color: AppColor.main,
-                    padding: EdgeInsets.all(3),
-                    strokeWidth: 3,
-                    radius: Radius.circular(20),
-                    borderType: BorderType.RRect,
-                    dashPattern: [6, 6],
-                    child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 23, vertical: 23),
-                        child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                  height: 65,
-                                  width: 66,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 19, vertical: 22),
-                                  decoration: BoxDecoration(
-                                      color: AppColor.greenLighter,
-                                      borderRadius: BorderRadius.circular(37),
-                                      border: Border.all(
-                                          color: AppColor.greenMain)),
-                                  child: Container(
+            child: Column(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: SizedBox(
+                          width: size.width * 0.48,
+                          child: Divider(
+                            color: AppColor.greenMain,
+                            indent: 0,
+                            thickness: 3,
+                          ))),
+                  Align(
+                      alignment: Alignment.centerRight,
+                      child: SizedBox(
+                          width: size.width * 0.48,
+                          child: Divider(
+                            color: AppColor.greenLighter,
+                            endIndent: 0,
+                            thickness: 3,
+                          ))),
+                ],
+              ),
+              SizedBox(height: 5),
+              Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 50),
+                  child: DottedBorder(
+                      color: AppColor.main,
+                      padding: EdgeInsets.all(3),
+                      strokeWidth: 3,
+                      radius: Radius.circular(20),
+                      borderType: BorderType.RRect,
+                      dashPattern: [6, 6],
+                      child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 23, vertical: 23),
+                          child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                    height: 65,
+                                    width: 66,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 19, vertical: 22),
                                     decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(iconPicture),
-                                        fit: BoxFit.cover,
+                                        color: AppColor.greenLighter,
+                                        borderRadius: BorderRadius.circular(37),
+                                        border: Border.all(
+                                            color: AppColor.greenMain)),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage(iconPicture),
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
-                                    ),
-                                    height: 5,
-                                    width: 5,
-                                  )),
-                              SizedBox(height: 10),
-                              Text(
-                                "click to upload up to 5 images",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              )
-                            ])))),
-            SizedBox(height: 13),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: 62,
-                  width: 80,
-                  padding: EdgeInsets.all(1.5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
+                                      height: 5,
+                                      width: 5,
+                                    )),
+                                SizedBox(height: 10),
+                                Text(
+                                  "click to upload up to 5 images",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                )
+                              ])))),
+              SizedBox(height: 13),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 62,
+                    width: 80,
+                    padding: EdgeInsets.all(1.5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    child: DottedBorder(
+                        color: AppColor.main,
+                        padding: EdgeInsets.all(3),
+                        strokeWidth: 3,
+                        radius: Radius.circular(20),
+                        borderType: BorderType.RRect,
+                        dashPattern: [6, 6],
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white,
+                          ),
+                          height: 60,
+                          width: 80,
+                        )),
                   ),
-                  child: DottedBorder(
-                      color: AppColor.main,
-                      padding: EdgeInsets.all(3),
-                      strokeWidth: 3,
-                      radius: Radius.circular(20),
-                      borderType: BorderType.RRect,
-                      dashPattern: [6, 6],
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white,
-                        ),
-                        height: 60,
-                        width: 80,
-                      )),
-                ),
-                Container(
-                  height: 62,
-                  width: 80,
-                  padding: EdgeInsets.all(1.5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
+                  Container(
+                    height: 62,
+                    width: 80,
+                    padding: EdgeInsets.all(1.5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    child: DottedBorder(
+                        color: AppColor.main,
+                        padding: EdgeInsets.all(3),
+                        strokeWidth: 3,
+                        radius: Radius.circular(20),
+                        borderType: BorderType.RRect,
+                        dashPattern: [6, 6],
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white,
+                          ),
+                          height: 60,
+                          width: 80,
+                        )),
                   ),
-                  child: DottedBorder(
-                      color: AppColor.main,
-                      padding: EdgeInsets.all(3),
-                      strokeWidth: 3,
-                      radius: Radius.circular(20),
-                      borderType: BorderType.RRect,
-                      dashPattern: [6, 6],
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white,
-                        ),
-                        height: 60,
-                        width: 80,
-                      )),
-                ),
-                Container(
-                  height: 62,
-                  width: 80,
-                  padding: EdgeInsets.all(1.5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
+                  Container(
+                    height: 62,
+                    width: 80,
+                    padding: EdgeInsets.all(1.5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    child: DottedBorder(
+                        color: AppColor.main,
+                        padding: EdgeInsets.all(3),
+                        strokeWidth: 3,
+                        radius: Radius.circular(20),
+                        borderType: BorderType.RRect,
+                        dashPattern: [6, 6],
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white,
+                          ),
+                          height: 60,
+                          width: 80,
+                        )),
                   ),
-                  child: DottedBorder(
-                      color: AppColor.main,
-                      padding: EdgeInsets.all(3),
-                      strokeWidth: 3,
-                      radius: Radius.circular(20),
-                      borderType: BorderType.RRect,
-                      dashPattern: [6, 6],
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white,
-                        ),
-                        height: 60,
-                        width: 80,
-                      )),
-                ),
-                Container(
-                  height: 62,
-                  width: 80,
-                  padding: EdgeInsets.all(1.5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
+                  Container(
+                    height: 62,
+                    width: 80,
+                    padding: EdgeInsets.all(1.5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    child: DottedBorder(
+                        color: AppColor.main,
+                        padding: EdgeInsets.all(3),
+                        strokeWidth: 3,
+                        radius: Radius.circular(20),
+                        borderType: BorderType.RRect,
+                        dashPattern: [6, 6],
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white,
+                          ),
+                          height: 60,
+                          width: 80,
+                        )),
                   ),
-                  child: DottedBorder(
-                      color: AppColor.main,
-                      padding: EdgeInsets.all(3),
-                      strokeWidth: 3,
-                      radius: Radius.circular(20),
-                      borderType: BorderType.RRect,
-                      dashPattern: [6, 6],
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white,
+                ],
+              ),
+              SizedBox(height: 30),
+              _NameFormField(context),
+              SizedBox(height: 10),
+              _DescriptionFormField(context),
+              SizedBox(height: 10),
+              _PriceFormField(context),
+              SizedBox(height: 20),
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                      padding: EdgeInsets.only(left: 30),
+                      child: Text(
+                        "Add available colors",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
                         ),
-                        height: 60,
-                        width: 80,
-                      )),
-                ),
-              ],
-            ),
-            SizedBox(height: 30),
-            _NameFormField(context),
-            SizedBox(height: 10),
-            _DescriptionFormField(context),
-            SizedBox(height: 10),
-            _PriceFormField(context),
-            SizedBox(height: 20),
-            Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                    padding: EdgeInsets.only(left: 30),
-                    child: Text(
-                      "Add available colors",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ))),
-            SizedBox(height: 2),
-            Padding(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              child: DropDownColors(context),
-            ),
-            SizedBox(height: 13),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: AddButton(context),
-            ),
-          ])),
-      bottomNavigationBar: _buildBottomBar(context),
-      // BottomNavigationBar(
-      //   selectedItemColor: Color.fromRGBO(133, 88, 111, 1.0),
-      //   unselectedItemColor: Colors.black,
-      //   onTap: (int index) {},
-      //   items: const [
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home),
-      //       label: 'Home',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.search),
-      //       label: 'Search',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.favorite),
-      //       label: 'Favorites',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.person),
-      //       label: 'Profile',
-      //     ),
-      //   ],
-      // ),
+                      ))),
+              SizedBox(height: 2),
+              Padding(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: DropDownColors(context),
+              ),
+              SizedBox(height: 13),
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: AddButton(context),
+              ),
+            ])),
+      ),
+      // bottomNavigationBar: _buildBottomBar(context),
     ));
   }
 }
@@ -534,8 +501,4 @@ Widget AddButton(BuildContext context) {
       ],
     ),
   );
-}
-
-Widget _buildBottomBar(BuildContext context) {
-  return BottomNavBar(onChanged: (BottomBarEnum type) {});
 }
