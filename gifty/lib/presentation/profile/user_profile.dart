@@ -4,7 +4,6 @@ import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
 import '../../config/font.config.dart';
 import '../../widgets/background_image_no_logo.dart';
-import '../../widgets/back_button.dart';
 import '../../widgets/items_row.dart';
 import '../../widgets/profile_image.dart';
 import '../../widgets/white_blurry_background.dart';
@@ -109,8 +108,6 @@ class _UserProfileState extends State<UserProfile> {
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  GoBackButton(),
-                                  SizedBox(height: 15),
                                   Padding(
                                       padding:
                                           EdgeInsets.only(left: 6, right: 10),
@@ -192,34 +189,6 @@ class _UserProfileState extends State<UserProfile> {
                                                   ),
                                                 ))
                                           ])),
-                                      // SizedBox(height: 20),
-                                      // Align(
-                                      //   alignment: Alignment.topLeft,
-                                      //   child: Container(
-                                      //     height: 35,
-                                      //     width: 85,
-                                      //     child: ElevatedButton(
-                                      //       style: ElevatedButton.styleFrom(
-                                      //         backgroundColor:
-                                      //             AppColor.greenLighter,
-                                      //         padding:
-                                      //             const EdgeInsets.symmetric(
-                                      //                 horizontal: 5,
-                                      //                 vertical: 0),
-                                      //       ),
-                                      //       onPressed: () {},
-                                      //       child: Text(
-                                      //         "Edit",
-                                      //         style:
-                                      //             AppTextStyles.text.copyWith(
-                                      //           color: Colors.white,
-                                      //           fontSize: 12,
-                                      //           fontWeight: FontWeight.bold,
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      // ),
                                       SizedBox(height: 25),
                                     ],
                                   ),
