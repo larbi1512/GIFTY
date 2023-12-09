@@ -17,7 +17,7 @@ class WhiteBlurryBackground extends StatelessWidget {
       height: height,
       elevation: 0,
       color: Colors.white.withOpacity(0.4),
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 17),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
       borderRadius: BorderRadius.circular(20),
       child: child,
     );

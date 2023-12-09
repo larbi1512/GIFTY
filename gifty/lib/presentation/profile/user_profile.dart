@@ -7,6 +7,7 @@ import '../../widgets/background_image_no_logo.dart';
 import '../../widgets/items_row.dart';
 import '../../widgets/profile_image.dart';
 import '../../widgets/white_blurry_background.dart';
+import 'edit_profile.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
@@ -103,7 +104,7 @@ class _UserProfileState extends State<UserProfile> {
                         padding: EdgeInsets.symmetric(
                             horizontal: mediaQueryData.size.width * 0.03),
                         child: WhiteBlurryBackground(
-                            height: mediaQueryData.size.height * 0.92,
+                            height: mediaQueryData.size.height * 0.77,
                             child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,7 +255,7 @@ class _UserProfileState extends State<UserProfile> {
                                               ),
                                             ))
                                       ])),
-                                  SizedBox(height: 20),
+                                  SizedBox(height: 15),
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Container(
@@ -267,7 +268,17 @@ class _UserProfileState extends State<UserProfile> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 5, vertical: 0),
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          // editProfile();
+
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditProfile(name: User_name),
+                                            ),
+                                          );
+                                        },
                                         child: Text(
                                           "Edit",
                                           style: AppTextStyles.text.copyWith(
