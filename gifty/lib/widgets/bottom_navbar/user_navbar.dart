@@ -52,7 +52,7 @@ class _UserBottomNavBarState extends State<UserBottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 70,
+        height: 65,
         decoration: BoxDecoration(
           color: Colors.white,
         ),

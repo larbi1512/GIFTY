@@ -6,6 +6,7 @@ import 'package:gifty/widgets/back_button.dart';
 import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
 import '../../config/font.config.dart';
+import '../../widgets/searchPageWidgets.dart';
 
 class ContinueAddScreen extends StatelessWidget {
   String iconPicture = Assets.images.iconPicture;
@@ -75,6 +76,31 @@ class ContinueAddScreen extends StatelessWidget {
                           fontSize: 15,
                         ),
                       )),
+                  // Expanded(
+                  //   child: SingleChildScrollView(
+                  //     child: Column(
+                  //       children: [
+                  //         // SearchWidget("Event type :", false),
+                  //         // SearchWidget("Age :", false),
+                  //         // SearchWidget("Position :", false),
+                  //         SizedBox(height: 20),
+                  //         Align(
+                  //             alignment: Alignment.centerLeft,
+                  //             child: Padding(
+                  //                 padding: EdgeInsets.only(left: 30),
+                  //                 child: Text(
+                  //                   "Add your tags here",
+                  //                   style: TextStyle(
+                  //                     fontSize: 14,
+                  //                     fontFamily: 'Poppins',
+                  //                     fontWeight: FontWeight.w600,
+                  //                   ),
+                  //                 ))),
+                  //         SearchWidget("Additional tags : ", true),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                   Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20),
                     child: AddButton(context),
@@ -101,7 +127,7 @@ Widget AddButton(BuildContext context) {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          "Continue Add Product",
+          "Add Product",
           style: TextStyle(
             color: AppColor.peachLightest,
             fontSize: 15,

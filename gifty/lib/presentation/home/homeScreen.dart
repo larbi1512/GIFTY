@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _provider_tabs = [
     HomeScreen(),
     SearchScreen(),
-    AddItemScreen(),
+    AddItemPage(),
     FavoritesScreen(),
     ProfileScreen(),
     SeeMore(seeMoreImagePaths: const [
@@ -155,6 +155,13 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return UserProfile();
+  }
+}
+
+class AddItemPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AddItemScreen();
   }
 }
 

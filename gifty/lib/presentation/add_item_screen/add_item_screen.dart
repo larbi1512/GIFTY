@@ -4,6 +4,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
+import '../../widgets/bottomSheet.dart';
 import 'continue_add_screen.dart';
 
 class AddItemScreen extends StatelessWidget {
@@ -64,45 +65,54 @@ class AddItemScreen extends StatelessWidget {
                       radius: Radius.circular(20),
                       borderType: BorderType.RRect,
                       dashPattern: [6, 6],
-                      child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 23, vertical: 23),
-                          child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                    height: 65,
-                                    width: 66,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 19, vertical: 22),
-                                    decoration: BoxDecoration(
-                                        color: AppColor.greenLighter,
-                                        borderRadius: BorderRadius.circular(37),
-                                        border: Border.all(
-                                            color: AppColor.greenMain)),
-                                    child: Container(
+                      child: InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: ((builder) => bottomSheet()),
+                          );
+                        },
+                        child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 23, vertical: 23),
+                            child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                      height: 65,
+                                      width: 66,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 19, vertical: 22),
                                       decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage(iconPicture),
-                                          fit: BoxFit.cover,
+                                          color: AppColor.greenLighter,
+                                          borderRadius:
+                                              BorderRadius.circular(37),
+                                          border: Border.all(
+                                              color: AppColor.greenMain)),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: AssetImage(iconPicture),
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
-                                      ),
-                                      height: 5,
-                                      width: 5,
-                                    )),
-                                SizedBox(height: 10),
-                                Text(
-                                  "click to upload up to 5 images",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                )
-                              ])))),
+                                        height: 5,
+                                        width: 5,
+                                      )),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    "click to upload up to 5 images",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  )
+                                ])),
+                      ))),
               SizedBox(height: 13),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -118,18 +128,21 @@ class AddItemScreen extends StatelessWidget {
                     ),
                     child: DottedBorder(
                         color: AppColor.main,
-                        padding: EdgeInsets.all(3),
+                        padding: EdgeInsets.all(1),
                         strokeWidth: 3,
                         radius: Radius.circular(20),
                         borderType: BorderType.RRect,
                         dashPattern: [6, 6],
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
+                        child: InkWell(
+                          onTap: () {},
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white,
+                            ),
+                            height: 60,
+                            width: 80,
                           ),
-                          height: 60,
-                          width: 80,
                         )),
                   ),
                   Container(
@@ -142,18 +155,21 @@ class AddItemScreen extends StatelessWidget {
                     ),
                     child: DottedBorder(
                         color: AppColor.main,
-                        padding: EdgeInsets.all(3),
+                        padding: EdgeInsets.all(1),
                         strokeWidth: 3,
                         radius: Radius.circular(20),
                         borderType: BorderType.RRect,
                         dashPattern: [6, 6],
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
+                        child: InkWell(
+                          onTap: () {},
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white,
+                            ),
+                            height: 60,
+                            width: 80,
                           ),
-                          height: 60,
-                          width: 80,
                         )),
                   ),
                   Container(
@@ -166,18 +182,21 @@ class AddItemScreen extends StatelessWidget {
                     ),
                     child: DottedBorder(
                         color: AppColor.main,
-                        padding: EdgeInsets.all(3),
+                        padding: EdgeInsets.all(1),
                         strokeWidth: 3,
                         radius: Radius.circular(20),
                         borderType: BorderType.RRect,
                         dashPattern: [6, 6],
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
+                        child: InkWell(
+                          onTap: () {},
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white,
+                            ),
+                            height: 60,
+                            width: 80,
                           ),
-                          height: 60,
-                          width: 80,
                         )),
                   ),
                   Container(
@@ -190,18 +209,21 @@ class AddItemScreen extends StatelessWidget {
                     ),
                     child: DottedBorder(
                         color: AppColor.main,
-                        padding: EdgeInsets.all(3),
+                        padding: EdgeInsets.all(1),
                         strokeWidth: 3,
                         radius: Radius.circular(20),
                         borderType: BorderType.RRect,
                         dashPattern: [6, 6],
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
+                        child: InkWell(
+                          onTap: () {},
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white,
+                            ),
+                            height: 60,
+                            width: 80,
                           ),
-                          height: 60,
-                          width: 80,
                         )),
                   ),
                 ],
