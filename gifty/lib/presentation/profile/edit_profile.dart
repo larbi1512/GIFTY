@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gifty/widgets/back_button.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
@@ -138,6 +139,8 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   @override
+  final picker = ImagePicker();
+
   Widget build(BuildContext context) {
     var mediaQueryData = MediaQuery.of(context);
     return SafeArea(
@@ -172,7 +175,7 @@ class _EditProfileState extends State<EditProfile> {
                                           showModalBottomSheet(
                                             context: context,
                                             builder: ((builder) =>
-                                                bottomSheet()),
+                                                BottomSheetWidget(picker)),
                                           );
                                         },
                                       ),

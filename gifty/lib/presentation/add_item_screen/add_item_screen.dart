@@ -2,6 +2,7 @@
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
 import '../../widgets/bottomSheet.dart';
@@ -10,6 +11,8 @@ import 'continue_add_screen.dart';
 class AddItemScreen extends StatelessWidget {
   String iconPicture = Assets.images.iconPicture;
   String iconDropdown = Assets.images.iconDropdown;
+      final picker = ImagePicker();
+
 
   AddItemScreen({super.key});
 
@@ -69,7 +72,7 @@ class AddItemScreen extends StatelessWidget {
                         onTap: () {
                           showModalBottomSheet(
                             context: context,
-                            builder: ((builder) => bottomSheet()),
+                            builder: ((builder) => BottomSheetWidget(picker)),
                           );
                         },
                         child: Container(
