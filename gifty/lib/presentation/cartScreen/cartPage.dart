@@ -15,7 +15,7 @@ class CartPage extends StatelessWidget {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 5),
+            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -46,7 +46,7 @@ class CartPage extends StatelessWidget {
                   child: const Icon(Icons.delete),
                   style: ElevatedButton.styleFrom(
                     shape: CircleBorder(),
-                    padding: EdgeInsets.all(5),
+                    padding: EdgeInsets.all(2),
                     backgroundColor: AppColor.mainLighter,
                     foregroundColor: Color.fromRGBO(255, 242, 238, 1.0),
                   ),
@@ -74,7 +74,7 @@ class CartPage extends StatelessWidget {
           )
           ),
          Padding(
-           padding: const EdgeInsets.symmetric(horizontal: 20 , vertical: 10 ),
+           padding: const EdgeInsets.symmetric(horizontal: 20 , vertical: 5 ),
            child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

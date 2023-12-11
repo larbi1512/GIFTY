@@ -12,7 +12,7 @@ class cartWidget extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Container(
-          margin: EdgeInsets.only(left: 19, right: 19, top: 19),
+         margin: EdgeInsets.only(left: 10, right: 10, top: 19),
           decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(20))),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12 , vertical:5 ),
