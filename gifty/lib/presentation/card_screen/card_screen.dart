@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import '../../databases/DBGift.dart';
 import '/config/assets.config.dart';
 import '/config/colors.config.dart';
 import '/config/font.config.dart';
@@ -9,23 +10,23 @@ import '../../widgets/back_button.dart';
 import '../providers_list/providers_list_screen.dart';
 
 class CardScreen extends StatefulWidget {
-  final String imagePath;
-  const CardScreen({required this.imagePath , super.key});
+  final int productId;
+  const CardScreen({super.key, required this.productId});
 
   @override
-  State<CardScreen> createState() => _CardScreenState(imagePath : imagePath);
+  State<CardScreen> createState() => _CardScreenState();
 }
 
 class _CardScreenState extends State<CardScreen> {
-   final String imagePath;
-  _CardScreenState({required this.imagePath});
   //List <Provider> providers= ;
+  // Future<Map<String, dynamic>?> itemInfo2 = DBGift.getProductById(1);
+
   static Map itemInfo = {
-    'Item_imagePath': "imagePath",
+    'Item_imagePath': Assets.images.itemImage,
     'Item_name': "Bouquet",
     'Item_isFavorite': false,
     'Item_description':
-    "Lorem ipsum dolor sit amet consectetur. Aliquam amet volutpat in vestibulum bibendum egestas integer nibh..",
+        "Lorem ipsum dolor sit amet consectetur. Aliquam amet volutpat in vestibulum bibendum egestas integer nibh..",
   };
   String Item_imagePath = itemInfo['Item_imagePath'];
   String Item_name = itemInfo['Item_name'];
@@ -38,6 +39,9 @@ class _CardScreenState extends State<CardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('**************************\n${widget.productId}');
+    Future<Map<String, dynamic>?> productInfo =
+        DBGift.getProductById(widget.productId);
     var size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -46,25 +50,79 @@ class _CardScreenState extends State<CardScreen> {
           body: Container(
               width: double.maxFinite,
               padding: EdgeInsets.symmetric(horizontal: 21, vertical: 15),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 37),
-                    SizedBox(
-                        height: size.height * 0.54,
-                        // width: size.width * 0.89,
-                        width: 387,
-                        child: ProductCard(
-                            Item_imagePath: imagePath,
-                            Item_name: Item_name,
-                            Item_isFavorite: Item_isFavorite,
-                            Item_description: Item_description)),
-                    const SizedBox(height: 20),
-                    Providers(),
-                    SizedBox(height: 5)
-                  ]))),
+              child: FutureBuilder(
+                future: productInfo,
+                builder: _build_product_info,
+              )
+              // Column(
+              //     crossAxisAlignment: CrossAxisAlignment.center,
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       const SizedBox(height: 37),
+              //       SizedBox(
+              //           height: size.height * 0.54,
+              //           // width: size.width * 0.89,
+              //           width: 387,
+              //           child: ProductCard(
+              //               Item_imagePath: Item_imagePath,
+              //               Item_name: Item_name,
+              //               Item_isFavorite: Item_isFavorite,
+              //               Item_description: Item_description)),
+              //       const SizedBox(height: 20),
+              //       Providers(),
+              //       SizedBox(height: 5)
+              //     ])
+              )),
     );
+  }
+
+  Widget _build_product_info(BuildContext context, AsyncSnapshot snapshot) {
+    if (snapshot.hasData) {
+      Map item = snapshot.data as Map;
+      print('*******************************: $item');
+      return getWidgetForProductInfo(item, this);
+    } else if (snapshot.hasError) {
+      return Text("${snapshot.error}");
+    }
+    return CircularProgressIndicator();
+  }
+
+  Widget getWidgetForProductInfo(Map item, stateWidget) {
+    return
+        // Column(
+        //   children: [
+        //     Card(
+        //         elevation: 10,
+        //         child: ListTile(
+        //           title: Text(item['name'], style: TextStyle(fontSize: 30)),
+        //           trailing: Text(item['barcode']),
+        //         )),
+        //     SizedBox(height: 10),
+        //     Row(
+        //       children: [Text(item['type']), Spacer(), Text(item['company'])],
+        //     ),
+        //     SizedBox(height: 10),
+        //     showImagesGrid(item['imageList'], true, stateWidget),
+        //   ],
+        // );
+        Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+          const SizedBox(height: 37),
+          SizedBox(
+              height: MediaQuery.of(context).size.height * 0.54,
+              // width: size.width * 0.89,
+              width: 387,
+              child: ProductCard(
+                  Item_imagePath: itemInfo['Item_imagePath'],
+                  Item_name: item['name'],
+                  Item_isFavorite: itemInfo['Item_isFavorite'],
+                  Item_description: item['description'])),
+          const SizedBox(height: 20),
+          Providers(),
+          SizedBox(height: 5)
+        ]);
   }
 }
 
