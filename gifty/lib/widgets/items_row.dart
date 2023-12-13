@@ -83,7 +83,7 @@ class ItemCell extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CardScreen(imagePath: Item_imagePath,),
+        builder: (context) => CardScreen(productId: 1),
       ),
     );
   }

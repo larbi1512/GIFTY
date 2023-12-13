@@ -39,6 +39,7 @@ dependencies:
   get: ^4.6.6
   flutter_launcher_icons: ^0.13.1
   image_picker: ^1.0.4
+  sqflite: ^2.3.0
 
 flutter_launcher_icons:
   android: true

@@ -26,29 +26,27 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'My Flutter App',
-      initialRoute:
-          '/splash', 
+      initialRoute: '/splash',
       routes: {
         '/splash': (context) => SplashScreen(),
-        '/card': (context) => CardScreen(imagePath: 'assets/images/goods.jpeg' ,),
+        // '/card': (context) => CardScreen(imagePath: 'assets/images/goods.jpeg' ,),
         '/providers': (context) => ProvidersListPage(),
         '/home': (context) => Home(),
         '/onboarding': (context) => OnBoardingScreen(),
         '/login': (context) => LoginScreen(),
 
-        '/cart' : (context) =>  CartPage(),
+        '/cart': (context) => CartPage(),
 
         '/signup': (context) => signup1(),
         '/signup_provider': (context) => signupProvider(),
         '/signup_user': (context) => signupUser(),
-        '/finish_signup_user': (context)=> SignupUserFinal(),
-        '/finish_signup_provider':(context)=>signupProviderFinal(),
+        '/finish_signup_user': (context) => SignupUserFinal(),
+        '/finish_signup_provider': (context) => signupProviderFinal(),
 
         '/user_profile': (context) => UserProfile(),
         '/provider_contact': (context) => ProviderContact(),
         '/Add_item_screen': (context) => AddItemScreen(),
         '/notifications': (context) => NotificationPage()
-
       },
     );
   }
