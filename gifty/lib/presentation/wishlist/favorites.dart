@@ -19,6 +19,13 @@ class _wishlistState extends State<wishList> {
         
            Expanded(
             child: RawScrollbar(
+                    trackColor: AppColor.mainLighter,
+                    thumbColor: AppColor.greenLighter,
+                
+                    radius: Radius.circular(20),
+                    thickness: 10,
+                    trackVisibility:true,
+                    thumbVisibility: true,
               child: SingleChildScrollView(
                 child:
                     buildGridView(), 
@@ -45,7 +52,7 @@ class _wishlistState extends State<wishList> {
       ),
       itemCount: 8, // Change this to the number of items you want to display
       itemBuilder: (BuildContext context, int index) {
-        return LikedItemWidget();
+        return LikedItemWidget(imagePath:   'assets/images/gift.jpeg' , isinFav: true);
       },
     );
   }
