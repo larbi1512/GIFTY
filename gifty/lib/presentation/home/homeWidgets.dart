@@ -1,48 +1,66 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:gifty/presentation/home/SeeMore.dart';
+import 'package:gifty/widgets/favorite_item.dart';
+import 'package:gifty/config/colors.config.dart';
+
+const List<String> imagePaths = [
+  'assets/images/goods.jpeg',
+  'assets/images/gift.jpeg',
+  'assets/images/watch.png',
+  'assets/images/gift.jpeg',
+  'assets/images/watch.png',
+  'assets/images/book.png',
+  'assets/images/gif.jpg',
+  'assets/images/flwr3.png',
+  'assets/images/book.png',
+  'assets/images/goods.jpeg',
+  'assets/images/gif.jpg',
+  'assets/images/flwr3.png',
+];
+
+const List<String> imagePathsFlowers = [
+  'assets/images/flwr3.png',
+  'assets/images/flowers3.png',
+  'assets/images/flower.jpeg',
+  'assets/images/flowr.png',
+  'assets/images/flwr2.png',
+];
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      child: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.0),
-              child: SearchBarApp(),
-            ),
-            CategoryRow(
-              title: 'gifts',
-              imagePaths: [
-                'assets/images/pic.jpg',
-                'assets/images/pic.jpg',
-                'assets/images/pic.jpg',
-                'assets/images/pic.jpg',
-                // Add more image paths as needed
-              ],
-            ),
-            CategoryRow(
-              title: 'flowers',
-              imagePaths: [
-                'assets/images/flower.jpeg',
-                'assets/images/flower.jpeg',
-                'assets/images/flower.jpeg',
-                'assets/images/flower.jpeg',
-                // Add more image paths as needed
-              ],
-            ),
-            CategoryRow(
-              title: 'inspirations',
-              imagePaths: [
-                'assets/images/inspo.jpeg',
-                'assets/images/inspo.jpeg',
-                'assets/images/inspo.jpeg',
-                'assets/images/inspo.jpeg',
-                // Add more image paths as needed
-              ],
-            ),
-          ],
+    return const RawScrollbar(
+                    trackColor: AppColor.mainLighter,
+                    thumbColor: AppColor.greenLighter,
+                
+                    radius: Radius.circular(20),
+                    thickness: 10,
+                    trackVisibility:true,
+                    thumbVisibility: true,
+      child:  SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 20.0),
+                child: SearchBarApp(),
+              ),
+              CategoryRow(
+                title: 'gifts',
+                imagePaths: imagePaths,
+              ),
+              CategoryRow(
+                title: 'flowers',
+                 imagePaths: imagePathsFlowers,
+              ),
+              CategoryRow(
+                title: 'inspirations',
+                imagePaths: imagePaths,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -121,60 +139,35 @@ class _SearchBarAppState extends State<SearchBarApp> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            title,
-            style: const TextStyle(
-            shadows: [
-              Shadow(
-                color: Color.fromRGBO(0, 0, 0, 0.3),
-                offset: Offset(1.0, 3.0),
-                blurRadius: 5.0, 
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                title,
+                style: const TextStyle(
+                shadows: [
+                  Shadow(
+                    color: Color.fromRGBO(0, 0, 0, 0.3),
+                    offset: Offset(1.0, 3.0),
+                    blurRadius: 5.0, 
+                  ),
+                ],
+                fontSize: 24,
+                fontFamily: 'inter',
+                fontWeight: FontWeight.w600,
+                color: Color.fromRGBO(133, 88, 111, 1.0) ),
+                
               ),
-            ],
-            fontSize: 24,
-            fontFamily: 'inter',
-            fontWeight: FontWeight.w600,
-            color: Color.fromRGBO(133, 88, 111, 1.0) ),
-            
-          ),
-        ),
-        Container(
-          height: 116,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: imagePaths.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: HomeItem(imagePath: imagePaths[index] , size: 120 , border:8.0),
-              );
-            },
-          ),
-        ),
-        Align(
+            ),
+            Align(
             alignment: Alignment.centerRight,
               child: ElevatedButton(
                     onPressed:  () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) =>  SeeMore(seeMoreImagePaths: const [
-                                    'assets/images/pic.jpg',
-                                    'assets/images/pic.jpg',
-                                    'assets/images/pic.jpg',
-                                    'assets/images/pic.jpg',
-                                    'assets/images/pic.jpg',
-                                    'assets/images/pic.jpg',
-                                    'assets/images/pic.jpg',
-                                    'assets/images/pic.jpg',
-                                    'assets/images/pic.jpg',
-                                    'assets/images/pic.jpg',
-                                    'assets/images/pic.jpg',
-                                    'assets/images/pic.jpg',
-                                    'assets/images/pic.jpg',
-                                    'assets/images/pic.jpg',
-                                  ])),
+                        MaterialPageRoute(builder: (context) =>  SeeMore(seeMoreImagePaths: imagePaths , title: "find the best $title",)),
                       );
                     },
                      style: ElevatedButton.styleFrom(
@@ -189,14 +182,30 @@ class _SearchBarAppState extends State<SearchBarApp> {
                     fontSize: 14,
                     fontFamily: 'inter',
                     fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    color: AppColor.main,
                     decoration: TextDecoration.underline,
+                    decorationColor: AppColor.main,
                     ),
                       textAlign: TextAlign.center),
                      
                   ),
             
            ),
+          ],
+        ),
+        Container(
+          height: 220,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: imagePaths.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: LikedItemWidget(imagePath: imagePaths[index] , isinFav: false),
+              );
+            },
+          ),
+        ),
         SizedBox(height: 20.0),
       ],
     );

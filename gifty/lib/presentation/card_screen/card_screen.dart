@@ -9,20 +9,23 @@ import '../../widgets/back_button.dart';
 import '../providers_list/providers_list_screen.dart';
 
 class CardScreen extends StatefulWidget {
-  const CardScreen({super.key});
+  final String imagePath;
+  const CardScreen({required this.imagePath , super.key});
 
   @override
-  State<CardScreen> createState() => _CardScreenState();
+  State<CardScreen> createState() => _CardScreenState(imagePath : imagePath);
 }
 
 class _CardScreenState extends State<CardScreen> {
+   final String imagePath;
+  _CardScreenState({required this.imagePath});
   //List <Provider> providers= ;
   static Map itemInfo = {
-    'Item_imagePath': Assets.images.itemImage,
+    'Item_imagePath': "imagePath",
     'Item_name': "Bouquet",
     'Item_isFavorite': false,
     'Item_description':
-        "Lorem ipsum dolor sit amet consectetur. Aliquam amet volutpat in vestibulum bibendum egestas integer nibh..",
+    "Lorem ipsum dolor sit amet consectetur. Aliquam amet volutpat in vestibulum bibendum egestas integer nibh..",
   };
   String Item_imagePath = itemInfo['Item_imagePath'];
   String Item_name = itemInfo['Item_name'];
@@ -53,7 +56,7 @@ class _CardScreenState extends State<CardScreen> {
                         // width: size.width * 0.89,
                         width: 387,
                         child: ProductCard(
-                            Item_imagePath: Item_imagePath,
+                            Item_imagePath: imagePath,
                             Item_name: Item_name,
                             Item_isFavorite: Item_isFavorite,
                             Item_description: Item_description)),

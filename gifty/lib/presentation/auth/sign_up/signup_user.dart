@@ -49,8 +49,8 @@ class signupUser extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width * .4,
-                          padding: EdgeInsets.only(left: 10, ),
+                          width: MediaQuery.of(context).size.width * .35,
+                          padding: EdgeInsets.only(left: 20, ),
                           child: TextField(
                             decoration: InputDecoration(
                               prefixIcon: Icon(Icons.person_2_rounded,
@@ -64,15 +64,16 @@ class signupUser extends StatelessWidget {
                                     BorderRadius.all(Radius.circular(25)),
                               ),
                               isDense: true,
-                              contentPadding: EdgeInsets.all(8),
+                              contentPadding: EdgeInsets.all(10),
                             ),
                           ),
                           
                         ),
                         Container(
-                          width: MediaQuery.of(context).size.width * .4,
+                          width: MediaQuery.of(context).size.width * .35,
                           padding: EdgeInsets.only(
                             right: 10,
+                            left : 5,
                           ),
                           child: TextField(
                             decoration: InputDecoration(

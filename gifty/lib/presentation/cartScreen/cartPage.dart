@@ -56,6 +56,13 @@ class CartPage extends StatelessWidget {
           ),
 
           const Expanded(child: RawScrollbar(
+                     trackColor: AppColor.mainLighter,
+                    thumbColor: AppColor.greenLighter,
+                
+                    radius: Radius.circular(20),
+                    thickness: 10,
+                    trackVisibility:true,
+                    thumbVisibility: true,
             child: SingleChildScrollView(
               child: Column(
                 children: [

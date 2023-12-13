@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           '/splash', 
       routes: {
         '/splash': (context) => SplashScreen(),
-        '/card': (context) => CardScreen(),
+        '/card': (context) => CardScreen(imagePath: 'assets/images/goods.jpeg' ,),
         '/providers': (context) => ProvidersListPage(),
         '/home': (context) => Home(),
         '/onboarding': (context) => OnBoardingScreen(),

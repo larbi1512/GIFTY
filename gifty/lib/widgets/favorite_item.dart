@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:gifty/config/assets.config.dart';
 import 'package:gifty/config/colors.config.dart';
 
 import '../presentation/card_screen/card_screen.dart';
 
 class LikedItemWidget extends StatelessWidget {
-  const LikedItemWidget({super.key});
+
+  final String imagePath;
+  final bool isinFav ;
+  const LikedItemWidget({required this.imagePath , this.isinFav = true , super.key});
+  
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => CardScreen()),
+        Navigator.push(context, MaterialPageRoute(builder: (context) => CardScreen(imagePath: imagePath)),
         );
       },
       child:
     Container(
       width: MediaQuery.of(context).size.width * 0.45,
-      height: MediaQuery.of(context).size.height * 0.32,
+      height: isinFav ? (MediaQuery.of(context).size.height * 0.32) : 200 ,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -24,7 +27,7 @@ class LikedItemWidget extends StatelessWidget {
           BoxShadow(
             color: AppColor.main.withOpacity(0.1),
             blurRadius: 10,
-            offset: Offset(0, 5),
+            offset: Offset(0,5),
           ),
         ],
       ),
@@ -50,12 +53,12 @@ class LikedItemWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  AppColor.main.withOpacity(0.6),
+                  AppColor.main.withOpacity(isinFav ? 0.6 : 0.5),
                   BlendMode.srcOver,
                   
                 ),
               child: Image.asset(
-                Assets.images.itemImage,
+                imagePath,
                 fit: BoxFit.cover,
                 width: 150,
                 height: 150,
@@ -89,43 +92,48 @@ class LikedItemWidget extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                "200.3 DA",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppColor.peach,
-                ),
-              ),
-             Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: [
-                      const Color.fromARGB(255, 212, 212, 212).withOpacity(0.5),
-                      const Color.fromARGB(255, 237, 237, 237).withOpacity(1),
-                    ],
+           Visibility(
+            visible: isinFav,
+             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  "200.3 DA",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColor.peach,
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Icon(
-                      Icons.favorite,
-                      color: AppColor.main,
+               Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        const Color.fromARGB(255, 212, 212, 212).withOpacity(0.5),
+                        const Color.fromARGB(255, 237, 237, 237).withOpacity(1),
+                      ],
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: InkWell(
+                      onTap: () {},
+                      child: Icon(
+                        Icons.favorite,
+                        color: AppColor.main,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+                       ),
+           ),
         ],
       ),
     ),
     );
   }
 }
+
+

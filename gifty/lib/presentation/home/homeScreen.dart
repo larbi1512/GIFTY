@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
       'assets/images/flower.jpeg',
       'assets/images/flower.jpeg',
       // Add more image paths as needed
-    ]),
+    ] , title: ""),
   ];
 
   final List<Widget> _provider_tabs = [
@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
       'assets/images/flower.jpeg',
       'assets/images/flower.jpeg',
       // Add more image paths as needed
-    ]),
+    ] , title:"nb"),
   ];
 
   @override
