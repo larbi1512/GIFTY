@@ -43,7 +43,7 @@ class _wishlistState extends State<wishList> {
 
         
       ),
-      itemCount: 8, // Change this to the number of items you want to display
+      itemCount: 8, // Change this to the number of items you want 
       itemBuilder: (BuildContext context, int index) {
         return LikedItemWidget();
       },
