@@ -5,6 +5,7 @@ import 'package:gifty/presentation/auth/sign_up/finish_signup_user.dart';
 import 'package:gifty/presentation/auth/sign_up/signup1.dart';
 import 'package:gifty/presentation/auth/sign_up/signup_provider.dart';
 import 'package:gifty/presentation/auth/sign_up/signup_user.dart';
+import 'package:gifty/presentation/notificationScreen/notificationPage.dart';
 import 'package:gifty/presentation/onboarding_screen/onboarding_screen.dart';
 import 'presentation/add_item_screen/add_item_screen.dart';
 import 'presentation/auth/sign_up/finish_signup_provider.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
         '/user_profile': (context) => UserProfile(),
         '/provider_contact': (context) => ProviderContact(),
         '/Add_item_screen': (context) => AddItemScreen(),
+        '/notifications': (context) => NotificationPage()
 
       },
     );

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:gifty/config/colors.config.dart';
 import 'package:gifty/widgets/cartWidget.dart';
 
+import '../../widgets/notifications.dart';
+
 
 class NotificationPage extends StatelessWidget {
   const NotificationPage
@@ -33,7 +35,7 @@ class NotificationPage extends StatelessWidget {
                   ),
                 ),
                 const Text(
-                  "Cart",
+                  "Notifications",
                   style:  TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -55,8 +57,78 @@ class NotificationPage extends StatelessWidget {
               ],
               ),
           ),
+          Expanded(
+            child: RawScrollbar(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    NotificationWidget(
+                      username: 'John Doe',
+                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      time: DateTime.now().subtract(Duration(days: 1)),
+                    ),
+                    NotificationWidget(
+                      username: 'Jane Doe',
+                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      time: DateTime.now().subtract(Duration(days: 2)),
+                    ),
+                    NotificationWidget(
+                      username: 'John Doe',
+                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      time: DateTime.now().subtract(Duration(days: 3)),
+                    ),
+                    NotificationWidget(
+                      username: 'Jane Doe',
+                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      time: DateTime.now().subtract(Duration(days: 4)),
+                    ),
+                    NotificationWidget(
+                      username: 'John Doe',
+                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      time: DateTime.now().subtract(Duration(days: 5)),
+                    ),
+                    NotificationWidget(
+                      username: 'Jane Doe',
+                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      time: DateTime.now().subtract(Duration(days: 6)),
+                    ),
+                    NotificationWidget(
+                      username: 'John Doe',
+                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      time: DateTime.now().subtract(Duration(days: 7)),
+                    ),
+                    NotificationWidget(
+                      username: 'Jane Doe',
+                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      time: DateTime.now().subtract(Duration(days: 8)),
+                    ),
+                    NotificationWidget(
+                      username: 'John Doe',
+                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      time: DateTime.now().subtract(Duration(days: 9)),
+                    ),
+                    NotificationWidget(
+                      username: 'Jane Doe',
+                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      time: DateTime.now().subtract(Duration(days: 10)),
+                    ),
+                    NotificationWidget(
+                      username: 'John Doe',
+                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      time: DateTime.now().subtract(Duration(days: 11)),
+                    ),
+                    NotificationWidget(
+                      username: 'Jane Doe',
+                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                       time: DateTime.now().subtract(Duration(days: 11)),
+                    ),
         ],
       ),
+    ),
+  ),
+),
+],
+),
     );
 
   }
