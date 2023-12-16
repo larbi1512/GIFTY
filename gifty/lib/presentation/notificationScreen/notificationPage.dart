@@ -1,20 +1,15 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:gifty/config/colors.config.dart';
-import 'package:gifty/widgets/cartWidget.dart';
 
 import '../../widgets/notifications.dart';
 
-
 class NotificationPage extends StatelessWidget {
-  const NotificationPage
-({super.key});
+  const NotificationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      backgroundColor:  Color.fromRGBO(255, 242, 238, 1.0),
+    return Scaffold(
+      backgroundColor: Color.fromRGBO(255, 242, 238, 1.0),
       body: Column(
         children: [
           Padding(
@@ -36,7 +31,7 @@ class NotificationPage extends StatelessWidget {
                 ),
                 const Text(
                   "Notifications",
-                  style:  TextStyle(
+                  style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: AppColor.main,
@@ -55,7 +50,7 @@ class NotificationPage extends StatelessWidget {
                   ),
                 ),
               ],
-              ),
+            ),
           ),
           Expanded(
             child: RawScrollbar(
@@ -64,72 +59,83 @@ class NotificationPage extends StatelessWidget {
                   children: [
                     NotificationWidget(
                       username: 'John Doe',
-                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      message:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
                       time: DateTime.now().subtract(Duration(days: 1)),
                     ),
                     NotificationWidget(
                       username: 'Jane Doe',
-                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      message:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
                       time: DateTime.now().subtract(Duration(days: 2)),
                     ),
                     NotificationWidget(
                       username: 'John Doe',
-                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      message:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
                       time: DateTime.now().subtract(Duration(days: 3)),
                     ),
                     NotificationWidget(
                       username: 'Jane Doe',
-                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      message:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
                       time: DateTime.now().subtract(Duration(days: 4)),
                     ),
                     NotificationWidget(
                       username: 'John Doe',
-                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      message:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
                       time: DateTime.now().subtract(Duration(days: 5)),
                     ),
                     NotificationWidget(
                       username: 'Jane Doe',
-                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      message:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
                       time: DateTime.now().subtract(Duration(days: 6)),
                     ),
                     NotificationWidget(
                       username: 'John Doe',
-                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      message:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
                       time: DateTime.now().subtract(Duration(days: 7)),
                     ),
                     NotificationWidget(
                       username: 'Jane Doe',
-                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      message:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
                       time: DateTime.now().subtract(Duration(days: 8)),
                     ),
                     NotificationWidget(
                       username: 'John Doe',
-                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      message:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
                       time: DateTime.now().subtract(Duration(days: 9)),
                     ),
                     NotificationWidget(
                       username: 'Jane Doe',
-                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      message:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
                       time: DateTime.now().subtract(Duration(days: 10)),
                     ),
                     NotificationWidget(
                       username: 'John Doe',
-                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      message:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
                       time: DateTime.now().subtract(Duration(days: 11)),
                     ),
                     NotificationWidget(
                       username: 'Jane Doe',
-                      message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                       time: DateTime.now().subtract(Duration(days: 11)),
+                      message:
+                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                      time: DateTime.now().subtract(Duration(days: 11)),
                     ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
-    ),
-  ),
-),
-],
-),
     );
-
   }
 }

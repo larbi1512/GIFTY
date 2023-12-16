@@ -1,6 +1,8 @@
 import 'package:gifty/databases/DBProductColor.dart';
 import 'package:sqflite/sqflite.dart';
+import '../config/assets.config.dart';
 import 'DBHelper.dart';
+import 'DBUser_favorites.dart';
 import 'DBimage.dart';
 
 class DBGift {
@@ -13,6 +15,7 @@ class DBGift {
              description TEXT,
              price REAL,
              provider_id INTEGER,
+             category_id INTEGER,
              create_date TEXT
            )
        ''';
@@ -20,17 +23,21 @@ class DBGift {
   static Future<List<Map<String, dynamic>>> getAllGifts() async {
     final database = await DBHelper.getDatabase();
 
-    return database.rawQuery('''SELECT 
-            gifts.id ,
-            gifts.name,
-            gifts.remote_id,
-            gifts.description,
-            gifts.price,
-            providers.store_name as provider
-          from ${tableName}
-              left join providers on provider_id=providers.id
-          order by gifts.name ASC
+    var res = await database.rawQuery('''SELECT 
+        gifts.id,
+        gifts.name,
+        gifts.remote_id,
+        gifts.description,
+        gifts.price,
+        categories.name as type,
+        MAX(images.imagePath) as imagePath
+        FROM ${tableName}
+        LEFT JOIN images ON gifts.id = images.product_id
+        left join categories on category_id=categories.id
+        GROUP BY gifts.id
+        ORDER BY gifts.name ASC
           ''');
+    return res;
   }
 
   static Future<Map<String, dynamic>?> getProductById(int id) async {
@@ -42,8 +49,10 @@ class DBGift {
             gifts.description,
             gifts.price,
             gifts.provider_id,
+            categories.name as type,
             gifts.remote_id
           from ${tableName}
+          left join categories on category_id=categories.id
           where gifts.id=${id}
           ''');
 
@@ -57,7 +66,45 @@ class DBGift {
           where product_id=${id}
           order by id ASC
           ''');
-    data['imageList'] = resImg;
+
+    var images = [];
+    for (Map image in resImg) {
+      images.add(image['imagePath']);
+    }
+
+    List<Map<String, dynamic>> resClrs = await database.rawQuery('''SELECT 
+            product_color.id ,
+            product_color.color
+          from product_color
+          where product_id=${id}
+          order by id ASC
+          ''');
+
+    var colors = [];
+    for (Map color in resClrs) {
+      colors.add(color['color']);
+    }
+
+    List<Map<String, dynamic>> providerInfo = await database.rawQuery('''SELECT 
+            id ,
+            store_name,
+            location,
+            brand_pic
+          from providers
+          where id=${data['provider_id']}
+          order by id ASC
+          ''');
+
+    data['imageList'] = images;
+
+    data['colorsList'] = colors;
+    data['isFavorite'] = await DBUserFavorits.isInUserFavorites(data['id'], 1);
+    data['providerInfo'] = {
+      'brand_pic': Assets.images.providerImage,
+      'store_name': "Bahdja telecom",
+      'location': "Baba hsen, Algiers"
+    };
+    // data['providerInfo'] = Map.of(providerInfo[0]);
     return data;
   }
 
@@ -85,16 +132,19 @@ class DBGift {
     final database = await DBHelper.getDatabase();
 
     return database.rawQuery('''SELECT 
-            gifts.id ,
-            gifts.name,
-            gifts.remote_id,
-            gifts.description,
-            gifts.price,
-            providers.store_name as provider
-          from ${tableName}
-              left join providers on provider_id=providers.id
-          Where LOWER(gifts.name) like '%${keyword.toLowerCase()}%' 
-          order by gifts.name ASC
+        gifts.id,
+        gifts.name,
+        gifts.remote_id,
+        gifts.description,
+        gifts.price,
+        categories.name as type,
+        MAX(images.imagePath) as imagePath
+        FROM ${tableName}
+        LEFT JOIN images ON gifts.id = images.product_id
+        LEFT JOIN categories ON category_id = categories.id
+        GROUP BY gifts.id
+        where LOWER(gifts.name) like '%${keyword.toLowerCase()}%' 
+        ORDER BY gifts.name ASC
           ''');
   }
 
@@ -128,7 +178,6 @@ class DBGift {
         conflictAlgorithm: ConflictAlgorithm.replace);
 
     for (Map<String, dynamic> img in data['images']) {
-      print("$img");
       img['product_id'] = id.toString();
       await database.insert(DBImage.tableName, img,
           conflictAlgorithm: ConflictAlgorithm.replace);
@@ -136,7 +185,6 @@ class DBGift {
 
     for (String color in data['colors']) {
       Map<String, dynamic> mapColor = {'color': color, 'product_id': id};
-      print(mapColor);
       await database.insert(DBProductColor.tableName, mapColor,
           conflictAlgorithm: ConflictAlgorithm.replace);
       // await DBProductColor.insertRecord(mapColor);

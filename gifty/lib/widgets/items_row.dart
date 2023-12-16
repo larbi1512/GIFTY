@@ -63,7 +63,7 @@ class ItemCell extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          itemSelected(context);
+          itemSelected(context, 4);
         },
         child: ClipRRect(
           borderRadius: BorderRadius.circular(
@@ -79,11 +79,11 @@ class ItemCell extends StatelessWidget {
     );
   }
 
-  void itemSelected(context) {
+  void itemSelected(context, productId) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CardScreen(productId: 1),
+        builder: (context) => CardScreen(productId: productId),
       ),
     );
   }
