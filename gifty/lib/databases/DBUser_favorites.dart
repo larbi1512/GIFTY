@@ -15,16 +15,47 @@ class DBUserFavorits {
             FOREIGN KEY (product_id) REFERENCES gifts(id) ON DELETE CASCADE
            );''';
 
-  static Future<List<Map<String, dynamic>>> getAllFavoritsOfUser(
-      String user_id) async {
+  static Future<List> getIdFavoritsOfUser(int user_id) async {
     final database = await DBHelper.getDatabase();
 
     List<Map> res = await database.rawQuery('''SELECT 
-            product_id ,
+            product_id 
           from ${tableName}
           where user_id='$user_id'
           ''');
-    return res[0]['product_id'] ?? 0;
+
+    var result = [];
+    for (Map product in res) {
+      result.add(product['product_id']);
+    }
+    return result;
+  }
+
+  static Future<List> getAllFavoritsOfUser(int user_id) async {
+    final database = await DBHelper.getDatabase();
+
+    var res = await database.rawQuery('''SELECT 
+        gifts.id,
+        gifts.name,
+        gifts.remote_id,
+        gifts.description,
+        gifts.price,
+        categories.name as type,
+        MAX(images.imagePath) as imagePath
+        FROM ${tableName}
+        left join gifts on user_favorits.product_id=gifts.id
+        LEFT JOIN images ON gifts.id = images.product_id
+        left join categories on category_id=categories.id
+        where user_favorits.user_id='$user_id'
+        GROUP BY gifts.id
+        ORDER BY gifts.name ASC
+          ''');
+    return res;
+  }
+
+  static Future<bool> isInUserFavorites(int product_id, int user_id) async {
+    var favorites = await getIdFavoritsOfUser(user_id);
+    return (favorites.contains(product_id));
   }
 
   static Future<bool> updateRecord(
@@ -37,6 +68,7 @@ class DBUserFavorits {
 
   static Future<int> insertRecord(Map<String, dynamic> data) async {
     final database = await DBHelper.getDatabase();
+    getIdFavoritsOfUser(1);
     return await database.insert(tableName, data,
         conflictAlgorithm: ConflictAlgorithm.replace);
   }

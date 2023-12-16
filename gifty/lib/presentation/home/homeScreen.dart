@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:gifty/presentation/cartScreen/cartPage.dart';
 import 'package:gifty/presentation/notificationScreen/notificationPage.dart';
 import 'package:gifty/presentation/wishlist/favorites.dart';
-import 'package:gifty/presentation/home/SeeMore.dart';
 import 'package:gifty/presentation/home/homeWidgets.dart';
 
 import '../../controllers/navbar_controller.dart';
@@ -44,13 +43,13 @@ class _MyHomePageState extends State<MyHomePage> {
     SearchScreen(),
     FavoritesScreen(),
     ProfileScreen(),
-    SeeMore(seeMoreImagePaths: const [
-      'assets/images/flower.jpeg',
-      'assets/images/flower.jpeg',
-      'assets/images/flower.jpeg',
-      'assets/images/flower.jpeg',
-      // Add more image paths as needed
-    ] , title: ""),
+    // SeeMore(seeMoreImagePaths: const [
+    //   'assets/images/flower.jpeg',
+    //   'assets/images/flower.jpeg',
+    //   'assets/images/flower.jpeg',
+    //   'assets/images/flower.jpeg',
+    //   // Add more image paths as needed
+    // ] , title: ""),
   ];
 
   final List<Widget> _provider_tabs = [
@@ -59,13 +58,13 @@ class _MyHomePageState extends State<MyHomePage> {
     AddItemPage(),
     FavoritesScreen(),
     ProfileScreen(),
-    SeeMore(seeMoreImagePaths: const [
-      'assets/images/flower.jpeg',
-      'assets/images/flower.jpeg',
-      'assets/images/flower.jpeg',
-      'assets/images/flower.jpeg',
-      // Add more image paths as needed
-    ] , title:"nb"),
+    // SeeMore(seeMoreImagePaths: const [
+    //   'assets/images/flower.jpeg',
+    //   'assets/images/flower.jpeg',
+    //   'assets/images/flower.jpeg',
+    //   'assets/images/flower.jpeg',
+    //   // Add more image paths as needed
+    // ] , title:"nb"),
   ];
 
   @override
@@ -153,7 +152,7 @@ class SearchScreen extends StatelessWidget {
 class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return wishList();
+    return wishList(user_id: 1);
   }
 }
 

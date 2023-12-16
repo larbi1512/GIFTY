@@ -122,21 +122,7 @@ Widget AddButton(BuildContext context, Map<String, dynamic> productData) {
     ),
     onPressed: () async {
       //do processing with this data
-      print("Here is the data ${productData}");
-      // await DBProvider.insertRecord({
-      //   'store_name': 'store_name',
-      //   'email': 'email',
-      //   'password': 'password',
-      //   'location': 'location',
-      //   'phone_number': 51,
-      //   'facebook': 'facebook',
-      //   'instagram': 'instagram',
-      //   'website': 'website',
-      //   'brand_pic': 'brand_pic',
-      // });
       await DBGift.insertRecord(productData);
-      print("Here is the data ${productData}");
-      //  Navigator.of(context).pushNamed("/historyProduct");
     },
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,

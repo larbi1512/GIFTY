@@ -58,7 +58,6 @@ class _ColorsInputState extends State<ColorsInput> {
           controller: _controller,
           onSubmitted: (value) {
             controller.doAddColor(value);
-            print(controller.colors);
             _controller.clear();
           },
           style: TextStyle(
