@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'DBGifts_tags.dart';
 import 'DBProductColor.dart';
 import 'package:path/path.dart';
@@ -11,6 +12,7 @@ import 'DBUser.dart';
 import 'DBUser_favorites.dart';
 import 'DBcategory.dart';
 import 'DBimage.dart';
+import 'DBUsercart.dart';
 
 class DBHelper {
   static const _database_name = "GIFTY.db";
@@ -32,6 +34,7 @@ class DBHelper {
       DBGiftsTags.sql_code,
       DBProductColor.sql_code,
       DBUserFavorits.sql_code,
+      DBUserCart.sql_code,
     ];
     database = openDatabase(
       join(await getDatabasesPath(), _database_name),
@@ -44,6 +47,7 @@ class DBHelper {
         if (oldVersion != newVersion) {
           database.execute('DROP TABLE IF EXISTS providers_tags');
           database.execute('DROP TABLE IF EXISTS user_favorits');
+          database.execute('DROP TABLE IF EXISTS user_cart');
           database.execute('DROP TABLE IF EXISTS users');
           database.execute('DROP TABLE IF EXISTS providers');
           database.execute('DROP TABLE IF EXISTS images');
