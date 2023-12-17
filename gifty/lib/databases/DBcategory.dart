@@ -33,6 +33,24 @@ class DBCategory {
     return res[0]['id'] ?? 0;
   }
 
+  static Future<Map<String, dynamic>> getCategoryById(int id) async {
+    final database = await DBHelper.getDatabase();
+
+    List<Map<String, dynamic>> res = await database.query(tableName,
+        columns: ['id', 'name', 'remote_id'], where: 'id = ?', whereArgs: [id]);
+
+    return res.first;
+    // // Check if there is a result
+    // if (res.isNotEmpty) {
+    //   // Return the first result
+    //   return res.first;
+    // }
+    // else {
+    //   // Return null or handle the case where there is no matching category
+    //   return null;
+    // }
+  }
+
   static Future<int> getAllCount() async {
     final database = await DBHelper.getDatabase();
 

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gifty/config/colors.config.dart';
 
+import '../config/assets.config.dart';
 import '../presentation/card_screen/card_screen.dart';
 
 class LikedItemWidget extends StatelessWidget {
@@ -72,7 +73,9 @@ class LikedItemWidget extends StatelessWidget {
                           height: 150,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: FileImage(File(product['imagePath'])),
+                              image: FileImage(File(
+                                product['imagePath'] ?? Assets.images.itemImage,
+                              )),
                               fit: BoxFit.cover,
                             ),
                             // borderRadius: BorderRadius.circular(20),
@@ -94,7 +97,7 @@ class LikedItemWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "${product['type'] ?? 'gift'}",
+                  "${product['category'] ?? 'gift'}",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.normal,
