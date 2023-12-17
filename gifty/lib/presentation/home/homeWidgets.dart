@@ -1,6 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:gifty/databases/DBGift.dart';
 import 'package:gifty/presentation/home/SeeMore.dart';
 import 'package:gifty/widgets/favorite_item.dart';
 import 'package:gifty/config/colors.config.dart';
@@ -31,15 +30,17 @@ const List<String> imagePathsFlowers = [
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const RawScrollbar(
-                    trackColor: AppColor.mainLighter,
-                    thumbColor: AppColor.greenLighter,
-                
-                    radius: Radius.circular(20),
-                    thickness: 10,
-                    trackVisibility:true,
-                    thumbVisibility: true,
-      child:  SingleChildScrollView(
+    Future<List> gifts = getListGifts();
+    Future<List> flowers = getListFlowers();
+    Future<List> inspirations = getListInspo();
+    return RawScrollbar(
+      trackColor: AppColor.mainLighter,
+      thumbColor: AppColor.greenLighter,
+      radius: Radius.circular(20),
+      thickness: 10,
+      trackVisibility: true,
+      thumbVisibility: true,
+      child: SingleChildScrollView(
         child: Center(
           child: Column(
             children: [
@@ -47,23 +48,78 @@ class HomeScreen extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 20.0),
                 child: SearchBarApp(),
               ),
-              CategoryRow(
-                title: 'gifts',
-                imagePaths: imagePaths,
+              FutureBuilder(
+                future: gifts,
+                builder: _build_list_gifts,
               ),
-              CategoryRow(
-                title: 'flowers',
-                 imagePaths: imagePathsFlowers,
+              FutureBuilder(
+                future: flowers,
+                builder: _build_list_flowers,
               ),
-              CategoryRow(
-                title: 'inspirations',
-                imagePaths: imagePaths,
-              ),
+              FutureBuilder(
+                future: inspirations,
+                builder: _build_list_inspirations,
+              )
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<List<Map>> getListGifts() async {
+    return DBGift.getAllGifts();
+  }
+
+  Future<List<Map>> getListFlowers() async {
+    return DBGift.getAllGifts();
+  }
+
+  Future<List<Map>> getListInspo() async {
+    return DBGift.getAllGifts();
+  }
+
+  Widget _build_list_gifts(BuildContext context, AsyncSnapshot snapshot) {
+    if (snapshot.hasData) {
+      List<Map> gifts = snapshot.data as List<Map>;
+      return CategoryRow(
+        title: 'gifts',
+        productsList: gifts,
+        imagePaths: imagePaths,
+      );
+    } else if (snapshot.hasError) {
+      return Text("${snapshot.error}");
+    }
+    return CircularProgressIndicator();
+  }
+
+  Widget _build_list_flowers(BuildContext context, AsyncSnapshot snapshot) {
+    if (snapshot.hasData) {
+      List<Map> flowers = snapshot.data as List<Map>;
+      return CategoryRow(
+        title: 'flowers',
+        productsList: flowers,
+        imagePaths: imagePaths,
+      );
+    } else if (snapshot.hasError) {
+      return Text("${snapshot.error}");
+    }
+    return CircularProgressIndicator();
+  }
+
+  Widget _build_list_inspirations(
+      BuildContext context, AsyncSnapshot snapshot) {
+    if (snapshot.hasData) {
+      List<Map> inspirations = snapshot.data as List<Map>;
+      return CategoryRow(
+        title: 'inspirations',
+        productsList: inspirations,
+        imagePaths: imagePaths,
+      );
+    } else if (snapshot.hasError) {
+      return Text("${snapshot.error}");
+    }
+    return CircularProgressIndicator();
   }
 }
 
@@ -79,6 +135,8 @@ class _SearchBarAppState extends State<SearchBarApp> {
 
   @override
   Widget build(BuildContext context) {
+    Future<List> search_result =
+        DBGift.getAllProductsByKeyword(_searchController.text);
     return Container(
       height: 50,
       width: 350,
@@ -110,31 +168,55 @@ class _SearchBarAppState extends State<SearchBarApp> {
               child: IconButton(
                 icon: const Icon(Icons.search, color: Colors.white),
                 onPressed: () {
-                  // Perform the search here
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FutureBuilder(
+                        future: search_result,
+                        builder: _build_search_result,
+                      ),
+                    ),
+                  );
                 },
               ),
             ),
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(40.0),
-              borderSide: BorderSide.none,
+            borderSide: BorderSide.none,
           ),
         ),
       ),
     );
   }
-}
- class CategoryRow extends StatelessWidget{
-    final String title;
-    final List<String> imagePaths;
 
-    const CategoryRow({
+  Widget _build_search_result(BuildContext context, AsyncSnapshot snapshot) {
+    if (snapshot.hasData) {
+      List<Map> search_result = snapshot.data as List<Map>;
+      return SeeMore(
+        title: "result for ${_searchController.text}",
+        productsList: search_result,
+      );
+    } else if (snapshot.hasError) {
+      return Text("${snapshot.error}");
+    }
+    return CircularProgressIndicator();
+  }
+}
+
+class CategoryRow extends StatelessWidget {
+  final String title;
+  final List<String> imagePaths;
+  final List productsList;
+
+  const CategoryRow({
     required this.title,
     required this.imagePaths,
+    required this.productsList,
     Key? key,
-   }) : super(key: key);
+  }) : super(key: key);
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,61 +229,64 @@ class _SearchBarAppState extends State<SearchBarApp> {
               child: Text(
                 title,
                 style: const TextStyle(
-                shadows: [
-                  Shadow(
-                    color: Color.fromRGBO(0, 0, 0, 0.3),
-                    offset: Offset(1.0, 3.0),
-                    blurRadius: 5.0, 
-                  ),
-                ],
-                fontSize: 24,
-                fontFamily: 'inter',
-                fontWeight: FontWeight.w600,
-                color: Color.fromRGBO(133, 88, 111, 1.0) ),
-                
+                    shadows: [
+                      Shadow(
+                        color: Color.fromRGBO(0, 0, 0, 0.3),
+                        offset: Offset(1.0, 3.0),
+                        blurRadius: 5.0,
+                      ),
+                    ],
+                    fontSize: 24,
+                    fontFamily: 'inter',
+                    fontWeight: FontWeight.w600,
+                    color: Color.fromRGBO(133, 88, 111, 1.0)),
               ),
             ),
             Align(
-            alignment: Alignment.centerRight,
+              alignment: Alignment.centerRight,
               child: ElevatedButton(
-                    onPressed:  () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>  SeeMore(seeMoreImagePaths: imagePaths , title: "find the best $title",)),
-                      );
-                    },
-                     style: ElevatedButton.styleFrom(
-                     primary: Colors.transparent, // Background color
-                     elevation: 0, // Elevation
-                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0), // Radius
-                      ),
-                    ),
-                    child:  const Text('See more',
-                    style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'inter',
-                    fontWeight: FontWeight.w600,
-                    color: AppColor.main,
-                    decoration: TextDecoration.underline,
-                    decorationColor: AppColor.main,
-                    ),
-                      textAlign: TextAlign.center),
-                     
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SeeMore(
+                              title: "find the best $title",
+                              productsList: productsList,
+                            )),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.transparent, // Background color
+                  elevation: 0, // Elevation
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0), // Radius
                   ),
-            
-           ),
+                ),
+                child: const Text('See more',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'inter',
+                      fontWeight: FontWeight.w600,
+                      color: AppColor.main,
+                      decoration: TextDecoration.underline,
+                      decorationColor: AppColor.main,
+                    ),
+                    textAlign: TextAlign.center),
+              ),
+            ),
           ],
         ),
         Container(
           height: 220,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: imagePaths.length,
+            itemCount: productsList.length,
+            // itemCount: imagePaths.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: LikedItemWidget(imagePath: imagePaths[index] , isinFav: false),
+                child: LikedItemWidget(
+                    product: productsList[index], isinFav: false),
               );
             },
           ),
@@ -210,17 +295,19 @@ class _SearchBarAppState extends State<SearchBarApp> {
       ],
     );
   }
- }
-
+}
 
 class HomeItem extends StatelessWidget {
   final String imagePath;
-  final double size; 
+  final double size;
   final double border;
 
-  const HomeItem({required this.imagePath, required this.size, required this.border, Key? key})
+  const HomeItem(
+      {required this.imagePath,
+      required this.size,
+      required this.border,
+      Key? key})
       : super(key: key);
-  
 
   @override
   Widget build(BuildContext context) {
@@ -239,7 +326,8 @@ class HomeItem extends StatelessWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(border), // Use the same radius as in the box decoration
+        borderRadius: BorderRadius.circular(
+            border), // Use the same radius as in the box decoration
         child: Image.asset(
           imagePath,
           fit: BoxFit.cover,

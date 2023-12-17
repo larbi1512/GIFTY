@@ -1,13 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gifty/config/colors.config.dart';
 
 import '../presentation/card_screen/card_screen.dart';
 
 class LikedItemWidget extends StatelessWidget {
-  final String imagePath;
+  final Map product;
   final bool isinFav;
   const LikedItemWidget(
-      {required this.imagePath, this.isinFav = true, super.key});
+      {required this.product, this.isinFav = true, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,8 @@ class LikedItemWidget extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CardScreen(productId: 1)),
+          MaterialPageRoute(
+              builder: (context) => CardScreen(productId: product['id'])),
         );
       },
       child: Container(
@@ -57,13 +60,23 @@ class LikedItemWidget extends StatelessWidget {
                     AppColor.main.withOpacity(isinFav ? 0.6 : 0.5),
                     BlendMode.srcOver,
                   ),
-                  child: Image.asset(
-                    imagePath,
-                    fit: BoxFit.cover,
-                    width: 150,
-                    height: 150,
-                    //add border radius
-                  ),
+                  child:
+                      // Image.file(
+                      //   File(product['imagePath']),
+                      //   fit: BoxFit.cover,
+                      //   width: 150,
+                      //   height: 150,
+                      // ),
+                      Container(
+                          width: 150,
+                          height: 150,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: FileImage(File(product['imagePath'])),
+                              fit: BoxFit.cover,
+                            ),
+                            // borderRadius: BorderRadius.circular(20),
+                          )),
                 ),
               ),
             ),
@@ -74,14 +87,14 @@ class LikedItemWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  "Lorem",
+                  product['name'],
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
-                  "size: US 7",
+                  "${product['type'] ?? 'gift'}",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.normal,
@@ -98,7 +111,7 @@ class LikedItemWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    "200.3 DA",
+                    "${product['price']} DZD",
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,

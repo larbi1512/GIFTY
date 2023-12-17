@@ -1,69 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:gifty/config/colors.config.dart';
-import 'package:gifty/config/font.config.dart';
 import 'package:gifty/widgets/favorite_item.dart';
 
-
 class SeeMore extends StatelessWidget {
-  final List<String> seeMoreImagePaths; 
+  final List productsList;
   final String title;
 
-  const SeeMore({required this.seeMoreImagePaths , required this.title ,  super.key});
+  const SeeMore({required this.title, required this.productsList, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:  Color.fromRGBO(255, 242, 238, 1.0),
-      body:
-        RawScrollbar(
-                    trackColor: AppColor.mainLighter,
-                    thumbColor: AppColor.greenLighter,
-                
-                    radius: Radius.circular(20),
-                    thickness: 10,
-                    trackVisibility:true,
-                    thumbVisibility: true,
+      backgroundColor: Color.fromRGBO(255, 242, 238, 1.0),
+      body: RawScrollbar(
+        trackColor: AppColor.mainLighter,
+        thumbColor: AppColor.greenLighter,
+        radius: Radius.circular(20),
+        thickness: 10,
+        trackVisibility: true,
+        thumbVisibility: true,
         child: SingleChildScrollView(
           child: Column(
             children: [
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding:  EdgeInsets.only( left:8 , top:20 , right:8 , bottom:8),
+                  padding:
+                      EdgeInsets.only(left: 8, top: 20, right: 8, bottom: 8),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context); // Navigate back to the previous page
+                      Navigator.pop(
+                          context); // Navigate back to the previous page
                     },
-                    child: Icon(Icons.arrow_back), 
+                    child: Icon(Icons.arrow_back),
                     style: ElevatedButton.styleFrom(
-                    shape: CircleBorder(),
-                    padding: EdgeInsets.all(5),
-                    backgroundColor: AppColor.mainLighter,
-                    foregroundColor: Colors.white, 
-                  ),
+                      shape: CircleBorder(),
+                      padding: EdgeInsets.all(5),
+                      backgroundColor: AppColor.mainLighter,
+                      foregroundColor: Colors.white,
+                    ),
                   ),
                 ),
               ),
-               Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                  padding: EdgeInsets.symmetric( vertical:3.0 , horizontal: 12.0),
-                  child: Text(
-                          title,
-                          style:  TextStyle(
-                                  shadows: [
-                                    Shadow(
-                                      color: Color.fromRGBO(0, 0, 0, 0.3), // You can change the shadow color
-                                      offset: Offset(1.0, 3.0), // You can change the shadow offset
-                                      blurRadius: 5.0, // You can change the blur radius
-                                    ),
-                                  ],
-                                  fontSize: 24,
-                                  fontFamily: 'inter',
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColor.mainLighter, 
-                                  )
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 3.0, horizontal: 12.0),
+                  child: Text(title,
+                      style: TextStyle(
+                        shadows: [
+                          Shadow(
+                            color: Color.fromRGBO(0, 0, 0,
+                                0.3), // You can change the shadow color
+                            offset: Offset(
+                                1.0, 3.0), // You can change the shadow offset
+                            blurRadius: 5.0, // You can change the blur radius
                           ),
+                        ],
+                        fontSize: 24,
+                        fontFamily: 'inter',
+                        fontWeight: FontWeight.w700,
+                        color: AppColor.mainLighter,
+                      )),
                 ),
               ),
               SizedBox(height: 10),
@@ -73,9 +72,8 @@ class SeeMore extends StatelessWidget {
                   spacing: 8.0, // Adjust the spacing between cards
                   runSpacing: 8.0,
                   children: [
-                    // Create HomeItem widgets using the seeMoreImagePaths
-                    for (String imagePath in seeMoreImagePaths)
-                      LikedItemWidget(imagePath: imagePath , isinFav: true),
+                    for (var product in productsList)
+                      LikedItemWidget(product: product, isinFav: true),
                   ],
                 ),
               ),

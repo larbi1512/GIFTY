@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:gifty/widgets/back_button.dart';
 import 'package:image_picker/image_picker.dart';
@@ -67,7 +69,6 @@ class _EditProfileState extends State<EditProfile> {
   String User_website = usersInfo[0]['User_website'];
 
   final _tx_User_name_controller = TextEditingController();
-  final _tx_User_surname_controller = TextEditingController();
   final _tx_User_email_controller = TextEditingController();
   final _tx_User_phone_controller = TextEditingController();
   final _tx_User_insta_controller = TextEditingController();
@@ -138,9 +139,8 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  @override
   final picker = ImagePicker();
-
+  @override
   Widget build(BuildContext context) {
     var mediaQueryData = MediaQuery.of(context);
     return SafeArea(

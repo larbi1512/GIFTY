@@ -90,12 +90,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       borderType: BorderType.RRect,
                       dashPattern: [6, 6],
                       child: InkWell(
-                        // onTap: () {
-                        //   showModalBottomSheet(
-                        //     context: context,
-                        //     builder: ((builder) => BottomSheetWidget(picker)),
-                        //   );
-                        // },
                         onTap: () async {
                           XFile? selectedImage = await showModalBottomSheet(
                             context: context,
@@ -104,13 +98,11 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           if (selectedImage != null) {
                             setState(() {
                               if (imagesItems.length < 5) {
-                                // imageList.add(XFile(selectedImage.path));
                                 imagesItems.add({
                                   'type': 'file',
                                   'imagePath': selectedImage.path
                                 });
                               } else {
-                                // imageList[4] = (XFile(selectedImage.path));
                                 imagesItems[4]['imagePath'] =
                                     selectedImage.path;
                               }
@@ -119,7 +111,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             // User cancelled the picker
                           }
                         },
-
                         child: (imagesItems.length > 4 &&
                                 imagesItems[4]['imagePath'] != null)
                             ? Container(
@@ -376,13 +367,11 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             if (selectedImage != null) {
                               setState(() {
                                 if (imagesItems.length < 1) {
-                                  // imageList.add(XFile(selectedImage.path));
                                   imagesItems.add({
                                     'type': 'file',
                                     'imagePath': selectedImage.path
                                   });
                                 } else {
-                                  // imageList[4] = (XFile(selectedImage.path));
                                   imagesItems[0]['imagePath'] =
                                       selectedImage.path;
                                 }
@@ -441,7 +430,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
               ),
             ])),
       ),
-      // bottomNavigationBar: _buildBottomBar(context),
     ));
   }
 }
@@ -621,15 +609,7 @@ Widget AddButton(BuildContext context, Map<String, dynamic> productData) {
       )),
     ),
     onPressed: () {
-      // Map<String, dynamic> productData = {
-      //                       'name': _tx_name_controller.text,
-      //                       'description': _tx_description_controller.text,
-      //                       'price': _tx_price_controller.text,
-      //                       'provider_id': 1,
-      //                       'images': imageList,
-      //                     };
-      print(
-          "Here is the data::::::::::::::::::::::::::::::::::: ${productData}");
+      print("Here is the data: ${productData}");
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -654,17 +634,3 @@ Widget AddButton(BuildContext context, Map<String, dynamic> productData) {
     ),
   );
 }
-
-// onPressed: () async {
-//                           Map<String, dynamic> productData = {
-//                             'name': _tx_name_controller.text,
-//                             'description': _tx_description_controller.text,
-//                             'price': _tx_price_controller.text,
-//                             'provider_id': 1,
-//                             'images': imageList,
-//                           };
-//                           //do processing with this data
-//                           print("Here is the data ${productData}");
-//                           await DBGift.insertRecord(productData);
-//                           //  Navigator.of(context).pushNamed("/historyProduct");
-//                         },
