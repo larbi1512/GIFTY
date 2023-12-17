@@ -135,8 +135,8 @@ class _SearchBarAppState extends State<SearchBarApp> {
 
   @override
   Widget build(BuildContext context) {
-    Future<List> search_result =
-        DBGift.getAllProductsByKeyword(_searchController.text);
+    // Future<List> search_result =
+    //     DBGift.getAllProductsByKeyword(_searchController.text);
     return Container(
       height: 50,
       width: 350,
@@ -172,7 +172,8 @@ class _SearchBarAppState extends State<SearchBarApp> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => FutureBuilder(
-                        future: search_result,
+                        future: DBGift.getAllProductsByKeyword(
+                            _searchController.text),
                         builder: _build_search_result,
                       ),
                     ),
@@ -191,6 +192,7 @@ class _SearchBarAppState extends State<SearchBarApp> {
   }
 
   Widget _build_search_result(BuildContext context, AsyncSnapshot snapshot) {
+    // _searchController.clear();
     if (snapshot.hasData) {
       List<Map> search_result = snapshot.data as List<Map>;
       return SeeMore(
