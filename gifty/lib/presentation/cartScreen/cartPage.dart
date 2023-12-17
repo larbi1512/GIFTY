@@ -1,17 +1,49 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:gifty/config/colors.config.dart';
 import 'package:gifty/widgets/cartWidget.dart';
+import 'package:gifty/databases/DBUsercart.dart';
 
 
-class CartPage extends StatelessWidget {
-  const CartPage({super.key});
+class CartPage extends StatefulWidget {
+  final int userId;
+  const CartPage({required this.userId, Key? key}) : super(key: key);
+
+  @override
+  _CartPageState createState() => _CartPageState();
+}
+
+class _CartPageState extends State<CartPage> {
+
+  //test insert
+  Future<void> _testInsert(int id) async {
+  Map<String, dynamic> testData = {
+    'user_id': id,
+    'product_id': 1,
+    'title': 'Test Product',
+    'remote_id': 123, 
+    'amount': 1,
+    'price': 50, 
+  };
+  Map<String, dynamic> testData2 = {
+    'user_id': id,
+    'product_id': 2,
+    'title': 'Test Product',
+    'remote_id': 123, 
+    'amount': 1,
+    'price': 50, 
+  };
+  await DBUserCart.insertRecord(testData);
+  await DBUserCart.insertRecord(testData2);
+  
+  setState(() {});
+}
+
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      backgroundColor:  Color.fromRGBO(255, 242, 238, 1.0),
+    final futureCartItems = DBUserCart.getAllCarItemsOfUser(widget.userId);
+    return Scaffold(
+      backgroundColor: Color.fromRGBO(255, 242, 238, 1.0),
       body: Column(
         children: [
           Padding(
@@ -33,16 +65,18 @@ class CartPage extends StatelessWidget {
                 ),
                 const Text(
                   "Cart",
-                  style:  TextStyle(
+                  style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: AppColor.main,
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  onPressed: ()
+                    async {
+                        await _testInsert(1);
+                        await _testInsert(2);
+                      },
                   child: const Icon(Icons.delete),
                   style: ElevatedButton.styleFrom(
                     shape: CircleBorder(),
@@ -52,79 +86,94 @@ class CartPage extends StatelessWidget {
                   ),
                 ),
               ],
-              ),
+            ),
           ),
+          Expanded(
+            child: FutureBuilder<List<Map<String, dynamic>>>(
+              future: futureCartItems,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator(); // Show a loading indicator while fetching data
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                 
+                 List<Widget> cartWidgets = [];
 
-          const Expanded(child: RawScrollbar(
-                     trackColor: AppColor.mainLighter,
+                for (var cartItem in snapshot.data!) {  
+                  String title = cartItem['title'];
+                  int price = cartItem['price'];
+                  int amount = cartItem['amount'];
+
+                  cartWidgets.add(
+                    CartWidget(
+                      title: title,
+                      price: price,
+                      amount: amount,
+                    ),
+                  );
+                }
+                  return RawScrollbar(
+                    trackColor: AppColor.mainLighter,
                     thumbColor: AppColor.greenLighter,
-                
                     radius: Radius.circular(20),
                     thickness: 10,
-                    trackVisibility:true,
+                    trackVisibility: true,
                     thumbVisibility: true,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  cartWidget(),
-                  cartWidget(),
-                  cartWidget(),
-                  cartWidget(),
-                  cartWidget(),
-                  cartWidget(),
-                  cartWidget(),
-                  cartWidget(),
-                  cartWidget(),
-                ],
-              ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: cartWidgets,
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
-          )
           ),
-         Padding(
-           padding: const EdgeInsets.symmetric(horizontal: 20 , vertical: 5 ),
-           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                height: 70,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Total price:",
-                      style: TextStyle(
-                        color: const Color.fromRGBO(0, 0, 0, 0.5),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  height: 70,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Total price:",
+                        style: TextStyle(
+                          color: const Color.fromRGBO(0, 0, 0, 0.5),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
-                    ),
-                    Text(
-                      "200.00 Da",
-                      style: TextStyle(
-                        fontSize: 24,
-                         fontWeight: FontWeight.bold,
+                      Text(
+                        "200.00 Da",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.all(5),
                     backgroundColor: AppColor.main,
                     foregroundColor: Color.fromRGBO(255, 242, 238, 1.0),
                   ),
-                onPressed: () {
-                  // Add your onPressed logic here
-                },
-                child: Text("Next"),
-              ),
-            ],
-                   ),
-         ),
-
+                  onPressed: () {
+                    // Add your onPressed logic here
+                  },
+                  child: Text("Next"),
+                ),
+              ],
+            ),
+          ),
         ],
-      )
+      ),
     );
   }
 }

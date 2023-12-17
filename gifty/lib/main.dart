@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         '/onboarding': (context) => OnBoardingScreen(),
         '/login': (context) => LoginScreen(),
 
-        '/cart': (context) => CartPage(),
+        '/cart': (context) => CartPage(userId: 1,),
 
         '/signup': (context) => signup1(),
         '/signup_provider': (context) => signupProvider(),

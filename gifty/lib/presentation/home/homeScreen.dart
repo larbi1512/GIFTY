@@ -13,6 +13,8 @@ import '../add_item_screen/add_item_screen.dart';
 import '../profile/user_profile.dart';
 import '../search_screen/search_page.dart';
 
+
+const user_id = 1;
 void main() => runApp(Home());
 
 class Home extends StatelessWidget {
@@ -96,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CartPage()),
+                  MaterialPageRoute(builder: (context) => CartPage(userId: user_id,)),
                 );
               },
             ),
