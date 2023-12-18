@@ -1,7 +1,9 @@
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gifty/config/colors.config.dart';
+import 'package:gifty/presentation/home/homeScreen.dart';
 import 'package:gifty/presentation/home/homeWidgets.dart';
 import 'package:gifty/databases/DBUsercart.dart';
 
@@ -11,12 +13,18 @@ class CartWidget extends StatefulWidget {
   final String title;
   final int price;
   final int amount;
+  final int user_id;
+  final int product_id;
+  var widgetState ;
 
  
-  const CartWidget({
+   CartWidget({
     required this.title,
     required this.price,
     required this.amount,
+    required this.user_id,
+    required this.product_id,
+     required this.widgetState,
     Key? key,
   }) : super(key: key);
   
@@ -26,29 +34,40 @@ class CartWidget extends StatefulWidget {
 
 
 class _CartWidgetState extends State<CartWidget> {
-  late int _currentAmount;
+   late int _currentAmount;
 
-   void _testDelete(int user_id , int product_id) async {
+    Future<void> _testDelete(int user_id , int product_id) async {
      await DBUserCart.deleteRecord(user_id , product_id);
-     setState((){});
+     widget.widgetState.setState((){});
    }
+ 
+
    void initState() {
     super.initState();
     _currentAmount = widget.amount;
   }
-    void _incrementAmount() {
-    setState(() {
-      _currentAmount++;
-    });
-  }
 
-  void _decrementAmount() {
-    if (_currentAmount > 0) {
-      setState(() {
-        _currentAmount--;
-      });
-    }
+   void _incrementAmount(int user_id , int product_id , new_data) {
+        setState(() {
+          _currentAmount++;
+          newData['amount'] = _currentAmount;
+            DBUserCart.updateRecord(user_id, product_id, new_data);
+        });
   }
+   void _decrementAmount(int user_id , int product_id , new_data) {
+        setState(() {
+          _currentAmount--;
+          newData['amount'] = _currentAmount;
+            DBUserCart.updateRecord(user_id, product_id, new_data);
+        });
+  }
+   
+       Map<String, dynamic> newData = {
+    'amount': 1, // Update the amount to 5
+    'price': 20, // Update the price to 20
+  };
+
+
   
   @override
   Widget build(BuildContext context) {
@@ -127,7 +146,7 @@ class _CartWidgetState extends State<CartWidget> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: <Widget>[
                                     GestureDetector(
-                                      onTap: _decrementAmount,
+                                      onTap: () => _decrementAmount(1 , widget.product_id ,newData),
                                       child: Container(
                                         decoration: BoxDecoration(
                                         color: Colors.grey.shade200,
@@ -149,7 +168,7 @@ class _CartWidgetState extends State<CartWidget> {
                                       ),
                                     ),
                                     GestureDetector(
-                                      onTap: _incrementAmount,
+                                      onTap: () => _incrementAmount(1 ,  widget.product_id , newData),
                                       child: Container(          
                                         decoration: BoxDecoration(
                                         color: Colors.grey.shade200,
@@ -173,8 +192,8 @@ class _CartWidgetState extends State<CartWidget> {
         Align(
           alignment: Alignment.topRight,
           child: GestureDetector(
-            onTap:  () => {
-              _testDelete(1, 1)
+            onTap:  () async => {
+               await _testDelete(1, widget.product_id)
             } ,
             child: Container(
               width: 24, 

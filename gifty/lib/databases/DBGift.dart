@@ -195,6 +195,12 @@ class DBGift {
     //{name: utr, company_data: {id: 1, name: Hamoud, remote_id: 1}, type: Bread, images: [{type: file, imagePath: /data/user/0/com.example.product_information_collection/cache/scaled_66986a42-4e0c-4879-9f1b-2ccba70650138265343296283913485.jpg}]}
     int id = await database.insert(tableName, prodData,
         conflictAlgorithm: ConflictAlgorithm.replace);
+    
+    //  if(data['images'] == null){
+    //     data['images'] = {
+    //       "imagePath" : "assets/images/book.png",
+    //     };
+    //   }
 
     for (Map<String, dynamic> img in data['images']) {
       img['product_id'] = id.toString();
