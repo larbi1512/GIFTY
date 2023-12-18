@@ -23,7 +23,7 @@ static Future<List<Map<String, dynamic>>> getAllCarItemsOfUser(int user_id) asyn
 
   List<Map<String, dynamic>> res = await database.rawQuery('''
     SELECT 
-      title , amount , price
+      title , amount , price , product_id
     FROM $tableName
     WHERE user_id=?
   ''', [user_id]);
@@ -51,4 +51,14 @@ static Future<List<Map<String, dynamic>>> getAllCarItemsOfUser(int user_id) asyn
         [user_id, product_id]);
     return true;
   }
+
+static Future<bool> deleteAll(int user_id) async {
+  final database = await DBHelper.getDatabase();
+  await database.delete(
+    tableName,
+    where: 'user_id = ?',
+    whereArgs: [user_id],
+  );
+  return true;
+}
 }

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gifty/config/colors.config.dart';
+import 'package:gifty/presentation/home/homeScreen.dart';
 import 'package:gifty/widgets/cartWidget.dart';
 import 'package:gifty/databases/DBUsercart.dart';
 
@@ -13,35 +16,31 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  late Future<List<Map<String, dynamic>>> futureCartItems;
+    int cartnbr = 0;
 
-  //test insert
-  Future<void> _testInsert(int id) async {
+ void initState() {
+    super.initState();
+    futureCartItems = DBUserCart.getAllCarItemsOfUser(widget.userId);
+  }
+
+  Future<void> _testInsert(int id , int prid) async {
   Map<String, dynamic> testData = {
     'user_id': id,
-    'product_id': 1,
+    'product_id': prid,
     'title': 'Test Product',
     'remote_id': 123, 
     'amount': 1,
-    'price': 50, 
-  };
-  Map<String, dynamic> testData2 = {
-    'user_id': id,
-    'product_id': 2,
-    'title': 'Test Product',
-    'remote_id': 123, 
-    'amount': 1,
-    'price': 50, 
+    'price': prid, 
   };
   await DBUserCart.insertRecord(testData);
-  await DBUserCart.insertRecord(testData2);
-  
   setState(() {});
 }
 
-
   @override
   Widget build(BuildContext context) {
-    final futureCartItems = DBUserCart.getAllCarItemsOfUser(widget.userId);
+  final  futureCartItems = DBUserCart.getAllCarItemsOfUser(widget.userId);
+
     return Scaffold(
       backgroundColor: Color.fromRGBO(255, 242, 238, 1.0),
       body: Column(
@@ -74,8 +73,9 @@ class _CartPageState extends State<CartPage> {
                 ElevatedButton(
                   onPressed: ()
                     async {
-                        await _testInsert(1);
-                        await _testInsert(2);
+                       await DBUserCart.deleteAll(1);
+                       setState(() {
+                        });
                       },
                   child: const Icon(Icons.delete),
                   style: ElevatedButton.styleFrom(
@@ -104,12 +104,16 @@ class _CartPageState extends State<CartPage> {
                   String title = cartItem['title'];
                   int price = cartItem['price'];
                   int amount = cartItem['amount'];
+                  int productID = cartItem['product_id'];
 
                   cartWidgets.add(
                     CartWidget(
                       title: title,
                       price: price,
+                      user_id: user_id,
+                      product_id: productID ,
                       amount: amount,
+                      widgetState : this,
                     ),
                   );
                 }
@@ -164,9 +168,10 @@ class _CartPageState extends State<CartPage> {
                     backgroundColor: AppColor.main,
                     foregroundColor: Color.fromRGBO(255, 242, 238, 1.0),
                   ),
-                  onPressed: () {
-                    // Add your onPressed logic here
-                  },
+                  onPressed: () async{
+                      cartnbr++;
+                      await _testInsert(1 , cartnbr);
+                  } ,
                   child: Text("Next"),
                 ),
               ],

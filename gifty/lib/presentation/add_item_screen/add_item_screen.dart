@@ -423,7 +423,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   'description': _tx_description_controller.text,
                   'price': _tx_price_controller.text,
                   'provider_id': 1,
-                  'images': imagesItems,
+                  'images': imagesItems?? {
+                                    'type': 'file',
+                                    'imagePath': "assets/images/book.png"
+                                  },
                   'colors': controller.colors
                 }),
                 // )
