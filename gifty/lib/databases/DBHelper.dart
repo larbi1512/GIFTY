@@ -25,9 +25,9 @@ class DBHelper {
     }
     List sql_create_code = [
       DBUser.sql_code,
+      DBCategory.sql_code,
       DBProvider.sql_code,
       DBGift.sql_code,
-      DBCategory.sql_code,
       DBImage.sql_code,
       DBTags.sql_code,
       DBProvidersTags.sql_code,

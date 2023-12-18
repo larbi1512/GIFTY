@@ -7,6 +7,7 @@ import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
 import '../../config/font.config.dart';
 import '../../databases/DBGift.dart';
+import '../../widgets/searchPageWidgets.dart';
 
 class ContinueAddScreen extends StatelessWidget {
   String iconPicture = Assets.images.iconPicture;
@@ -79,9 +80,9 @@ class ContinueAddScreen extends StatelessWidget {
               //   child: SingleChildScrollView(
               //     child: Column(
               //       children: [
-              //         // SearchWidget("Event type :", false),
-              //         // SearchWidget("Age :", false),
-              //         // SearchWidget("Position :", false),
+              //         SearchWidget("Event type :", false),
+              //         SearchWidget("Age :", false),
+              //         SearchWidget("Position :", false),
               //         SizedBox(height: 20),
               //         Align(
               //             alignment: Alignment.centerLeft,
