@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "587134338987",
+    "project_id": "gifty-3b7c1",
+    "storage_bucket": "gifty-3b7c1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587134338987:android:89c1fee2f8c6332dcdb4ee",
+        "android_client_info": {
+          "package_name": "com.example.gifty"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2fAlDh4piPeAZvWBjE17_hHtiOMTJtRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

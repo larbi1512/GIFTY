@@ -4,9 +4,38 @@ import 'package:gifty/widgets/background_image.dart';
 import '../../../config/colors.config.dart';
 import '../../../config/font.config.dart';
 import '../../../widgets/rounded_container.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+class _LoginScreenState extends State<LoginScreen> {
+  bool _isObscure3 = true;
+  bool visible = false;
+  final _formkey = GlobalKey<FormState>();
+  final TextEditingController emailController = new TextEditingController();
+  final TextEditingController passwordController = new TextEditingController();
+  String errorMessage = '';
+   Future<void> signIn() async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      print('Login Successful: ${userCredential.user?.uid}');
+      Navigator.pushNamed(context, '/home');
+    } catch (e) {
+      print('Login Failed: $e');
+      setState((){
+       errorMessage = 'Login failed. Please check your credentials.';
+
+      });
+    }
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundImage(
@@ -24,9 +53,22 @@ class LoginScreen extends StatelessWidget {
                   style: AppTextStyles.loginText,
                 ),
                 SizedBox(height: 20),
+         if (errorMessage.isNotEmpty)
+         Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      errorMessage,
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       prefixIcon:
                           Icon(Icons.email_rounded, color: AppColor.main),
@@ -46,6 +88,9 @@ class LoginScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(
+                    controller: passwordController,
+                    obscureText: _isObscure3,
+                    
                     decoration: InputDecoration(
                       fillColor: Colors.white,
                       filled: true,
@@ -53,8 +98,14 @@ class LoginScreen extends StatelessWidget {
                           Icon(Icons.lock_rounded, color: AppColor.main),
                       hintText: 'Password',
                       suffixIcon: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.visibility_off_rounded),
+                        onPressed: () {
+                           setState(() {
+                            _isObscure3 = !_isObscure3;
+                          });
+                        },
+                        icon: Icon(_isObscure3
+                            ? Icons.visibility
+                            : Icons.visibility_off),
                       ),
                       border: const OutlineInputBorder(
                         borderSide: BorderSide(color: AppColor.main),
@@ -76,8 +127,8 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/home');
-                  },
+signIn();                 
+ },
                   child: Text('Login'),
                 ),
                 TextButton(
