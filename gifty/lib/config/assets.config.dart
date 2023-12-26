@@ -27,4 +27,6 @@ class Images {
   String iconSearchActive = 'assets/icons/icon_search_active.png';
   String iconAdd = 'assets/icons/icon_add.png';
   String iconMagic = 'assets/icons/icon_magic.png';
+  String iconHeartWhite = 'assets/icons/icon_heart_white.png';
+  String iconHeartActiveWhite = 'assets/icons/icon_heart_active_white.png';
 }

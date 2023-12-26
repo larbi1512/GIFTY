@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gifty/presentation/cartScreen/cartPage.dart';
+import 'package:gifty/presentation/notificationScreen/notificationPage.dart';
 import 'package:gifty/presentation/wishlist/favorites.dart';
-import 'package:gifty/presentation/home/SeeMore.dart';
 import 'package:gifty/presentation/home/homeWidgets.dart';
 
 import '../../controllers/navbar_controller.dart';
@@ -13,6 +13,8 @@ import '../add_item_screen/add_item_screen.dart';
 import '../profile/user_profile.dart';
 import '../search_screen/search_page.dart';
 
+
+const user_id = 1;
 void main() => runApp(Home());
 
 class Home extends StatelessWidget {
@@ -43,28 +45,28 @@ class _MyHomePageState extends State<MyHomePage> {
     SearchScreen(),
     FavoritesScreen(),
     ProfileScreen(),
-    SeeMore(seeMoreImagePaths: const [
-      'assets/images/flower.jpeg',
-      'assets/images/flower.jpeg',
-      'assets/images/flower.jpeg',
-      'assets/images/flower.jpeg',
-      // Add more image paths as needed
-    ]),
+    // SeeMore(seeMoreImagePaths: const [
+    //   'assets/images/flower.jpeg',
+    //   'assets/images/flower.jpeg',
+    //   'assets/images/flower.jpeg',
+    //   'assets/images/flower.jpeg',
+    //   // Add more image paths as needed
+    // ] , title: ""),
   ];
 
   final List<Widget> _provider_tabs = [
     HomeScreen(),
     SearchScreen(),
-    AddItemScreen(),
+    AddItemPage(),
     FavoritesScreen(),
     ProfileScreen(),
-    SeeMore(seeMoreImagePaths: const [
-      'assets/images/flower.jpeg',
-      'assets/images/flower.jpeg',
-      'assets/images/flower.jpeg',
-      'assets/images/flower.jpeg',
-      // Add more image paths as needed
-    ]),
+    // SeeMore(seeMoreImagePaths: const [
+    //   'assets/images/flower.jpeg',
+    //   'assets/images/flower.jpeg',
+    //   'assets/images/flower.jpeg',
+    //   'assets/images/flower.jpeg',
+    //   // Add more image paths as needed
+    // ] , title:"nb"),
   ];
 
   @override
@@ -96,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CartPage()),
+                  MaterialPageRoute(builder: (context) => CartPage(userId: user_id,)),
                 );
               },
             ),
@@ -116,7 +118,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Color.fromRGBO(255, 242, 238, 1.0),
               ),
               tooltip: 'Go to the next page',
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NotificationPage()),
+                );
+              },
             ),
           ),
           SizedBox(width: 10),
@@ -147,7 +154,7 @@ class SearchScreen extends StatelessWidget {
 class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return wishList();
+    return wishList(user_id: 1);
   }
 }
 
@@ -155,6 +162,13 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return UserProfile();
+  }
+}
+
+class AddItemPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AddItemScreen();
   }
 }
 

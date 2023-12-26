@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gifty/config/colors.config.dart';
 import 'package:gifty/widgets/favorite_item.dart';
 
+import '../../databases/DBUser_favorites.dart';
+
 class wishList extends StatefulWidget {
-  const wishList({Key? key}) : super(key: key);
+  final int user_id;
+  const wishList({Key? key, required this.user_id}) : super(key: key);
 
   @override
   State<wishList> createState() => _wishlistState();
@@ -12,16 +15,26 @@ class wishList extends StatefulWidget {
 class _wishlistState extends State<wishList> {
   @override
   Widget build(BuildContext context) {
+    Future<List?> favorites =
+        DBUserFavorits.getAllFavoritsOfUser(widget.user_id);
     return Scaffold(
       backgroundColor: Color.fromRGBO(255, 242, 238, 1.0),
       body: Column(
         children: [
-        
-           Expanded(
+          Expanded(
             child: RawScrollbar(
+              trackColor: AppColor.mainLighter,
+              thumbColor: AppColor.greenLighter,
+              radius: Radius.circular(20),
+              thickness: 10,
+              trackVisibility: true,
+              thumbVisibility: true,
               child: SingleChildScrollView(
-                child:
-                    buildGridView(), 
+                child: FutureBuilder(
+                  future: favorites,
+                  builder: _build_grid_favorites,
+                ),
+                // buildGridView(),
               ),
             ),
           ),
@@ -30,7 +43,22 @@ class _wishlistState extends State<wishList> {
     );
   }
 
-  Widget buildGridView() {
+  Widget _build_grid_favorites(BuildContext context, AsyncSnapshot snapshot) {
+    if (snapshot.hasData) {
+      List<Map> favorites = snapshot.data as List<Map>;
+      return buildGridView(favorites);
+      // CategoryRow(
+      //   title: 'gifts',
+      //   productsList: gifts,
+      //   imagePaths: imagePaths,
+      // );
+    } else if (snapshot.hasError) {
+      return Text("${snapshot.error}");
+    }
+    return CircularProgressIndicator();
+  }
+
+  Widget buildGridView(productsList) {
     return GridView.builder(
       shrinkWrap: true,
       padding: EdgeInsets.all(10),
@@ -40,12 +68,11 @@ class _wishlistState extends State<wishList> {
         mainAxisSpacing: 20,
         crossAxisSpacing: 6,
         childAspectRatio: 0.7,
-
-        
       ),
-      itemCount: 8, // Change this to the number of items you want to display
+      itemCount:
+          productsList.length, // Change this to the number of items you want
       itemBuilder: (BuildContext context, int index) {
-        return LikedItemWidget();
+        return LikedItemWidget(product: productsList[index], isinFav: true);
       },
     );
   }

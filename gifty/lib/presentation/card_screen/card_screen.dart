@@ -1,6 +1,10 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:gifty/databases/DBUser_favorites.dart';
+import '../../databases/DBGift.dart';
 import '/config/assets.config.dart';
 import '/config/colors.config.dart';
 import '/config/font.config.dart';
@@ -9,25 +13,14 @@ import '../../widgets/back_button.dart';
 import '../providers_list/providers_list_screen.dart';
 
 class CardScreen extends StatefulWidget {
-  const CardScreen({super.key});
+  final int productId;
+  const CardScreen({super.key, required this.productId});
 
   @override
   State<CardScreen> createState() => _CardScreenState();
 }
 
 class _CardScreenState extends State<CardScreen> {
-  //List <Provider> providers= ;
-  static Map itemInfo = {
-    'Item_imagePath': Assets.images.itemImage,
-    'Item_name': "Bouquet",
-    'Item_isFavorite': false,
-    'Item_description':
-        "Lorem ipsum dolor sit amet consectetur. Aliquam amet volutpat in vestibulum bibendum egestas integer nibh..",
-  };
-  String Item_imagePath = itemInfo['Item_imagePath'];
-  String Item_name = itemInfo['Item_name'];
-  bool Item_isFavorite = itemInfo['Item_isFavorite'];
-  String Item_description = itemInfo['Item_description'];
   String Provider_imagePath = Assets.images.providerImage;
   String Provider_name = "Flower paradise Event";
   String Provider_storePlace = "Baba hsen, Algiers";
@@ -35,48 +28,60 @@ class _CardScreenState extends State<CardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    Future<Map<String, dynamic>?> productInfo =
+        DBGift.getProductById(widget.productId);
     return SafeArea(
       child: Scaffold(
           floatingActionButton: const GoBackButton(),
           floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-          body: Container(
-              width: double.maxFinite,
-              padding: EdgeInsets.symmetric(horizontal: 21, vertical: 15),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 37),
-                    SizedBox(
-                        height: size.height * 0.54,
-                        // width: size.width * 0.89,
-                        width: 387,
-                        child: ProductCard(
-                            Item_imagePath: Item_imagePath,
-                            Item_name: Item_name,
-                            Item_isFavorite: Item_isFavorite,
-                            Item_description: Item_description)),
-                    const SizedBox(height: 20),
-                    Providers(),
-                    SizedBox(height: 5)
-                  ]))),
+          body: SingleChildScrollView(
+            child: Container(
+                width: double.maxFinite,
+                padding: EdgeInsets.symmetric(horizontal: 21, vertical: 15),
+                child: FutureBuilder(
+                  future: productInfo,
+                  builder: _build_product_info,
+                )),
+          )),
     );
+  }
+
+  Widget _build_product_info(BuildContext context, AsyncSnapshot snapshot) {
+    if (snapshot.hasData) {
+      Map item = snapshot.data as Map;
+      return getWidgetForProductInfo(item, this);
+    } else if (snapshot.hasError) {
+      return Text("${snapshot.error}");
+    }
+    return CircularProgressIndicator();
+  }
+
+  Widget getWidgetForProductInfo(Map item, stateWidget) {
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(height: 50),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.58,
+            // width: size.width * 0.89,
+            // width: 387,
+            child: ProductCard(item: item, widgetState: stateWidget),
+          ),
+          const SizedBox(height: 20),
+          Provider(providerInfo: item['providerInfo']),
+          // const SizedBox(height: 10),
+          // OtherProviders(),
+          SizedBox(height: 5)
+        ]);
   }
 }
 
 class ProductCard extends StatelessWidget {
-  final String Item_imagePath;
-  final String Item_name;
-  bool Item_isFavorite;
-  final String Item_description;
+  dynamic widgetState;
+  final Map item;
 
-  ProductCard(
-      {required this.Item_imagePath,
-      required this.Item_name,
-      required this.Item_isFavorite,
-      required this.Item_description,
-      Key? key})
+  ProductCard({required this.widgetState, required this.item, Key? key})
       : super(key: key);
 
   @override
@@ -87,12 +92,14 @@ class ProductCard extends StatelessWidget {
           color: AppColor.main,
           borderRadius: BorderRadius.circular(20),
           image: DecorationImage(
-            image: AssetImage(Item_imagePath),
+            image:
+                // AssetImage(Item_imagePath),
+                FileImage(File(item['imageList'][0])),
             fit: BoxFit.cover,
           ),
         ),
-        height: 510,
-        width: 387,
+        // height: 550,
+        // width: 387,
         alignment: Alignment.center,
       ),
       ShaderMask(
@@ -106,7 +113,7 @@ class ProductCard extends StatelessWidget {
         },
         blendMode: BlendMode.dstIn,
         child: Container(
-          height: 500,
+          height: MediaQuery.of(context).size.height * 0.5,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: AppColor.main,
@@ -127,57 +134,71 @@ class ProductCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          Item_name,
+                          item['name'],
                           style: AppTextStyles.subtitle.copyWith(
                             color: Colors.white,
                           ),
                         ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     // setState(() {
-                        //     //   Item_isFavorite = !Item_isFavorite;
-                        //     // });
-                        //     // Obx(() {
-                        //     //   Item_isFavorite = !Item_isFavorite;
-                        //     // });
-                        //     //addToFavorite();
-                        //   },
-                        //   child:
-                        Icon(
-                          Item_isFavorite
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: Colors.white,
+                        InkWell(
+                          onTap: () {
+                            widgetState.setState(() {
+                              if (item['isFavorite']) {
+                                DBUserFavorits.deleteRecord(1, item['id']);
+                              } else {
+                                DBUserFavorits.insertRecord(
+                                    {'user_id': 1, 'product_id': item['id']});
+                              }
+                              item['isFavorite'] = !item['isFavorite'];
+                            });
+                            //       //addToFavorite();
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: (item['isFavorite'])
+                                    ? AssetImage(
+                                        Assets.images.iconHeartActiveWhite)
+                                    : AssetImage(Assets.images.iconHeartWhite),
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            height: 30,
+                            width: 30,
+                          ),
                         ),
-                        // ),
-
-                        //the icon from figma
-                        // InkWell(
-                        //   onTap: () {
-                        //  setState(() {
-                        //         Item_isFavorite =
-                        //             !Item_isFavorite;
-                        //       });
-                        //       //addToFavorite();
-                        //   },
-                        //   child: Container(
-                        //     padding: EdgeInsets.all(
-                        //         16.0),
-                        //     child: SvgPicture.asset(
-                        //       'assets/images/icons/img_nav_liked.svg',
-                        //       width: 20.0,
-                        //       height: 20.0,
-                        //       fit: BoxFit.cover,
-                        //     ),
-                        //   ),
-                        // ),
                       ])),
+              const SizedBox(height: 5),
+              Container(
+                  width: 282,
+                  margin: const EdgeInsets.only(left: 6, right: 64),
+                  child: Text(
+                    "${item['price'].toString()} DZD",
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.text.copyWith(
+                      color: Colors.white,
+                      fontSize: 10,
+                    ),
+                  )),
               const SizedBox(height: 12),
               Container(
                   width: 282,
                   margin: const EdgeInsets.only(left: 6, right: 64),
                   child: Text(
-                    Item_description,
+                    item['description'],
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.text.copyWith(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
+                  )),
+              const SizedBox(height: 3),
+              Container(
+                  width: 282,
+                  margin: const EdgeInsets.only(left: 6, right: 64),
+                  child: Text(
+                    "available in: ${item['colorsList'].join(', ')}",
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.text.copyWith(
@@ -191,7 +212,174 @@ class ProductCard extends StatelessWidget {
   }
 }
 
-class Providers extends StatelessWidget {
+class Provider extends StatelessWidget {
+  final Map providerInfo;
+
+  Provider({
+    super.key,
+    required this.providerInfo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    String Provider_imagePath =
+        providerInfo['brand_pic'] ?? Assets.images.providerImage;
+    String Provider_name = providerInfo['store_name'] ?? "Bahdja telecom";
+    String Provider_storePlace =
+        providerInfo['location'] ?? "Baba hsen, Algiers";
+    String Provider_storeName = "Store";
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColor.main,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: EdgeInsets.all(8),
+      child: Column(
+        children: [
+          Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Provider 🌟",
+                      style: AppTextStyles.subtitle.copyWith(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProvidersListPage(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "See others",
+                        style: AppTextStyles.subtitle.copyWith(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    )
+                  ])),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 2,
+              vertical: 2,
+            ),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(27)),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      //border: border,
+                      borderRadius: BorderRadius.circular(27),
+                    ),
+                    child: Image.asset(
+                      Provider_imagePath,
+                      height: 47,
+                      width: 47,
+                      fit: BoxFit.cover,
+                      //color: color,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: 8,
+                    top: 4,
+                    bottom: 4,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        Provider_name,
+                        style: AppTextStyles.text.copyWith(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                      SizedBox(height: 1),
+                      Row(
+                        children: [
+                          Opacity(
+                            opacity: 0.7,
+                            child: Text(
+                              Provider_storePlace,
+                              style: AppTextStyles.text.copyWith(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: 1,
+                              top: 1,
+                              bottom: 1,
+                            ),
+                            child: Text(
+                              ".",
+                              style: AppTextStyles.text.copyWith(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                          Opacity(
+                            opacity: 0.7,
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 4),
+                              child: Text(
+                                Provider_storeName,
+                                style: AppTextStyles.text.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColor.greenLighter,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    "Add",
+                    style: AppTextStyles.text.copyWith(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class OtherProviders extends StatelessWidget {
   String Item_imagePath = Assets.images.itemImage;
   String Item_name = "Bouquet";
   bool Item_isFavorite = false;
@@ -202,13 +390,13 @@ class Providers extends StatelessWidget {
   String Provider_storePlace = "Baba hsen, Algiers";
   String Provider_storeName = "Store";
 
-  Providers({super.key});
+  OtherProviders({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColor.main,
+        color: AppColor.mainLighter,
         borderRadius: BorderRadius.circular(20),
       ),
       height: 216,
@@ -222,7 +410,7 @@ class Providers extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Providers 🌟",
+                      "Others ",
                       style: AppTextStyles.subtitle.copyWith(
                         color: Colors.white,
                         fontSize: 17,

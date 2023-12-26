@@ -58,7 +58,8 @@ class _ProviderBottomNavBarState extends State<ProviderBottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 70,
+        height: 65,
+        // height: MediaQuery.of(context).size.height * 0.08,
         decoration: BoxDecoration(
           color: Colors.white,
         ),

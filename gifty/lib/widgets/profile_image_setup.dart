@@ -1,14 +1,24 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:gifty/config/assets.config.dart';
+import 'package:gifty/config/colors.config.dart';
 import 'package:gifty/config/font.config.dart';
 import 'package:gifty/widgets/bottomSheet.dart';
+import 'package:image_picker/image_picker.dart';
 
-import '../config/assets.config.dart';
-import '../config/colors.config.dart';
-
-class ProfileImageSetup extends StatelessWidget {
+class ProfileImageSetup extends StatefulWidget {
   final String hintText;
 
-  ProfileImageSetup({required this.hintText});
+  ProfileImageSetup({Key? key, required this.hintText}) : super(key: key);
+
+  @override
+  State<ProfileImageSetup> createState() => _ProfileImageSetupState();
+}
+
+class _ProfileImageSetupState extends State<ProfileImageSetup> {
+  final picker = ImagePicker();
+  XFile? pickedImage;
 
   @override
   Widget build(BuildContext context) {
@@ -17,20 +27,29 @@ class ProfileImageSetup extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 80,
-          backgroundImage: AssetImage(Assets.images.profilePic),
+          backgroundImage: pickedImage != null
+            ? FileImage(File(pickedImage!.path))
+            : AssetImage(Assets.images.profilePic) as ImageProvider<Object>?,
         ),
         SizedBox(height: 20.0),
         Text(
-          hintText,
+          widget.hintText,
           style: AppTextStyles.Hello,
         ),
         SizedBox(height: 20.0),
         InkWell(
-          onTap: () {
-            showModalBottomSheet(
+          onTap: () async {
+            XFile? selectedImage = await showModalBottomSheet(
               context: context,
-              builder: ((builder) => bottomSheet()),
+              builder: ((builder) => BottomSheetWidget(picker)),
             );
+            if (selectedImage != null) {
+              setState(() {
+                pickedImage = XFile(selectedImage.path);
+              });
+            } else {
+              // User cancelled the picker
+            }
           },
           child: Container(
             width: 100,
