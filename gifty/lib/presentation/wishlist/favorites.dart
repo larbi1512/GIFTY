@@ -72,7 +72,8 @@ class _wishlistState extends State<wishList> {
       itemCount:
           productsList.length, // Change this to the number of items you want
       itemBuilder: (BuildContext context, int index) {
-        return LikedItemWidget(product: productsList[index], isinFav: true);
+        return LikedItemWidget(
+            widgetState: this, product: productsList[index], isinFav: true);
       },
     );
   }

@@ -1,11 +1,13 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:gifty/presentation/home/homeScreen.dart';
 import 'package:gifty/widgets/back_button.dart';
 
 import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
 import '../../config/font.config.dart';
+import '../../controllers/navbar_controller.dart';
 import '../../databases/DBGift.dart';
 
 class ContinueAddScreen extends StatelessWidget {
@@ -121,8 +123,13 @@ Widget AddButton(BuildContext context, Map<String, dynamic> productData) {
       )),
     ),
     onPressed: () async {
-      //do processing with this data
       await DBGift.insertRecord(productData);
+      Navigator.pop(context);
+      // navBarController.SetPage(1);
+      // Navigator.pop(context);
+      // Navigator.popUntil(context, ModalRoute.withName('/home'));
+      // Navigator.pushNamed(context, '/home');
+      // setState(() {});
     },
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,

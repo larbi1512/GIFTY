@@ -21,6 +21,10 @@ class AddItemController extends GetxController {
   void doRemoveColor(String color) {
     colors.remove(color);
   }
+
+  void doClearColors() {
+    colors.clear();
+  }
 }
 
 final AddItemController controller = AddItemController();
