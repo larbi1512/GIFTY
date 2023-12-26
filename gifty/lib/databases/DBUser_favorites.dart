@@ -49,7 +49,14 @@ class DBUserFavorits {
         GROUP BY gifts.id
         ORDER BY gifts.name ASC
           ''');
-    return res;
+
+    List<Map<String, dynamic>> data = [];
+    for (int i = 0; i < res.length; i++) {
+      data.add(Map.of(res[i]));
+      data[i]['isFavorite'] = true;
+    }
+    return data;
+    // return res;
   }
 
   static Future<bool> isInUserFavorites(int product_id, int user_id) async {

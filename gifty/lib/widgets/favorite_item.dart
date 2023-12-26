@@ -4,13 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:gifty/config/colors.config.dart';
 
 import '../config/assets.config.dart';
+import '../databases/DBUser_favorites.dart';
 import '../presentation/card_screen/card_screen.dart';
 
 class LikedItemWidget extends StatelessWidget {
+  dynamic widgetState;
   final Map product;
   final bool isinFav;
-  const LikedItemWidget(
-      {required this.product, this.isinFav = true, super.key});
+  LikedItemWidget(
+      {required this.widgetState,
+      required this.product,
+      this.isinFav = true,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +29,9 @@ class LikedItemWidget extends StatelessWidget {
       },
       child: Container(
         width: MediaQuery.of(context).size.width * 0.45,
-        height: isinFav ? (MediaQuery.of(context).size.height * 0.32) : 200,
+        height: isinFav
+            ? (MediaQuery.of(context).size.height * 0.335)
+            : (MediaQuery.of(context).size.height * 0.3),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -135,11 +142,38 @@ class LikedItemWidget extends StatelessWidget {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(5.0),
-                      child: InkWell(
-                        onTap: () {},
-                        child: Icon(
-                          Icons.favorite,
-                          color: AppColor.main,
+                      child:
+                          // InkWell(
+                          //   onTap: () {},
+                          //   child: Icon(
+                          //     Icons.favorite,
+                          //     color: AppColor.main,
+                          //   ),
+                          // ),
+                          InkWell(
+                        onTap: () {
+                          widgetState.setState(() {
+                            if (product['isFavorite']) {
+                              DBUserFavorits.deleteRecord(1, product['id']);
+                            } else {
+                              DBUserFavorits.insertRecord(
+                                  {'user_id': 1, 'product_id': product['id']});
+                            }
+                            product['isFavorite'] = !product['isFavorite'];
+                          });
+                          //       //addToFavorite();
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: (product['isFavorite'])
+                                  ? AssetImage(Assets.images.iconHeartActive)
+                                  : AssetImage(Assets.images.iconHeart),
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                          height: 23,
+                          width: 23,
                         ),
                       ),
                     ),

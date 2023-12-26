@@ -38,7 +38,14 @@ class DBGift {
         GROUP BY gifts.id
         ORDER BY gifts.name ASC
           ''');
-    return res;
+
+    List<Map<String, dynamic>> data = [];
+    for (int i = 0; i < res.length; i++) {
+      data.add(Map.of(res[i]));
+      data[i]['isFavorite'] =
+          await DBUserFavorits.isInUserFavorites(res[i]['id'], 1);
+    }
+    return data;
   }
 
   static Future<Map<String, dynamic>?> getProductById(int id) async {
@@ -195,7 +202,7 @@ class DBGift {
     //{name: utr, company_data: {id: 1, name: Hamoud, remote_id: 1}, type: Bread, images: [{type: file, imagePath: /data/user/0/com.example.product_information_collection/cache/scaled_66986a42-4e0c-4879-9f1b-2ccba70650138265343296283913485.jpg}]}
     int id = await database.insert(tableName, prodData,
         conflictAlgorithm: ConflictAlgorithm.replace);
-    
+
     //  if(data['images'] == null){
     //     data['images'] = {
     //       "imagePath" : "assets/images/book.png",

@@ -279,7 +279,7 @@ class CategoryRow extends StatelessWidget {
           ],
         ),
         Container(
-          height: 220,
+          height: (MediaQuery.of(context).size.height * 0.3),
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: productsList.length,
@@ -288,7 +288,9 @@ class CategoryRow extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: LikedItemWidget(
-                    product: productsList[index], isinFav: false),
+                    widgetState: this,
+                    product: productsList[index],
+                    isinFav: false),
               );
             },
           ),
