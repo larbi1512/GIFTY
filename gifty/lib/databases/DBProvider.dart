@@ -16,13 +16,14 @@ class DBProvider {
              instagram TEXT,
              website TEXT,
              brand_pic TEXT,
+             category TEXT,
              create_date TEXT
            );''';
   static Future<List<Map<String, dynamic>>> getAllProviders() async {
     final database = await DBHelper.getDatabase();
     return database.rawQuery('''SELECT 
 
-              id,
+             id,
              remote_id,
              store_name,
              email,
@@ -46,6 +47,17 @@ class DBProvider {
           where store_name='$storeName'
           ''');
     return res[0]['id'] ?? 0;
+  }
+
+  static Future<String> getCategory(int provider_id) async {
+    final database = await DBHelper.getDatabase();
+
+    List<Map> res = await database.rawQuery('''SELECT 
+          category  
+          from ${tableName}
+          where id='$provider_id'
+          ''');
+    return res[0]['category'] ?? "category";
   }
 
   static Future<int> getAllCount() async {

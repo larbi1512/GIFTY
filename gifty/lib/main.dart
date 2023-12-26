@@ -15,8 +15,14 @@ import 'presentation/profile/user_profile.dart';
 import 'presentation/providers_list/providers_list_screen.dart';
 import 'presentation/splash_screen/splash_screen.dart';
 import 'package:gifty/presentation/home/homeScreen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+);
   runApp(MyApp());
 }
 

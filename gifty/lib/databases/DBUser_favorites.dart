@@ -40,17 +40,23 @@ class DBUserFavorits {
         gifts.remote_id,
         gifts.description,
         gifts.price,
-        categories.name as type,
+        gifts.category,
         MAX(images.imagePath) as imagePath
         FROM ${tableName}
         left join gifts on user_favorits.product_id=gifts.id
         LEFT JOIN images ON gifts.id = images.product_id
-        left join categories on category_id=categories.id
         where user_favorits.user_id='$user_id'
         GROUP BY gifts.id
         ORDER BY gifts.name ASC
           ''');
-    return res;
+
+    List<Map<String, dynamic>> data = [];
+    for (int i = 0; i < res.length; i++) {
+      data.add(Map.of(res[i]));
+      data[i]['isFavorite'] = true;
+    }
+    return data;
+    // return res;
   }
 
   static Future<bool> isInUserFavorites(int product_id, int user_id) async {

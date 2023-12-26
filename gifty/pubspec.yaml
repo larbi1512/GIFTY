@@ -40,6 +40,12 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   image_picker: ^1.0.4
   sqflite: ^2.3.0
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.15.3
+  cloud_firestore: ^4.13.6
+
+
+
 
 flutter_launcher_icons:
   android: true

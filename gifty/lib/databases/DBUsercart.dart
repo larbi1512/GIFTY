@@ -61,4 +61,5 @@ static Future<bool> deleteAll(int user_id) async {
   );
   return true;
 }
+
 }
