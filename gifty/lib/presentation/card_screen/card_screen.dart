@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gifty/databases/DBUser_favorites.dart';
 import '../../databases/DBGift.dart';
+import '../../databases/DBUsercart.dart';
+import '../cartScreen/cartPage.dart';
 import '/config/assets.config.dart';
 import '/config/colors.config.dart';
 import '/config/font.config.dart';
@@ -69,7 +71,7 @@ class _CardScreenState extends State<CardScreen> {
             child: ProductCard(item: item, widgetState: stateWidget),
           ),
           const SizedBox(height: 20),
-          Provider(providerInfo: item['providerInfo']),
+          Provider(providerInfo: item['providerInfo'], item: item),
           // const SizedBox(height: 10),
           // OtherProviders(),
           SizedBox(height: 5)
@@ -214,11 +216,25 @@ class ProductCard extends StatelessWidget {
 
 class Provider extends StatelessWidget {
   final Map providerInfo;
+  final Map item;
 
   Provider({
     super.key,
     required this.providerInfo,
+    required this.item,
   });
+  Future<void> _testInsert(int id, int prid) async {
+    Map<String, dynamic> testData = {
+      'user_id': id,
+      'product_id': prid,
+      'title': 'Test Product',
+      'remote_id': 123,
+      'amount': 1,
+      'price': prid,
+    };
+    await DBUserCart.insertRecord(testData);
+    // setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -360,7 +376,19 @@ class Provider extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    await _testInsert(1, item['id']);
+                    Navigator.pop(context);
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CartPage(
+                          userId: 1,
+                        ),
+                      ),
+                    );
+                  },
                   child: Text(
                     "Add",
                     style: AppTextStyles.text.copyWith(

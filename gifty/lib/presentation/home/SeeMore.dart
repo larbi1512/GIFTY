@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:gifty/config/colors.config.dart';
 import 'package:gifty/widgets/favorite_item.dart';
 
-class SeeMore extends StatelessWidget {
+class SeeMore extends StatefulWidget {
   final List productsList;
   final String title;
 
   const SeeMore({required this.title, required this.productsList, super.key});
 
+  @override
+  State<SeeMore> createState() => _SeeMoreState();
+}
+
+class _SeeMoreState extends State<SeeMore> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +52,7 @@ class SeeMore extends StatelessWidget {
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: 3.0, horizontal: 12.0),
-                  child: Text(title,
+                  child: Text(widget.title,
                       style: TextStyle(
                         shadows: [
                           Shadow(
@@ -72,8 +77,9 @@ class SeeMore extends StatelessWidget {
                   spacing: 8.0, // Adjust the spacing between cards
                   runSpacing: 8.0,
                   children: [
-                    for (var product in productsList)
-                      LikedItemWidget(product: product, isinFav: true),
+                    for (var product in widget.productsList)
+                      LikedItemWidget(
+                          widgetState: this, product: product, isinFav: true),
                   ],
                 ),
               ),

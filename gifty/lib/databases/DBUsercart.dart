@@ -17,19 +17,20 @@ class DBUserCart {
             FOREIGN KEY (product_id) REFERENCES gifts(id) ON DELETE CASCADE
            );''';
 
+  static Future<List<Map<String, dynamic>>> getAllCarItemsOfUser(
+      int user_id) async {
+    final database = await DBHelper.getDatabase();
 
-static Future<List<Map<String, dynamic>>> getAllCarItemsOfUser(int user_id) async {
-  final database = await DBHelper.getDatabase();
-
-  List<Map<String, dynamic>> res = await database.rawQuery('''
+    List<Map<String, dynamic>> res = await database.rawQuery('''
     SELECT 
       title , amount , price , product_id
     FROM $tableName
     WHERE user_id=?
   ''', [user_id]);
 
-  return res;
-}
+    return res;
+  }
+
   static Future<bool> updateRecord(
       int user_id, int product_id, Map<String, dynamic> data) async {
     final database = await DBHelper.getDatabase();
@@ -52,13 +53,13 @@ static Future<List<Map<String, dynamic>>> getAllCarItemsOfUser(int user_id) asyn
     return true;
   }
 
-static Future<bool> deleteAll(int user_id) async {
-  final database = await DBHelper.getDatabase();
-  await database.delete(
-    tableName,
-    where: 'user_id = ?',
-    whereArgs: [user_id],
-  );
-  return true;
-}
+  static Future<bool> deleteAll(int user_id) async {
+    final database = await DBHelper.getDatabase();
+    await database.delete(
+      tableName,
+      where: 'user_id = ?',
+      whereArgs: [user_id],
+    );
+    return true;
+  }
 }

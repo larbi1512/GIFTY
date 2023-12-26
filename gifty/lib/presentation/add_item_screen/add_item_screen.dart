@@ -37,6 +37,52 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
   final picker = ImagePicker();
 
+  Widget AddButton(BuildContext context, Map<String, dynamic> productData) {
+    return OutlinedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(AppColor.mainLighter),
+        side: MaterialStateProperty.all(BorderSide(
+          color: AppColor.main,
+          width: 1,
+        )),
+        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        )),
+      ),
+      onPressed: () {
+        print("Here is the data: ${productData}");
+        _tx_name_controller.clear();
+        _tx_description_controller.clear();
+        _tx_price_controller.clear();
+        setState(() {
+          imagesItems.clear();
+          controller.doClearColors();
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ContinueAddScreen(productData: productData),
+          ),
+        );
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            "Continue Add Product",
+            style: TextStyle(
+              color: AppColor.peachLightest,
+              fontSize: 15,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -423,10 +469,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   'description': _tx_description_controller.text,
                   'price': _tx_price_controller.text,
                   'provider_id': 1,
-                  'images': imagesItems?? {
-                                    'type': 'file',
-                                    'imagePath': "assets/images/book.png"
-                                  },
+                  'images': imagesItems ??
+                      {'type': 'file', 'imagePath': "assets/images/book.png"},
                   'colors': controller.colors
                 }),
                 // )
@@ -595,45 +639,6 @@ Widget _PriceFormField(BuildContext context, controller) {
           fontWeight: FontWeight.w400,
         ),
       ),
-    ),
-  );
-}
-
-Widget AddButton(BuildContext context, Map<String, dynamic> productData) {
-  return OutlinedButton(
-    style: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all(AppColor.mainLighter),
-      side: MaterialStateProperty.all(BorderSide(
-        color: AppColor.main,
-        width: 1,
-      )),
-      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      )),
-    ),
-    onPressed: () {
-      print("Here is the data: ${productData}");
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ContinueAddScreen(productData: productData),
-        ),
-      );
-    },
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          "Continue Add Product",
-          style: TextStyle(
-            color: AppColor.peachLightest,
-            fontSize: 15,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-      ],
     ),
   );
 }
