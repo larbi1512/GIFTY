@@ -60,7 +60,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final ApiService apiService = ApiService('http://10.0.2.2:5000'); 
+  final ApiService apiService = ApiService('http://127.0.0.1:5000'); 
 
   @override
   Widget build(BuildContext context) {
