@@ -7,6 +7,7 @@ import 'package:gifty/databases/DBUser_favorites.dart';
 import '../../databases/DBGift.dart';
 import '../../databases/DBUsercart.dart';
 import '../cartScreen/cartPage.dart';
+import '../profile/provider_contact.dart';
 import '/config/assets.config.dart';
 import '/config/colors.config.dart';
 import '/config/font.config.dart';
@@ -68,7 +69,9 @@ class _CardScreenState extends State<CardScreen> {
             height: MediaQuery.of(context).size.height * 0.58,
             // width: size.width * 0.89,
             // width: 387,
-            child: ProductCard(item: item, widgetState: stateWidget),
+
+            // child: ProductCard(item: item, widgetState: stateWidget),
+            child: ProductCard(item: item),
           ),
           const SizedBox(height: 20),
           Provider(providerInfo: item['providerInfo'], item: item),
@@ -79,138 +82,227 @@ class _CardScreenState extends State<CardScreen> {
   }
 }
 
-class ProductCard extends StatelessWidget {
-  dynamic widgetState;
+class ProductCard extends StatefulWidget {
   final Map item;
 
-  ProductCard({required this.widgetState, required this.item, Key? key})
-      : super(key: key);
+  ProductCard({required this.item, Key? key}) : super(key: key);
+
+  @override
+  _ProductCardState createState() => _ProductCardState();
+}
+
+class _ProductCardState extends State<ProductCard> {
+  late PageController _pageController;
+  int currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: currentIndex);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(alignment: Alignment.bottomCenter, children: [
-      Container(
-        decoration: BoxDecoration(
-          color: AppColor.main,
-          borderRadius: BorderRadius.circular(20),
-          image: DecorationImage(
-            image:
-                // AssetImage(Item_imagePath),
-                FileImage(File(item['imageList'][0])),
-            fit: BoxFit.cover,
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        PageView.builder(
+          controller: _pageController,
+          itemCount: widget.item['imageList']?.length ?? 0,
+          onPageChanged: (index) {
+            setState(() {
+              currentIndex = index;
+            });
+          },
+          itemBuilder: (context, index) {
+            return Container(
+              decoration: BoxDecoration(
+                color: AppColor.main,
+                borderRadius: BorderRadius.circular(20),
+                image: DecorationImage(
+                  image: getItemImageProvider(index),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              alignment: Alignment.center,
+            );
+          },
+        ),
+        ShaderMask(
+          shaderCallback: (Rect bounds) {
+            return const LinearGradient(
+              colors: [Colors.transparent, Colors.black],
+              stops: [0.2, 0.8],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ).createShader(bounds);
+          },
+          blendMode: BlendMode.dstIn,
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.5,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: AppColor.main,
+            ),
           ),
         ),
-        // height: 550,
-        // width: 387,
-        alignment: Alignment.center,
-      ),
-      ShaderMask(
-        shaderCallback: (Rect bounds) {
-          return const LinearGradient(
-            colors: [Colors.transparent, Colors.black],
-            stops: [0.2, 0.8],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ).createShader(bounds);
-        },
-        blendMode: BlendMode.dstIn,
-        child: Container(
-          height: MediaQuery.of(context).size.height * 0.5,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: AppColor.main,
-          ),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 29),
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(left: 6),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          item['name'],
-                          style: AppTextStyles.subtitle.copyWith(
-                            color: Colors.white,
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            widgetState.setState(() {
-                              if (item['isFavorite']) {
-                                DBUserFavorits.deleteRecord(1, item['id']);
-                              } else {
-                                DBUserFavorits.insertRecord(
-                                    {'user_id': 1, 'product_id': item['id']});
-                              }
-                              item['isFavorite'] = !item['isFavorite'];
-                            });
-                            //       //addToFavorite();
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: (item['isFavorite'])
-                                    ? AssetImage(
-                                        Assets.images.iconHeartActiveWhite)
-                                    : AssetImage(Assets.images.iconHeartWhite),
-                                fit: BoxFit.contain,
-                              ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 29),
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                    padding: EdgeInsets.only(left: 6),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            widget.item['name'],
+                            style: AppTextStyles.subtitle.copyWith(
+                              color: Colors.white,
                             ),
-                            height: 30,
-                            width: 30,
                           ),
-                        ),
-                      ])),
-              const SizedBox(height: 5),
-              Container(
-                  width: 282,
-                  margin: const EdgeInsets.only(left: 6, right: 64),
-                  child: Text(
-                    "${item['price'].toString()} DZD",
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.text.copyWith(
-                      color: Colors.white,
-                      fontSize: 10,
-                    ),
-                  )),
-              const SizedBox(height: 12),
-              Container(
-                  width: 282,
-                  margin: const EdgeInsets.only(left: 6, right: 64),
-                  child: Text(
-                    item['description'],
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.text.copyWith(
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
-                  )),
-              const SizedBox(height: 3),
-              Container(
-                  width: 282,
-                  margin: const EdgeInsets.only(left: 6, right: 64),
-                  child: Text(
-                    "available in: ${item['colorsList'].join(', ')}",
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.text.copyWith(
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
-                  ))
-            ]),
-      ),
-    ]);
+                          InkWell(
+                            onTap: () {
+                              // wishList.widget.setState(() {});
+                              setState(() {
+                                if (widget.item['isFavorite']) {
+                                  DBUserFavorits.deleteRecord(
+                                      1, widget.item['id']);
+                                } else {
+                                  DBUserFavorits.insertRecord({
+                                    'user_id': 1,
+                                    'product_id': widget.item['id']
+                                  });
+                                }
+                                widget.item['isFavorite'] =
+                                    !widget.item['isFavorite'];
+                              });
+                              //       //addToFavorite();
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: (widget.item['isFavorite'])
+                                      ? AssetImage(
+                                          Assets.images.iconHeartActiveWhite)
+                                      : AssetImage(
+                                          Assets.images.iconHeartWhite),
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                              height: 30,
+                              width: 30,
+                            ),
+                          ),
+                        ])),
+                const SizedBox(height: 5),
+                Container(
+                    width: 282,
+                    margin: const EdgeInsets.only(left: 6, right: 64),
+                    child: Text(
+                      "${widget.item['price'].toString()} DZD",
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.text.copyWith(
+                        color: Colors.white,
+                        fontSize: 10,
+                      ),
+                    )),
+                const SizedBox(height: 12),
+                Container(
+                    width: 282,
+                    margin: const EdgeInsets.only(left: 6, right: 64),
+                    child: Text(
+                      widget.item['description'],
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.text.copyWith(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    )),
+                const SizedBox(height: 3),
+                Container(
+                    width: 282,
+                    margin: const EdgeInsets.only(left: 6, right: 64),
+                    child: Text(
+                      "available in: ${widget.item['colorsList'].join(', ')}",
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.text.copyWith(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ))
+              ]),
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: IgnorePointer(
+            ignoring: false,
+            child: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                print("ùùùùùùùùùùùùùùùùù $currentIndex");
+                if (currentIndex > 0) currentIndex = (currentIndex - 1);
+                setState(() {});
+                _pageController.animateToPage(
+                  currentIndex,
+                  duration: Duration(milliseconds: 400),
+                  curve: Curves.easeInOut,
+                );
+              },
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: IgnorePointer(
+            ignoring: false,
+            child: IconButton(
+              icon: Icon(
+                Icons.arrow_forward,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                print("ùùùùùùùùùùùùùùùùù $currentIndex");
+                if (currentIndex < widget.item['imageList']!.length - 1)
+                  currentIndex = (currentIndex + 1);
+                setState(() {});
+                _pageController.animateToPage(
+                  currentIndex,
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  ImageProvider<Object> getItemImageProvider(int index) {
+    if (widget.item['imageList'] == null || widget.item['imageList']!.isEmpty) {
+      return AssetImage(Assets.images.providerImage);
+    }
+
+    String imagePath = widget.item['imageList']![index]['imagePath'];
+    String imageType = widget.item['imageList']![index]['type'];
+
+    switch (imageType) {
+      case 'file':
+        return FileImage(File(imagePath));
+      default:
+        return AssetImage(imagePath);
+    }
   }
 }
 
@@ -284,121 +376,131 @@ class Provider extends StatelessWidget {
                       ),
                     )
                   ])),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 2,
-              vertical: 2,
-            ),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(27)),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      //border: border,
-                      borderRadius: BorderRadius.circular(27),
-                    ),
-                    child: Image.asset(
-                      Provider_imagePath,
-                      height: 47,
-                      width: 47,
-                      fit: BoxFit.cover,
-                      //color: color,
-                    ),
-                  ),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProviderContact(),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 8,
-                    top: 4,
-                    bottom: 4,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        Provider_name,
-                        style: AppTextStyles.text.copyWith(
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 2,
+                vertical: 2,
+              ),
+              child: Row(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(27)),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        //border: border,
+                        borderRadius: BorderRadius.circular(27),
                       ),
-                      SizedBox(height: 1),
-                      Row(
-                        children: [
-                          Opacity(
-                            opacity: 0.7,
-                            child: Text(
-                              Provider_storePlace,
-                              style: AppTextStyles.text.copyWith(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
-                            ),
+                      child: Image.asset(
+                        Provider_imagePath,
+                        height: 47,
+                        width: 47,
+                        fit: BoxFit.cover,
+                        //color: color,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 8,
+                      top: 4,
+                      bottom: 4,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          Provider_name,
+                          style: AppTextStyles.text.copyWith(
+                            color: Colors.white,
+                            fontSize: 14,
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: 1,
-                              top: 1,
-                              bottom: 1,
-                            ),
-                            child: Text(
-                              ".",
-                              style: AppTextStyles.text.copyWith(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                          Opacity(
-                            opacity: 0.7,
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 4),
+                        ),
+                        SizedBox(height: 1),
+                        Row(
+                          children: [
+                            Opacity(
+                              opacity: 0.7,
                               child: Text(
-                                Provider_storeName,
+                                Provider_storePlace,
                                 style: AppTextStyles.text.copyWith(
                                   color: Colors.white,
                                   fontSize: 12,
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Spacer(),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColor.greenLighter,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                  ),
-                  onPressed: () async {
-                    await _testInsert(1, item['id']);
-                    Navigator.pop(context);
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CartPage(
-                          userId: 1,
+                            Padding(
+                              padding: EdgeInsets.only(
+                                left: 1,
+                                top: 1,
+                                bottom: 1,
+                              ),
+                              child: Text(
+                                ".",
+                                style: AppTextStyles.text.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                            Opacity(
+                              opacity: 0.7,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 4),
+                                child: Text(
+                                  Provider_storeName,
+                                  style: AppTextStyles.text.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    "Add",
-                    style: AppTextStyles.text.copyWith(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+                      ],
                     ),
                   ),
-                ),
-              ],
+                  Spacer(),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.greenLighter,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 0),
+                    ),
+                    onPressed: () async {
+                      await _testInsert(1, item['id']);
+                      Navigator.pop(context);
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CartPage(
+                            userId: 1,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Add",
+                      style: AppTextStyles.text.copyWith(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

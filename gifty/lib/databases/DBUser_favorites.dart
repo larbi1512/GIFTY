@@ -41,7 +41,8 @@ class DBUserFavorits {
         gifts.description,
         gifts.price,
         gifts.category,
-        MAX(images.imagePath) as imagePath
+        MAX(images.imagePath) as imagePath,
+        MAX(images.type) as type
         FROM ${tableName}
         left join gifts on user_favorits.product_id=gifts.id
         LEFT JOIN images ON gifts.id = images.product_id

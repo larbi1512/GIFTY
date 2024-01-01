@@ -6,6 +6,8 @@ import 'package:gifty/config/colors.config.dart';
 import 'package:gifty/config/font.config.dart';
 import 'package:gifty/widgets/back_button.dart';
 
+import '../profile/provider_contact.dart';
+
 class ProvidersListPage extends StatelessWidget {
   const ProvidersListPage({super.key});
 
@@ -77,80 +79,64 @@ class ProvidersList extends StatelessWidget {
                     child: ListView.builder(
                       itemCount: 16,
                       itemBuilder: (context, index) {
-                        return Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 2,
-                            vertical: 2,
-                          ),
-                          child: Row(
-                            children: [
-                              ClipRRect(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(27)),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    //border: border,
-                                    borderRadius: BorderRadius.circular(27),
-                                  ),
-                                  child: Image.asset(
-                                    Provider_imagePath,
-                                    height: 47,
-                                    width: 47,
-                                    fit: BoxFit.cover,
-                                    //color: color,
-                                  ),
-                                ),
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProviderContact(),
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  left: 8,
-                                  top: 4,
-                                  bottom: 4,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      Provider_name,
-                                      style: AppTextStyles.text.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                      ),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 2,
+                              vertical: 2,
+                            ),
+                            child: Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(27)),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      //border: border,
+                                      borderRadius: BorderRadius.circular(27),
                                     ),
-                                    SizedBox(height: 1),
-                                    Row(
-                                      children: [
-                                        Opacity(
-                                          opacity: 0.7,
-                                          child: Text(
-                                            Provider_storePlace,
-                                            style: AppTextStyles.text.copyWith(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                            ),
-                                          ),
+                                    child: Image.asset(
+                                      Provider_imagePath,
+                                      height: 47,
+                                      width: 47,
+                                      fit: BoxFit.cover,
+                                      //color: color,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    left: 8,
+                                    top: 4,
+                                    bottom: 4,
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        Provider_name,
+                                        style: AppTextStyles.text.copyWith(
+                                          color: Colors.white,
+                                          fontSize: 14,
                                         ),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                            left: 1,
-                                            top: 1,
-                                            bottom: 1,
-                                          ),
-                                          child: Text(
-                                            ".",
-                                            style: AppTextStyles.text.copyWith(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ),
-                                        Opacity(
-                                          opacity: 0.7,
-                                          child: Padding(
-                                            padding: EdgeInsets.only(left: 4),
+                                      ),
+                                      SizedBox(height: 1),
+                                      Row(
+                                        children: [
+                                          Opacity(
+                                            opacity: 0.7,
                                             child: Text(
-                                              Provider_storeName,
+                                              Provider_storePlace,
                                               style:
                                                   AppTextStyles.text.copyWith(
                                                 color: Colors.white,
@@ -158,30 +144,59 @@ class ProvidersList extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Spacer(),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColor.greenLighter,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 0),
-                                ),
-                                onPressed: () {},
-                                child: Text(
-                                  "Add",
-                                  style: AppTextStyles.text.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                              left: 1,
+                                              top: 1,
+                                              bottom: 1,
+                                            ),
+                                            child: Text(
+                                              ".",
+                                              style:
+                                                  AppTextStyles.text.copyWith(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ),
+                                          Opacity(
+                                            opacity: 0.7,
+                                            child: Padding(
+                                              padding: EdgeInsets.only(left: 4),
+                                              child: Text(
+                                                Provider_storeName,
+                                                style:
+                                                    AppTextStyles.text.copyWith(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                            ],
+                                // Spacer(),
+                                // ElevatedButton(
+                                //   style: ElevatedButton.styleFrom(
+                                //     backgroundColor: AppColor.greenLighter,
+                                //     padding: const EdgeInsets.symmetric(
+                                //         horizontal: 5, vertical: 0),
+                                //   ),
+                                //   onPressed: () {},
+                                //   child: Text(
+                                //     "Add",
+                                //     style: AppTextStyles.text.copyWith(
+                                //       color: Colors.white,
+                                //       fontSize: 12,
+                                //       fontWeight: FontWeight.bold,
+                                //     ),
+                                //   ),
+                                // ),
+                              ],
+                            ),
                           ),
                         );
                       },
