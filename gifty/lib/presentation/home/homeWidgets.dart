@@ -4,6 +4,8 @@ import 'package:gifty/presentation/home/SeeMore.dart';
 import 'package:gifty/widgets/favorite_item.dart';
 import 'package:gifty/config/colors.config.dart';
 
+import '../add_item_screen/add_item_screen.dart';
+
 const List<String> imagePaths = [
   'assets/images/goods.jpeg',
   'assets/images/gift.jpeg',
@@ -288,7 +290,7 @@ class CategoryRow extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: LikedItemWidget(
-                    widgetState: this,
+                    widgetState: AddItemScreen,
                     product: productsList[index],
                     isinFav: false),
               );

@@ -123,6 +123,7 @@ Widget AddButton(BuildContext context, Map<String, dynamic> productData) {
       )),
     ),
     onPressed: () async {
+      print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii $productData");
       await DBGift.insertRecord(productData);
       Navigator.pop(context);
       // navBarController.SetPage(1);

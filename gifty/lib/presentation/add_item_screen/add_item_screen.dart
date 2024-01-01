@@ -49,21 +49,30 @@ class _AddItemScreenState extends State<AddItemScreen> {
           borderRadius: BorderRadius.circular(15),
         )),
       ),
-      onPressed: () {
+      onPressed: () async {
+        // Check if imagesItems is empty and insert a default image if needed
+        if (imagesItems.isEmpty) {
+          // Add a default image to productData['images']
+          productData['images'] = [
+            {'type': 'asset', 'imagePath': Assets.images.valentineBouquet}
+          ];
+        }
         print("Here is the data: ${productData}");
-        _tx_name_controller.clear();
-        _tx_description_controller.clear();
-        _tx_price_controller.clear();
-        setState(() {
-          imagesItems.clear();
-          controller.doClearColors();
-        });
-        Navigator.push(
+
+        await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ContinueAddScreen(productData: productData),
           ),
         );
+        _tx_name_controller.clear();
+        _tx_description_controller.clear();
+        _tx_price_controller.clear();
+
+        setState(() {
+          imagesItems.clear();
+          controller.doClearColors();
+        });
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -469,8 +478,16 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   'description': _tx_description_controller.text,
                   'price': _tx_price_controller.text,
                   'provider_id': 1,
-                  'images': imagesItems ??
-                      {'type': 'file', 'imagePath': "assets/images/book.png"},
+                  'images':
+                      // imagesItems.isEmpty
+                      //     ? [
+                      //         {
+                      //           'type': 'file',
+                      //           'imagePath': "assets/images/book.png"
+                      //         }
+                      //       ]
+                      //     :
+                      imagesItems,
                   'colors': controller.colors
                 }),
                 // )

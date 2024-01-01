@@ -17,6 +17,22 @@ class LikedItemWidget extends StatelessWidget {
       this.isinFav = true,
       super.key});
 
+  ImageProvider<Object> getImageProvider(String? imagePath, String? imageType) {
+    if (imagePath == null || imageType == null) {
+      print("nul type or path   $imagePath , $imageType");
+      return AssetImage(Assets.images.itemImage);
+    }
+
+    switch (imageType) {
+      case 'file':
+        return FileImage(File(imagePath));
+      case 'asset':
+        return AssetImage(imagePath);
+      default:
+        return AssetImage(Assets.images.itemImage);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -26,6 +42,7 @@ class LikedItemWidget extends StatelessWidget {
           MaterialPageRoute(
               builder: (context) => CardScreen(productId: product['id'])),
         );
+        if (isinFav) widgetState.setState(() {});
       },
       child: Container(
         width: MediaQuery.of(context).size.width * 0.45,
@@ -68,25 +85,18 @@ class LikedItemWidget extends StatelessWidget {
                     AppColor.main.withOpacity(isinFav ? 0.6 : 0.5),
                     BlendMode.srcOver,
                   ),
-                  child:
-                      // Image.file(
-                      //   File(product['imagePath']),
-                      //   fit: BoxFit.cover,
-                      //   width: 150,
-                      //   height: 150,
-                      // ),
-                      Container(
-                          width: 150,
-                          height: 150,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: FileImage(File(
-                                product['imagePath'] ?? Assets.images.itemImage,
-                              )),
-                              fit: BoxFit.cover,
-                            ),
-                            // borderRadius: BorderRadius.circular(20),
-                          )),
+                  child: Container(
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: getImageProvider(
+                              product['imagePath'], product['type']),
+                          fit: BoxFit.cover,
+                        ),
+
+                        // borderRadius: BorderRadius.circular(20),
+                      )),
                 ),
               ),
             ),

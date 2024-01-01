@@ -84,16 +84,16 @@ class MyApp extends StatelessWidget {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
-                 final userData = {
-                  'username': 'sumia',
-                  'name': 'soumia',
-                  'email': 'soumia@gmail.com',
-                  'password': 12121212,
-                  'wilaya': 'biskra',
-                  'phone_number': 98765456,
+                  final userData = {
+                    'username': 'sumia',
+                    'name': 'soumia',
+                    'email': 'soumia@gmail.com',
+                    'password': 12121212,
+                    'wilaya': 'biskra',
+                    'phone_number': 98765456,
                   };
-                   await apiService.inserUser(userData);
-                   print('User inserted successfully');
+                  await apiService.inserUser(userData);
+                  print('User inserted successfully');
                 },
                 child: Text('Test POST to insert user'),
               ),
@@ -104,4 +104,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

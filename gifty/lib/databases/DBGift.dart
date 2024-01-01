@@ -32,7 +32,8 @@ class DBGift {
         gifts.description,
         gifts.price,
         gifts.category,
-        MAX(images.imagePath) as imagePath
+        MAX(images.imagePath) as imagePath,
+        MAX(images.type) as type
         FROM ${tableName}
         LEFT JOIN images ON gifts.id = images.product_id
         GROUP BY gifts.id
@@ -76,7 +77,7 @@ class DBGift {
 
     var images = [];
     for (Map image in resImg) {
-      images.add(image['imagePath']);
+      images.add({'imagePath': image['imagePath'], 'type': image['type']});
     }
 
     List<Map<String, dynamic>> resClrs = await database.rawQuery('''SELECT 
