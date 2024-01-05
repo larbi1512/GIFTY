@@ -186,7 +186,7 @@ class DBGift {
     return res[0]['cc'] ?? 0;
   }
 
-  static Future<bool> syncGifts(List<Map<String, dynamic>> remote_data) async {
+  static Future<bool> syncGifts(List<dynamic> remote_data) async {
     List local_data = await getAllGifts();
     Map index_remote = {};
     List local_ids = [];

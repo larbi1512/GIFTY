@@ -70,7 +70,7 @@ class ApiService {
     }
   }
 
-  Future<List<Map<String, dynamic>>> fetchGifts() async {
+  Future<List<dynamic>> fetchGifts() async {
     final response = await http.get(Uri.parse('$baseUrl/gifts.get'));
 
     if (response.statusCode == 200) {
@@ -88,7 +88,7 @@ class ApiService {
       );
 
       if (response.statusCode != 200) {
-        throw Exception('Failed to add gift');
+        throw Exception('Failed to add gift :${response.statusCode}(');
       }
     } catch (e) {
       throw Exception('Error: $e');
@@ -135,10 +135,10 @@ class ApiService {
 
   Future<bool> service_sync_gifts() async {
     print("Running Cron Service to get gifts");
-    List? remote_data = await fetchGifts();
+    List<dynamic>? remote_data = await fetchGifts();
 
     if (remote_data != null) {
-      await DBGift.syncGifts(remote_data as List<Map<String, dynamic>>);
+      await DBGift.syncGifts(remote_data as List<dynamic>);
       return true;
     }
     return false;
