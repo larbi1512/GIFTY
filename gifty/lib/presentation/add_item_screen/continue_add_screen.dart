@@ -1,14 +1,12 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:gifty/presentation/home/homeScreen.dart';
 import 'package:gifty/widgets/back_button.dart';
-
 import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
 import '../../config/font.config.dart';
-import '../../controllers/navbar_controller.dart';
 import '../../databases/DBGift.dart';
+import '../../services/api_service.dart';
 
 class ContinueAddScreen extends StatelessWidget {
   String iconPicture = Assets.images.iconPicture;
@@ -111,6 +109,7 @@ class ContinueAddScreen extends StatelessWidget {
 }
 
 Widget AddButton(BuildContext context, Map<String, dynamic> productData) {
+  final ApiService apiService = ApiService('http://127.0.0.1:5000');
   return OutlinedButton(
     style: ButtonStyle(
       backgroundColor: MaterialStateProperty.all(AppColor.mainLighter),
@@ -125,6 +124,7 @@ Widget AddButton(BuildContext context, Map<String, dynamic> productData) {
     onPressed: () async {
       print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii $productData");
       await DBGift.insertRecord(productData);
+      await apiService.addGift(productData);
       Navigator.pop(context);
       // navBarController.SetPage(1);
       // Navigator.pop(context);

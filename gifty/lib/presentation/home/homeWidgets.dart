@@ -4,6 +4,7 @@ import 'package:gifty/presentation/home/SeeMore.dart';
 import 'package:gifty/widgets/favorite_item.dart';
 import 'package:gifty/config/colors.config.dart';
 
+import '../../services/api_service.dart';
 import '../add_item_screen/add_item_screen.dart';
 
 const List<String> imagePaths = [
@@ -30,6 +31,7 @@ const List<String> imagePathsFlowers = [
 ];
 
 class HomeScreen extends StatelessWidget {
+  final ApiService apiService = ApiService('http://127.0.0.1:5000');
   @override
   Widget build(BuildContext context) {
     Future<List> gifts = getListGifts();
@@ -70,6 +72,9 @@ class HomeScreen extends StatelessWidget {
   }
 
   Future<List<Map>> getListGifts() async {
+    List<Map<String, dynamic>> remote_data = await apiService.fetchGifts();
+    print('Data from server: $remote_data');
+    DBGift.syncGifts(remote_data);
     return DBGift.getAllGifts();
   }
 

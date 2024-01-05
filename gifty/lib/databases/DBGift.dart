@@ -1,6 +1,4 @@
 import 'package:gifty/databases/DBProductColor.dart';
-import 'package:gifty/databases/DBProvider.dart';
-import 'package:gifty/databases/DBcategory.dart';
 import 'package:sqflite/sqflite.dart';
 import '../config/assets.config.dart';
 import 'DBHelper.dart';
@@ -186,6 +184,51 @@ class DBGift {
           from ${tableName}
           ''');
     return res[0]['cc'] ?? 0;
+  }
+
+  static Future<bool> syncGifts(List<Map<String, dynamic>> remote_data) async {
+    List local_data = await getAllGifts();
+    Map index_remote = {};
+    List local_ids = [];
+    for (Map item in local_data) {
+      index_remote[item['remote_id']] = item['id'];
+      local_ids.add(item['id']);
+    }
+
+    for (Map item in remote_data) {
+      if (index_remote.containsKey(item['id'])) {
+        int local_id = index_remote[item['id']];
+        await updateRecord(local_id, {
+          'name': item['name'],
+          'description': item['description'],
+          'price': item['price'],
+          'category': item['category']
+        });
+
+        await DBProductColor.deleteColors(local_id);
+        for (String color in item['colors']) {
+          Map<String, dynamic> mapColor = {
+            'color': color,
+            'product_id': local_id
+          };
+          await DBProductColor.insertRecord(mapColor);
+        }
+
+        await DBImage.deleteImages(local_id);
+        for (Map<String, dynamic> img in item['images']) {
+          img['product_id'] = local_id.toString();
+          await DBImage.insertRecord(img);
+        }
+
+        local_ids.remove(local_id);
+      } else {
+        await insertRecord({'name': item['name'], 'remote_id': item['id']});
+      }
+    }
+    //Remote Local gifts...
+    //There is a RISK ? in case items pending with old data?
+    for (int local_id in local_ids) await deleteRecord(local_id);
+    return true;
   }
 
   static Future<bool> updateRecord(int id, Map<String, dynamic> data) async {
