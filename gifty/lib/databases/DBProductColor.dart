@@ -43,4 +43,11 @@ class DBProductColor {
     database.rawQuery("""delete from  ${tableName}  where id=?""", [id]);
     return true;
   }
+
+  static Future<bool> deleteColors(int product_id) async {
+    final database = await DBHelper.getDatabase();
+    database.rawQuery(
+        """delete from  ${tableName}  where product_id=?""", [product_id]);
+    return true;
+  }
 }

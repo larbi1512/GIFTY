@@ -1,10 +1,11 @@
+import 'package:sqflite/sqflite.dart';
+
 import 'DBHelper.dart';
 
 class DBImage {
   static const tableName = 'images';
 
-  static const sql_code =
-      '''CREATE TABLE IF NOT EXISTS images (
+  static const sql_code = '''CREATE TABLE IF NOT EXISTS images (
              id INTEGER PRIMARY KEY AUTOINCREMENT,
              remote_id INTEGER,
              product_id INTEGER,
@@ -17,8 +18,7 @@ class DBImage {
   static Future<Map<String, dynamic>?> getSingleImageToUpload() async {
     final database = await DBHelper.getDatabase();
 
-    List<Map<String, dynamic>> res = await database.rawQuery(
-        '''SELECT 
+    List<Map<String, dynamic>> res = await database.rawQuery('''SELECT 
             images.id,
             images.type,
             images.imagePath,
@@ -35,8 +35,7 @@ class DBImage {
   static Future<Map<String, dynamic>?> getImagesOfProduct() async {
     final database = await DBHelper.getDatabase();
 
-    List<Map<String, dynamic>> res = await database.rawQuery(
-        '''SELECT 
+    List<Map<String, dynamic>> res = await database.rawQuery('''SELECT 
             images.id,
             images.type,
             images.imagePath,
@@ -52,12 +51,17 @@ class DBImage {
   static Future<int> getAllCount() async {
     final database = await DBHelper.getDatabase();
 
-    List<Map> res = await database.rawQuery(
-        '''SELECT 
+    List<Map> res = await database.rawQuery('''SELECT 
             count(id) as cc
           from ${tableName}
           ''');
     return res[0]['cc'] ?? 0;
+  }
+
+  static Future<int> insertRecord(Map<String, dynamic> data) async {
+    final database = await DBHelper.getDatabase();
+    return await database.insert(tableName, data,
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   static Future<bool> updateRecord(int id, Map<String, dynamic> data) async {
@@ -69,6 +73,13 @@ class DBImage {
   static Future<bool> deleteRecord(int id) async {
     final database = await DBHelper.getDatabase();
     database.rawQuery("""delete from  ${tableName}  where id=?""", [id]);
+    return true;
+  }
+
+  static Future<bool> deleteImages(int product_id) async {
+    final database = await DBHelper.getDatabase();
+    database.rawQuery(
+        """delete from  ${tableName}  where product_id=?""", [product_id]);
     return true;
   }
 }
