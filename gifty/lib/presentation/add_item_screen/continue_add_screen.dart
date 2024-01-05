@@ -5,6 +5,7 @@ import 'package:gifty/widgets/back_button.dart';
 import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
 import '../../config/font.config.dart';
+import '../../constants/endpoints.dart';
 import '../../databases/DBGift.dart';
 import '../../services/api_service.dart';
 
@@ -109,7 +110,7 @@ class ContinueAddScreen extends StatelessWidget {
 }
 
 Widget AddButton(BuildContext context, Map<String, dynamic> productData) {
-  final ApiService apiService = ApiService('http://127.0.0.1:5000');
+  final ApiService apiService = ApiService(api_endpoint);
   return OutlinedButton(
     style: ButtonStyle(
       backgroundColor: MaterialStateProperty.all(AppColor.mainLighter),
