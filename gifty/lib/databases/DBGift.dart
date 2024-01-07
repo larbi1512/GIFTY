@@ -59,7 +59,7 @@ class DBGift {
             gifts.category,
             gifts.remote_id
           from ${tableName}
-          where gifts.id=${id}
+          where gifts.remote_id=${id}
           ''');
 
     if (res == null) return null;
@@ -196,6 +196,7 @@ class DBGift {
     }
 
     for (Map item in remote_data) {
+      print("\nitem in remote: $item");
       if (index_remote.containsKey(item['id'])) {
         int local_id = index_remote[item['id']];
         await updateRecord(local_id, {
@@ -205,24 +206,36 @@ class DBGift {
           'category': item['category']
         });
 
-        await DBProductColor.deleteColors(local_id);
-        for (String color in item['colors']) {
+        await DBProductColor.deleteColors(item['id']);
+        for (var color in item['colors']) {
           Map<String, dynamic> mapColor = {
-            'color': color,
-            'product_id': local_id
+            'color': color['color'],
+            'product_id':
+                // id
+                color['product_id']
           };
           await DBProductColor.insertRecord(mapColor);
         }
 
-        await DBImage.deleteImages(local_id);
+        await DBImage.deleteImages(item['id']);
         for (Map<String, dynamic> img in item['images']) {
-          img['product_id'] = local_id.toString();
+          // img['product_id'] = local_id.toString();
           await DBImage.insertRecord(img);
         }
 
         local_ids.remove(local_id);
       } else {
-        await insertRecord({'name': item['name'], 'remote_id': item['id']});
+        await insertRecord(item as Map<String, dynamic>
+            //   {
+            //   'name': item['name'],
+            //   'description': item['description'],
+            //   'price': item['price'],
+            //   'provider_id': item['provider_id'],
+            //   'category': item['category'],
+            //   'remote_id': item['id']
+
+            // }
+            );
       }
     }
     //Remote Local gifts...
@@ -240,16 +253,21 @@ class DBGift {
   static Future<int> insertRecord(Map<String, dynamic> data) async {
     final database = await DBHelper.getDatabase();
 
+    print('\nparameter data0: $data');
+
     String cat = "gifts";
     // String cat = (await DBProvider.getCategory(data['provider_id'])) ;
 
     Map<String, dynamic> prodData = {
+      'remote_id': data['id'],
       'name': data['name'],
       'description': data['description'],
       'price': data['price'],
       'provider_id': data['provider_id'],
-      'category': cat,
+      'category': data['category'] ?? cat,
     };
+
+    print('\nprodData : $prodData');
 
     //{name: utr, company_data: {id: 1, name: Hamoud, remote_id: 1}, type: Bread, images: [{type: file, imagePath: /data/user/0/com.example.product_information_collection/cache/scaled_66986a42-4e0c-4879-9f1b-2ccba70650138265343296283913485.jpg}]}
     int id = await database.insert(tableName, prodData,
@@ -260,15 +278,21 @@ class DBGift {
     //       "imagePath" : "assets/images/book.png",
     //     };
     //   }
+    print('\nparameter data of images: ${data['images']}');
 
     for (Map<String, dynamic> img in data['images']) {
-      img['product_id'] = id.toString();
+      // img['product_id'] = id.toString();
       await database.insert(DBImage.tableName, img,
           conflictAlgorithm: ConflictAlgorithm.replace);
     }
 
-    for (String color in data['colors']) {
-      Map<String, dynamic> mapColor = {'color': color, 'product_id': id};
+    for (var color in data['colors']) {
+      Map<String, dynamic> mapColor = {
+        'color': color['color'],
+        'product_id':
+            // id
+            color['product_id']
+      };
       await database.insert(DBProductColor.tableName, mapColor,
           conflictAlgorithm: ConflictAlgorithm.replace);
       // await DBProductColor.insertRecord(mapColor);

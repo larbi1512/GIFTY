@@ -80,6 +80,22 @@ class ApiService {
     }
   }
 
+  // Future<void> addGift(Map<String, dynamic> newGift) async {
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse('$baseUrl/gifts.add'),
+  //       body: {'new_gift': json.encode(newGift)},
+  //     );
+
+  //     if (response.statusCode != 200) {
+  //       throw Exception(
+  //           'Failed to add gift,  statusCode:${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     throw Exception('Error: $e');
+  //   }
+  // }
+
   Future<void> addGift(Map<String, dynamic> newGift) async {
     try {
       final response = await http.post(
@@ -87,8 +103,20 @@ class ApiService {
         body: {'new_gift': json.encode(newGift)},
       );
 
-      if (response.statusCode != 200) {
-        throw Exception('Failed to add gift :${response.statusCode}(');
+      if (response.statusCode == 308) {
+        // If the status code is 308, follow the redirection
+        final redirectUrl = response.headers['location'];
+        if (redirectUrl != null) {
+          await http.post(
+            Uri.parse(redirectUrl),
+            body: {'new_gift': json.encode(newGift)},
+          );
+        } else {
+          throw Exception('Redirect URL not provided in the response headers.');
+        }
+      } else if (response.statusCode != 200) {
+        throw Exception(
+            'Failed to add gift,  statusCode: ${response.statusCode}');
       }
     } catch (e) {
       throw Exception('Error: $e');
