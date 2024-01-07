@@ -40,7 +40,8 @@ class LikedItemWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => CardScreen(productId: product['id'])),
+              builder: (context) =>
+                  CardScreen(productId: product['remote_id'])),
         );
         if (isinFav) widgetState.setState(() {});
       },
