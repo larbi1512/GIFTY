@@ -5,15 +5,17 @@ import '../../config/colors.config.dart';
 
 class UsernameField extends StatelessWidget {
   final String hintText; 
+  final TextEditingController controller; 
 
   UsernameField(
-      {required this.hintText}); 
+      {required this.hintText, required this.controller}); 
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TextField(
+        controller: controller,
         decoration: InputDecoration(
           fillColor: Colors.white,
           filled: true,
