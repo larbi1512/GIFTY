@@ -22,14 +22,17 @@ class LikedItemWidget extends StatelessWidget {
       print("nul type or path   $imagePath , $imageType");
       return AssetImage(Assets.images.itemImage);
     }
+    print("\n hhhhhhhhhhhhhhhhhhh $imageType");
 
     switch (imageType) {
       case 'file':
         return FileImage(File(imagePath));
       case 'asset':
         return AssetImage(imagePath);
+      case 'url':
+        return NetworkImage(imagePath);
       default:
-        return AssetImage(Assets.images.itemImage);
+        return AssetImage(Assets.images.iconMagic);
     }
   }
 
