@@ -300,8 +300,12 @@ class _ProductCardState extends State<ProductCard> {
     switch (imageType) {
       case 'file':
         return FileImage(File(imagePath));
-      default:
+      case 'asset':
         return AssetImage(imagePath);
+      case 'url':
+        return NetworkImage(imagePath);
+      default:
+        return AssetImage(Assets.images.itemImage);
     }
   }
 }

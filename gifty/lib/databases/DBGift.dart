@@ -33,7 +33,7 @@ class DBGift {
         MAX(images.imagePath) as imagePath,
         MAX(images.type) as type
         FROM ${tableName}
-        LEFT JOIN images ON gifts.id = images.product_id
+        LEFT JOIN images ON gifts.remote_id = images.product_id
         GROUP BY gifts.id
         ORDER BY gifts.name ASC
           ''');
@@ -44,6 +44,7 @@ class DBGift {
       data[i]['isFavorite'] =
           await DBUserFavorits.isInUserFavorites(res[i]['id'], 1);
     }
+    print('\nooooooooooooooooooo $data');
     return data;
   }
 
@@ -59,7 +60,7 @@ class DBGift {
             gifts.category,
             gifts.remote_id
           from ${tableName}
-          where gifts.id=${id}
+          where gifts.remote_id=${id}
           ''');
 
     if (res == null) return null;
@@ -75,6 +76,7 @@ class DBGift {
 
     var images = [];
     for (Map image in resImg) {
+      print("uuuuuuuuuuuuuuuuuuu $image");
       images.add({'imagePath': image['imagePath'], 'type': image['type']});
     }
 
@@ -120,25 +122,9 @@ class DBGift {
     };
 
     // data['providerInfo'] = Map.of(providerInfo[0]);
+    print("\n******************$data \n");
     return data;
   }
-
-  // static Future<List<Map<String, dynamic>>> getgiftsToUpload() async {
-  //   final database = await DBHelper.getDatabase();
-
-  //   return database.rawQuery('''SELECT
-  //           gifts.id as local_id,
-  //           gifts.name,
-  //           gifts.barcode,
-  //           gifts.remote_id,
-  //           categories.remote_id as category_id,
-  //           companies.remote_id as company_id
-  //         from ${tableName}
-  //             left join categories on category_id=categories.id
-  //             left join companies on company_id=companies.id
-  //         order by gifts.name ASC
-  //         ''');
-  // }
 
   static Future<List<Map<String, dynamic>>> getAllProductsByKeyword(
       String keyword) async {
@@ -186,48 +172,88 @@ class DBGift {
     return res[0]['cc'] ?? 0;
   }
 
-  static Future<bool> syncGifts(List<Map<String, dynamic>> remote_data) async {
+  // static Future<bool> syncGifts(List<dynamic> remote_data) async {
+  //   List local_data = await getAllGifts();
+  //   Map index_remote = {};
+  //   List local_ids = [];
+  //   for (Map item in local_data) {
+  //     index_remote[item['remote_id']] = item['id'];
+  //     local_ids.add(item['id']);
+  //   }
+
+  //   for (Map item in remote_data) {
+  //     print("\nitem in remote: $item");
+  //     if (index_remote.containsKey(item['id'])) {
+  //       int local_id = index_remote[item['id']];
+  //       await updateRecord(local_id, {
+  //         'name': item['name'],
+  //         'description': item['description'],
+  //         'price': item['price'],
+  //         'category': item['category']
+  //       });
+
+  //       await DBProductColor.deleteColors(item['id']);
+  //       for (var color in item['colors']) {
+  //         Map<String, dynamic> mapColor = {
+  //           'color': color['color'],
+  //           'product_id':
+  //               // id
+  //               color['product_id']
+  //         };
+  //         print(
+  //             "\n************** DBProductColor.insertRecord(mapColor) $mapColor \n");
+  //         await DBProductColor.insertRecord(mapColor);
+  //       }
+
+  //       await DBImage.deleteImages(item['id']);
+  //       for (Map<String, dynamic> img in item['images']) {
+  //         // img['product_id'] = local_id.toString();
+  //         print("\n************** DBImage.insertRecord(img) $img \n");
+  //         await DBImage.insertRecord(img);
+  //       }
+
+  //       local_ids.remove(local_id);
+  //     } else {
+  //       print(
+  //           "\n************** insertRecord(item as Map<String, dynamic> $item \n");
+  //       await insertRecord(item as Map<String, dynamic>
+  //           //   {
+  //           //   'name': item['name'],
+  //           //   'description': item['description'],
+  //           //   'price': item['price'],
+  //           //   'provider_id': item['provider_id'],
+  //           //   'category': item['category'],
+  //           //   'remote_id': item['id']
+
+  //           // }
+  //           );
+  //     }
+  //   }
+  //   //Remote Local gifts...
+  //   //There is a RISK ? in case items pending with old data?
+  //   for (int local_id in local_ids) await deleteRecord(local_id);
+  //   return true;
+  // }
+
+  static Future<bool> syncGifts(List<dynamic> remote_data) async {
     List local_data = await getAllGifts();
-    Map index_remote = {};
-    List local_ids = [];
     for (Map item in local_data) {
-      index_remote[item['remote_id']] = item['id'];
-      local_ids.add(item['id']);
+      deleteRecord(item['id']);
     }
+
+    var limit = 20;
+    var counter = 0;
 
     for (Map item in remote_data) {
-      if (index_remote.containsKey(item['id'])) {
-        int local_id = index_remote[item['id']];
-        await updateRecord(local_id, {
-          'name': item['name'],
-          'description': item['description'],
-          'price': item['price'],
-          'category': item['category']
-        });
-
-        await DBProductColor.deleteColors(local_id);
-        for (String color in item['colors']) {
-          Map<String, dynamic> mapColor = {
-            'color': color,
-            'product_id': local_id
-          };
-          await DBProductColor.insertRecord(mapColor);
-        }
-
-        await DBImage.deleteImages(local_id);
-        for (Map<String, dynamic> img in item['images']) {
-          img['product_id'] = local_id.toString();
-          await DBImage.insertRecord(img);
-        }
-
-        local_ids.remove(local_id);
-      } else {
-        await insertRecord({'name': item['name'], 'remote_id': item['id']});
+      print("\nitem in remote: $item");
+      await DBProductColor.deleteColors(item['id']);
+      await DBImage.deleteImages(item['id']);
+      await insertRecord(item as Map<String, dynamic>);
+      counter = counter + 1;
+      if (counter >= limit) {
+        break;
       }
     }
-    //Remote Local gifts...
-    //There is a RISK ? in case items pending with old data?
-    for (int local_id in local_ids) await deleteRecord(local_id);
     return true;
   }
 
@@ -240,16 +266,21 @@ class DBGift {
   static Future<int> insertRecord(Map<String, dynamic> data) async {
     final database = await DBHelper.getDatabase();
 
+    print('\nparameter data0: $data');
+
     String cat = "gifts";
     // String cat = (await DBProvider.getCategory(data['provider_id'])) ;
 
     Map<String, dynamic> prodData = {
+      'remote_id': data['id'],
       'name': data['name'],
       'description': data['description'],
       'price': data['price'],
       'provider_id': data['provider_id'],
-      'category': cat,
+      'category': data['category'] ?? cat,
     };
+
+    print('\nprodData : $prodData');
 
     //{name: utr, company_data: {id: 1, name: Hamoud, remote_id: 1}, type: Bread, images: [{type: file, imagePath: /data/user/0/com.example.product_information_collection/cache/scaled_66986a42-4e0c-4879-9f1b-2ccba70650138265343296283913485.jpg}]}
     int id = await database.insert(tableName, prodData,
@@ -260,15 +291,27 @@ class DBGift {
     //       "imagePath" : "assets/images/book.png",
     //     };
     //   }
+    print('\nparameter data of images: ${data['images']}');
 
     for (Map<String, dynamic> img in data['images']) {
-      img['product_id'] = id.toString();
-      await database.insert(DBImage.tableName, img,
+      // img['product_id'] = id.toString();
+      var imgInsert = {
+        'create_date': img['create_date'],
+        'imagepath': img['imagepath'],
+        'product_id': img['product_id'],
+        'type': img['type']
+      };
+      await database.insert(DBImage.tableName, imgInsert,
           conflictAlgorithm: ConflictAlgorithm.replace);
     }
 
-    for (String color in data['colors']) {
-      Map<String, dynamic> mapColor = {'color': color, 'product_id': id};
+    for (var color in data['colors']) {
+      Map<String, dynamic> mapColor = {
+        'color': color['color'],
+        'product_id':
+            // id
+            color['product_id']
+      };
       await database.insert(DBProductColor.tableName, mapColor,
           conflictAlgorithm: ConflictAlgorithm.replace);
       // await DBProductColor.insertRecord(mapColor);

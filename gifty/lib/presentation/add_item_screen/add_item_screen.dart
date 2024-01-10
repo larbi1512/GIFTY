@@ -54,7 +54,11 @@ class _AddItemScreenState extends State<AddItemScreen> {
         if (imagesItems.isEmpty) {
           // Add a default image to productData['images']
           productData['images'] = [
-            {'type': 'asset', 'imagePath': Assets.images.valentineBouquet}
+            {
+              'type': 'asset',
+              'imagePath': Assets.images.valentineBouquet,
+              'imageName': 'valentineBouquet'
+            }
           ];
         }
         print("Here is the data: ${productData}");
@@ -155,11 +159,14 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               if (imagesItems.length < 5) {
                                 imagesItems.add({
                                   'type': 'file',
-                                  'imagePath': selectedImage.path
+                                  'imagePath': selectedImage.path,
+                                  'imageName': selectedImage.name
                                 });
                               } else {
                                 imagesItems[4]['imagePath'] =
                                     selectedImage.path;
+                                imagesItems[4]['imageName'] =
+                                    selectedImage.name;
                               }
                             });
                           } else {
@@ -252,11 +259,14 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 if (imagesItems.length < 4) {
                                   imagesItems.add({
                                     'type': 'file',
-                                    'imagePath': selectedImage.path
+                                    'imagePath': selectedImage.path,
+                                    'imageName': selectedImage.name
                                   });
                                 } else {
                                   imagesItems[3]['imagePath'] =
                                       selectedImage.path;
+                                  imagesItems[3]['imageName'] =
+                                      selectedImage.name;
                                 }
                               });
                             } else {
@@ -310,11 +320,14 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                   // imageList.add(XFile(selectedImage.path));
                                   imagesItems.add({
                                     'type': 'file',
-                                    'imagePath': selectedImage.path
+                                    'imagePath': selectedImage.path,
+                                    'imageName': selectedImage.name
                                   });
                                 } else {
                                   imagesItems[2]['imagePath'] =
                                       selectedImage.path;
+                                  imagesItems[2]['imageName'] =
+                                      selectedImage.name;
                                 }
                               });
                             } else {
@@ -367,11 +380,14 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 if (imagesItems.length < 2) {
                                   imagesItems.add({
                                     'type': 'file',
-                                    'imagePath': selectedImage.path
+                                    'imagePath': selectedImage.path,
+                                    'imageName': selectedImage.name
                                   });
                                 } else {
                                   imagesItems[1]['imagePath'] =
                                       selectedImage.path;
+                                  imagesItems[1]['imageName'] =
+                                      selectedImage.name;
                                 }
                               });
                             } else {
@@ -424,11 +440,14 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 if (imagesItems.length < 1) {
                                   imagesItems.add({
                                     'type': 'file',
-                                    'imagePath': selectedImage.path
+                                    'imagePath': selectedImage.path,
+                                    'imageName': selectedImage.name
                                   });
                                 } else {
                                   imagesItems[0]['imagePath'] =
                                       selectedImage.path;
+                                  imagesItems[0]['imageName'] =
+                                      selectedImage.name;
                                 }
                               });
                             } else {
@@ -478,16 +497,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   'description': _tx_description_controller.text,
                   'price': _tx_price_controller.text,
                   'provider_id': 1,
-                  'images':
-                      // imagesItems.isEmpty
-                      //     ? [
-                      //         {
-                      //           'type': 'file',
-                      //           'imagePath': "assets/images/book.png"
-                      //         }
-                      //       ]
-                      //     :
-                      imagesItems,
+                  'images': imagesItems,
                   'colors': controller.colors
                 }),
                 // )

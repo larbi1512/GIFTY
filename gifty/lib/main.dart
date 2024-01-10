@@ -36,6 +36,9 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
 
         '/cart': (context) => CartPage(userId: 1,),
+        '/cart': (context) => CartPage(
+              userId: 1,
+            ),
 
         '/signup': (context) => signup1(),
         '/signup_provider': (context) => signupProvider(),
@@ -54,6 +57,8 @@ class MyApp extends StatelessWidget {
 
 // import 'package:flutter/material.dart';
 // import './services/api_service.dart'; // Import your ApiService
+// import './services/api_service.dart';
+// import 'constants/endpoints.dart'; // Import your ApiService
 
 // void main() {
 //   runApp(MyApp());
@@ -61,6 +66,7 @@ class MyApp extends StatelessWidget {
 
 // class MyApp extends StatelessWidget {
 //   final ApiService apiService = ApiService('http://127.0.0.1:5000');
+//   final ApiService apiService = ApiService(api_endpoint);
 
 //   @override
 //   Widget build(BuildContext context) {

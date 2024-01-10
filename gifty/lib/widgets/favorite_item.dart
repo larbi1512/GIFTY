@@ -22,14 +22,17 @@ class LikedItemWidget extends StatelessWidget {
       print("nul type or path   $imagePath , $imageType");
       return AssetImage(Assets.images.itemImage);
     }
+    print("\n hhhhhhhhhhhhhhhhhhh $imageType");
 
     switch (imageType) {
       case 'file':
         return FileImage(File(imagePath));
       case 'asset':
         return AssetImage(imagePath);
+      case 'url':
+        return NetworkImage(imagePath);
       default:
-        return AssetImage(Assets.images.itemImage);
+        return AssetImage(Assets.images.iconMagic);
     }
   }
 
@@ -40,7 +43,8 @@ class LikedItemWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => CardScreen(productId: product['id'])),
+              builder: (context) =>
+                  CardScreen(productId: product['remote_id'])),
         );
         if (isinFav) widgetState.setState(() {});
       },
