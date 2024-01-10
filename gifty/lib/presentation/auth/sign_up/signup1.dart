@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:gifty/config/colors.config.dart';
 import 'package:gifty/config/font.config.dart';
+import 'package:gifty/constants/endpoints.dart';
 
 import '../../../config/assets.config.dart';
 import '../../../widgets/background_image.dart';
 import '../../../widgets/rounded_container.dart';
 import '../../../widgets/toggle_button.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../../../models/index.dart';
 
 class signup1 extends StatefulWidget {
    @override
@@ -14,11 +18,86 @@ class signup1 extends StatefulWidget {
   
   class _Signup1State extends State<signup1> {
   bool isUserSelected = true;
+   final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   void toggleCallback(bool selected) {
     setState(() {
       isUserSelected = selected;
     });
+  }
+
+   Future<void> signup() async {
+    final String email = emailController.text;
+    final String password = passwordController.text;
+    final String confirmPassword = confirmPasswordController.text;
+
+    // Validate email, password, and confirmPassword
+    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please enter all required fields'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Check if passwords match
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Passwords do not match'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Choose the appropriate signup endpoint based on user or provider
+    final String signupEndpoint = isUserSelected
+        ? api_endpoint_user_signup: api_endpoint_provider_signup;
+
+     try {
+      final response = await http.post(
+        Uri.parse(signupEndpoint),
+        body: {
+          'email': email,
+          'password': password,
+          'confirm_password': confirmPassword,
+        },
+      );
+  print('Signup Response status code: ${response.statusCode}');
+      print('Signup Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        // Successful signup
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        final String userId = responseData['id'];
+        print(responseData);
+        // Navigate to the next screen or perform any other actions
+        Navigator.pushNamed(context,   isUserSelected ? '/signup_user': '/signup_provider', arguments: userId);
+      } else {
+        // Handle signup errors
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        final String errorMessage = responseData['message'];
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error during signup: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('An error occurred during signup'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -61,6 +140,7 @@ class signup1 extends StatefulWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: TextField(
+                          controller: emailController,
                           decoration: InputDecoration(
                             prefixIcon:
                                 Icon(Icons.email_rounded, color: AppColor.main),
@@ -81,6 +161,8 @@ class signup1 extends StatefulWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: TextField(
+                          controller: passwordController,
+                          obscureText: true,
                           decoration: InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
@@ -105,6 +187,8 @@ class signup1 extends StatefulWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: TextField(
+                          controller: confirmPasswordController,
+                          obscureText: true,
                           decoration: InputDecoration(
                             fillColor: Colors.white,
                             filled: true,
@@ -135,14 +219,7 @@ class signup1 extends StatefulWidget {
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
-                        onPressed: () {
-                             if (isUserSelected) {
-                          Navigator.pushNamed(context, '/signup_user');
-                        } else {
-                          Navigator.pushNamed(context, '/signup_provider');
-                        }
-                          
-                        },
+                        onPressed: signup,
                         child: Text('Next'),
                       ),
                       TextButton(

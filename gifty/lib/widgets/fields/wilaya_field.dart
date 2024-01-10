@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import '../../config/colors.config.dart';
 
 class WilayaField extends StatelessWidget {
+  final TextEditingController controller;
+  WilayaField({required this.controller}); 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TextField(
+        controller: controller,
         decoration: InputDecoration(
           fillColor: Colors.white,
           filled: true,
