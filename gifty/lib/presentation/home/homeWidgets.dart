@@ -76,7 +76,7 @@ class HomeScreen extends StatelessWidget {
     // List<Map<String, dynamic>> remote_data = await apiService.fetchGifts();
     // print('Data from server: $remote_data');
     // DBGift.syncGifts(remote_data);
-    apiService.service_sync_gifts();
+    await apiService.service_sync_gifts();
     return DBGift.getAllGifts();
   }
 
@@ -294,6 +294,7 @@ class CategoryRow extends StatelessWidget {
             itemCount: productsList.length,
             // itemCount: imagePaths.length,
             itemBuilder: (context, index) {
+              print('\nggggggggggggggggggg: ${productsList[index]}');
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: LikedItemWidget(

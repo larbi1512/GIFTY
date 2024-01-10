@@ -33,7 +33,7 @@ class DBGift {
         MAX(images.imagePath) as imagePath,
         MAX(images.type) as type
         FROM ${tableName}
-        LEFT JOIN images ON gifts.id = images.product_id
+        LEFT JOIN images ON gifts.remote_id = images.product_id
         GROUP BY gifts.id
         ORDER BY gifts.name ASC
           ''');
@@ -44,6 +44,7 @@ class DBGift {
       data[i]['isFavorite'] =
           await DBUserFavorits.isInUserFavorites(res[i]['id'], 1);
     }
+    print('\nooooooooooooooooooo $data');
     return data;
   }
 
@@ -75,6 +76,7 @@ class DBGift {
 
     var images = [];
     for (Map image in resImg) {
+      print("uuuuuuuuuuuuuuuuuuu $image");
       images.add({'imagePath': image['imagePath'], 'type': image['type']});
     }
 
@@ -120,25 +122,9 @@ class DBGift {
     };
 
     // data['providerInfo'] = Map.of(providerInfo[0]);
+    print("\n******************$data \n");
     return data;
   }
-
-  // static Future<List<Map<String, dynamic>>> getgiftsToUpload() async {
-  //   final database = await DBHelper.getDatabase();
-
-  //   return database.rawQuery('''SELECT
-  //           gifts.id as local_id,
-  //           gifts.name,
-  //           gifts.barcode,
-  //           gifts.remote_id,
-  //           categories.remote_id as category_id,
-  //           companies.remote_id as company_id
-  //         from ${tableName}
-  //             left join categories on category_id=categories.id
-  //             left join companies on company_id=companies.id
-  //         order by gifts.name ASC
-  //         ''');
-  // }
 
   static Future<List<Map<String, dynamic>>> getAllProductsByKeyword(
       String keyword) async {
@@ -186,61 +172,88 @@ class DBGift {
     return res[0]['cc'] ?? 0;
   }
 
+  // static Future<bool> syncGifts(List<dynamic> remote_data) async {
+  //   List local_data = await getAllGifts();
+  //   Map index_remote = {};
+  //   List local_ids = [];
+  //   for (Map item in local_data) {
+  //     index_remote[item['remote_id']] = item['id'];
+  //     local_ids.add(item['id']);
+  //   }
+
+  //   for (Map item in remote_data) {
+  //     print("\nitem in remote: $item");
+  //     if (index_remote.containsKey(item['id'])) {
+  //       int local_id = index_remote[item['id']];
+  //       await updateRecord(local_id, {
+  //         'name': item['name'],
+  //         'description': item['description'],
+  //         'price': item['price'],
+  //         'category': item['category']
+  //       });
+
+  //       await DBProductColor.deleteColors(item['id']);
+  //       for (var color in item['colors']) {
+  //         Map<String, dynamic> mapColor = {
+  //           'color': color['color'],
+  //           'product_id':
+  //               // id
+  //               color['product_id']
+  //         };
+  //         print(
+  //             "\n************** DBProductColor.insertRecord(mapColor) $mapColor \n");
+  //         await DBProductColor.insertRecord(mapColor);
+  //       }
+
+  //       await DBImage.deleteImages(item['id']);
+  //       for (Map<String, dynamic> img in item['images']) {
+  //         // img['product_id'] = local_id.toString();
+  //         print("\n************** DBImage.insertRecord(img) $img \n");
+  //         await DBImage.insertRecord(img);
+  //       }
+
+  //       local_ids.remove(local_id);
+  //     } else {
+  //       print(
+  //           "\n************** insertRecord(item as Map<String, dynamic> $item \n");
+  //       await insertRecord(item as Map<String, dynamic>
+  //           //   {
+  //           //   'name': item['name'],
+  //           //   'description': item['description'],
+  //           //   'price': item['price'],
+  //           //   'provider_id': item['provider_id'],
+  //           //   'category': item['category'],
+  //           //   'remote_id': item['id']
+
+  //           // }
+  //           );
+  //     }
+  //   }
+  //   //Remote Local gifts...
+  //   //There is a RISK ? in case items pending with old data?
+  //   for (int local_id in local_ids) await deleteRecord(local_id);
+  //   return true;
+  // }
+
   static Future<bool> syncGifts(List<dynamic> remote_data) async {
     List local_data = await getAllGifts();
-    Map index_remote = {};
-    List local_ids = [];
     for (Map item in local_data) {
-      index_remote[item['remote_id']] = item['id'];
-      local_ids.add(item['id']);
+      deleteRecord(item['id']);
     }
+
+    var limit = 20;
+    var counter = 0;
 
     for (Map item in remote_data) {
       print("\nitem in remote: $item");
-      if (index_remote.containsKey(item['id'])) {
-        int local_id = index_remote[item['id']];
-        await updateRecord(local_id, {
-          'name': item['name'],
-          'description': item['description'],
-          'price': item['price'],
-          'category': item['category']
-        });
-
-        await DBProductColor.deleteColors(item['id']);
-        for (var color in item['colors']) {
-          Map<String, dynamic> mapColor = {
-            'color': color['color'],
-            'product_id':
-                // id
-                color['product_id']
-          };
-          await DBProductColor.insertRecord(mapColor);
-        }
-
-        await DBImage.deleteImages(item['id']);
-        for (Map<String, dynamic> img in item['images']) {
-          // img['product_id'] = local_id.toString();
-          await DBImage.insertRecord(img);
-        }
-
-        local_ids.remove(local_id);
-      } else {
-        await insertRecord(item as Map<String, dynamic>
-            //   {
-            //   'name': item['name'],
-            //   'description': item['description'],
-            //   'price': item['price'],
-            //   'provider_id': item['provider_id'],
-            //   'category': item['category'],
-            //   'remote_id': item['id']
-
-            // }
-            );
+      await DBProductColor.deleteColors(item['id']);
+      await DBImage.deleteImages(item['id']);
+      await insertRecord(item as Map<String, dynamic>);
+      counter = counter + 1;
+      if (counter >= limit) {
+        break;
       }
     }
-    //Remote Local gifts...
-    //There is a RISK ? in case items pending with old data?
-    for (int local_id in local_ids) await deleteRecord(local_id);
     return true;
   }
 
@@ -282,7 +295,13 @@ class DBGift {
 
     for (Map<String, dynamic> img in data['images']) {
       // img['product_id'] = id.toString();
-      await database.insert(DBImage.tableName, img,
+      var imgInsert = {
+        'create_date': img['create_date'],
+        'imagepath': img['imagepath'],
+        'product_id': img['product_id'],
+        'type': img['type']
+      };
+      await database.insert(DBImage.tableName, imgInsert,
           conflictAlgorithm: ConflictAlgorithm.replace);
     }
 

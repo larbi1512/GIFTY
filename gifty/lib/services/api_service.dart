@@ -1,8 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path;
+import 'package:supabase/supabase.dart';
 
 import '../databases/DBGift.dart';
+
+var SUPABASE_URL = 'https://zkfovcmkaobvsceazqat.supabase.co';
+final SupabaseClient supabase = SupabaseClient(SUPABASE_URL,
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InprZm92Y21rYW9idnNjZWF6cWF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDI2NjIwNDIsImV4cCI6MjAxODIzODA0Mn0.p7nCDkbdLK9WnfrmELj8zDk4dfTsP1DveSMHeGnrPpA');
 
 class ApiService {
   final String baseUrl;
@@ -80,44 +87,68 @@ class ApiService {
     }
   }
 
-  // Future<void> addGift(Map<String, dynamic> newGift) async {
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse('$baseUrl/gifts.add'),
-  //       body: {'new_gift': json.encode(newGift)},
-  //     );
-
-  //     if (response.statusCode != 200) {
-  //       throw Exception(
-  //           'Failed to add gift,  statusCode:${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     throw Exception('Error: $e');
-  //   }
-  // }
-
   Future<void> addGift(Map<String, dynamic> newGift) async {
     try {
+      print("\naaaaaaaaaaaaaaaaaaaa");
       final response = await http.post(
         Uri.parse('$baseUrl/gifts.add'),
-        body: {'new_gift': json.encode(newGift)},
+        body: json.encode(newGift),
+        headers: {'Content-Type': 'application/json'},
       );
 
-      if (response.statusCode == 308) {
-        // If the status code is 308, follow the redirection
-        final redirectUrl = response.headers['location'];
-        if (redirectUrl != null) {
-          await http.post(
-            Uri.parse(redirectUrl),
-            body: {'new_gift': json.encode(newGift)},
-          );
-        } else {
-          throw Exception('Redirect URL not provided in the response headers.');
-        }
-      } else if (response.statusCode != 200) {
+      print("\naaaaaaaaaaaaaaaaaaaa2  $response \n ${response.statusCode}");
+
+      if (response.statusCode != 200) {
         throw Exception(
-            'Failed to add gift,  statusCode: ${response.statusCode}');
+            'Failed to add gift, statusCode: ${response.statusCode}');
       }
+
+      String responseBody = response.body;
+      print("\naaaaaaaaaaaaaaaaaaaa2.1  $responseBody \n");
+
+      Map<String, dynamic> parsedJson = jsonDecode(responseBody);
+      print("\naaaaaaaaaaaaaaaaaaaa2.2  $parsedJson \n");
+
+      int gift_id = parsedJson['id'];
+      print("\naaaaaaaaaaaaaaaaaaaa3");
+
+      var colors = [];
+      for (var color in newGift['colors']) {
+        colors.add({'product_id': gift_id, 'color': color});
+      }
+      print("\naaaaaaaaaaaaaaaaaaaa4");
+
+      final responseColor = await http.post(
+        Uri.parse('$baseUrl/colors.add'),
+        body: json.encode(colors),
+        headers: {'Content-Type': 'application/json'},
+      );
+      print("\naaaaaaaaaaaaaaaaaaaa5");
+
+      for (var img in newGift['images']) {
+        img['product_id'] = gift_id;
+        img['type'] = 'url';
+        print("\naaaaaaaaaaaaaaaaaaaa5.1");
+        var imageFile = File(img['imagePath']);
+
+        // Upload the image to Supabase storage
+        var imageUrl = await supabase.storage.from('gifts_images').upload(
+            img['imageName'] ?? "image",
+            imageFile); //need to handle existing name
+        print("\naaaaaaaaaaaaaaaaaaaa5.15 \n");
+        print(imageUrl);
+        // img['imageUrl'] = imageUrl;
+        img['imageUrl'] = '${SUPABASE_URL}//storage/v1/object/public/$imageUrl';
+        print("\nurl:               ${img['imageUrl']}");
+      }
+      print("\naaaaaaaaaaaaaaaaaaaa6");
+
+      final responsePaths = await http.post(
+        Uri.parse('$baseUrl/images.add'),
+        body: json.encode(newGift['images']),
+        headers: {'Content-Type': 'application/json'},
+      );
+      print("\naaaaaaaaaaaaaaaaaaaa7");
     } catch (e) {
       throw Exception('Error: $e');
     }
@@ -164,6 +195,7 @@ class ApiService {
   Future<bool> service_sync_gifts() async {
     print("Running Cron Service to get gifts");
     List<dynamic>? remote_data = await fetchGifts();
+    print("\nremote_data is : $remote_data");
 
     if (remote_data != null) {
       await DBGift.syncGifts(remote_data as List<dynamic>);
@@ -171,4 +203,57 @@ class ApiService {
     }
     return false;
   }
+
+  // Future<String> uploadImage(imageBytes) async {
+  //   try {
+  //     print("\nfunction upload was called front");
+  //     final response = await http
+  //         .post(Uri.parse('$baseUrl/upload'), body: {'image': imageBytes});
+  //     print("\nfunction upload was called back");
+  //     String responseBody = response.body;
+  //     print("\nfunction upload was called1");
+  //     Map<String, dynamic> parsedJson = jsonDecode(responseBody);
+
+  //     String image_url = parsedJson['image_url'];
+  //     print("\nfunction upload was called2: $image_url");
+
+  //     if (response.statusCode == 200) {
+  //       final decodedData = json.decode(response.body);
+  //       return image_url;
+  //     } else {
+  //       throw Exception('Failed to load data from Supabase');
+  //     }
+  //   } catch (e) {
+  //     throw Exception('Error: $e');
+  //   }
+  // }
+
+  // Future<void> uploadImage(img) async {
+  //   var uri = Uri.parse('$baseUrl/upload');
+
+  //   var imageFile = File(img['imagePath']);
+
+  //   var stream = http.ByteStream(imageFile.openRead());
+  //   var length = await imageFile.length();
+  //   var multipartFile = http.MultipartFile('image', stream, length,
+  //       filename: path.basename(imageFile.path));
+
+  //   var request = http.MultipartRequest('POST', uri)..files.add(multipartFile);
+
+  //   try {
+  //     var response = await http.Response.fromStream(await request.send());
+
+  //     if (response.statusCode == 200) {
+  //       print('Image uploaded successfully');
+  //       var imageUrl = response
+  //           .body; // Assuming the server sends the image URL in the response
+  //       print('Image uploaded successfully. URL: $imageUrl');
+  //       img['imageUrl'] = imageUrl;
+  //     } else {
+  //       print('Failed to upload image. Status code: ${response.statusCode}');
+  //     }
+  //   } catch (error) {
+  //     print('Error uploading image: $error');
+  //   }
+  // }
 }
