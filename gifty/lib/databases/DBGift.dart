@@ -1,12 +1,17 @@
+import 'package:gifty/constants/endpoints.dart';
 import 'package:gifty/databases/DBProductColor.dart';
+import 'package:gifty/services/api_service.dart';
 import 'package:sqflite/sqflite.dart';
 import '../config/assets.config.dart';
 import 'DBHelper.dart';
 import 'DBUser_favorites.dart';
 import 'DBimage.dart';
 
+
 class DBGift {
   static const tableName = 'gifts';
+  static ApiService apiService = ApiService(api_endpoint);
+
 
   static const sql_code = '''CREATE TABLE IF NOT EXISTS gifts (
              id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -65,6 +70,17 @@ class DBGift {
 
     if (res == null) return null;
     Map<String, dynamic> data = Map.of(res[0]);
+    int providerId = data['provider_id'];
+     Map<String, dynamic> remote_info = await apiService.fetchItemProvider(providerId);
+
+    data['providerInfo'] = {
+      'brand_pic': Assets.images.providerImage,
+      'store_name': remote_info['brand_pic'],
+      'location': remote_info['location'],
+    };
+
+   
+    print("provideeeeeeeeeeeer data : ${data['providerInfo']}");
     List<Map<String, dynamic>> resImg = await database.rawQuery('''SELECT 
             images.id ,
             images.type,
@@ -93,17 +109,17 @@ class DBGift {
       colors.add(color['color']);
     }
 
-    List<Map<String, dynamic>> providerInfo = await database.rawQuery('''SELECT 
-            id ,
-            store_name,
-            location,
-            brand_pic
-          from providers
-          where id=${data['provider_id']}
-          order by id ASC
-          ''');
+    // List<Map<String, dynamic>> providerInfo = await database.rawQuery('''SELECT 
+    //         id ,
+    //         store_name,
+    //         location,
+    //         brand_pic
+    //       from providers
+    //       where id=${data['provider_id']}
+    //       order by id ASC
+    //       ''');
 
-    print("*****************$providerInfo");
+    // print("*****************$providerInfo");
 
     // data['providerInfo'] = {
     //   'brand_pic': providerInfo['brand_pic'],
@@ -115,12 +131,6 @@ class DBGift {
 
     data['colorsList'] = colors;
     data['isFavorite'] = await DBUserFavorits.isInUserFavorites(data['id'], 1);
-    data['providerInfo'] = {
-      'brand_pic': Assets.images.providerImage,
-      'store_name': "Bahdja telecom",
-      'location': "Baba hsen, Algiers"
-    };
-
     // data['providerInfo'] = Map.of(providerInfo[0]);
     print("\n******************$data \n");
     return data;

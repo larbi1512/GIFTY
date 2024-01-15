@@ -60,6 +60,7 @@ class _CardScreenState extends State<CardScreen> {
   }
 
   Widget getWidgetForProductInfo(Map item, stateWidget) {
+    print("here item data : ${item}");
     return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
