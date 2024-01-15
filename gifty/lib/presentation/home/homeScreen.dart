@@ -5,6 +5,7 @@ import 'package:gifty/presentation/cartScreen/cartPage.dart';
 import 'package:gifty/presentation/notificationScreen/notificationPage.dart';
 import 'package:gifty/presentation/wishlist/favorites.dart';
 import 'package:gifty/presentation/home/homeWidgets.dart';
+import 'package:provider/provider.dart';
 
 import '../../controllers/navbar_controller.dart';
 import '../../widgets/bottom_navbar/provider_navbar.dart';
@@ -12,6 +13,7 @@ import '../../widgets/bottom_navbar/user_navbar.dart';
 import '../add_item_screen/add_item_screen.dart';
 import '../profile/user_profile.dart';
 import '../search_screen/search_page.dart';
+import '../../../providers/role_provider.dart'; 
 
 const user_id = 1;
 void main() => runApp(Home());
@@ -70,6 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+  String userRole = Provider.of<RoleProvider>(context).role;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(255, 242, 238, 1.0),
@@ -135,13 +139,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
       // body: _tabs[navBarController.selectedPage.value],
       body: Obx(() {
-        if (isProvider == true) {
+        if (userRole == 'provider') {
           return _provider_tabs[navBarController.selectedPage.value];
         } else {
           return _tabs[navBarController.selectedPage.value];
         }
       }),
-      bottomNavigationBar: _buildBottomBar(context, isProvider),
+      bottomNavigationBar: _buildBottomBar(context, userRole),
     );
   }
 }
@@ -174,8 +178,8 @@ class AddItemPage extends StatelessWidget {
   }
 }
 
-Widget _buildBottomBar(BuildContext context, bool isProvider) {
-  if (isProvider == true) {
+Widget _buildBottomBar(BuildContext context, String userRole) {
+  if (userRole == 'provider') {
     return ProviderBottomNavBar();
   } else {
     return UserBottomNavBar();
