@@ -7,6 +7,8 @@ import 'package:gifty/presentation/auth/sign_up/signup_provider.dart';
 import 'package:gifty/presentation/auth/sign_up/signup_user.dart';
 import 'package:gifty/presentation/notificationScreen/notificationPage.dart';
 import 'package:gifty/presentation/onboarding_screen/onboarding_screen.dart';
+import 'package:gifty/providers/role_provider.dart';
+import 'package:provider/provider.dart';
 import 'presentation/add_item_screen/add_item_screen.dart';
 import 'presentation/auth/sign_up/finish_signup_provider.dart';
 import 'presentation/card_screen/card_screen.dart';
@@ -17,7 +19,15 @@ import 'presentation/splash_screen/splash_screen.dart';
 import 'package:gifty/presentation/home/homeScreen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+     MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => RoleProvider()),
+        // Add other providers if needed
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
