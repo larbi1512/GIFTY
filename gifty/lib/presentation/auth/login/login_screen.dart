@@ -9,7 +9,8 @@ import 'dart:core';
 import 'package:http/http.dart' as http;
 import '../../../models/index.dart';
 import '../../../constants/endpoints.dart';
-import 'package:email_validator/email_validator.dart';
+import '../../../providers/role_provider.dart';
+import 'package:provider/provider.dart'; 
 
 
 class LoginScreen extends StatefulWidget {
@@ -64,6 +65,9 @@ try {
       // Successful login
       final Map<String, dynamic> responseData = json.decode(response.body);
       print(responseData);
+
+      String role = responseData['data']['role'];
+      Provider.of<RoleProvider>(context, listen: false).setRole(role);
       // Navigate to the home screen or perform any other actions
       Navigator.pushNamed(context, '/home');
     } else {
