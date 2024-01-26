@@ -16,6 +16,7 @@ class signupUser extends StatefulWidget {
   _SignupUserState createState() => _SignupUserState();
 }
 class _SignupUserState extends State<signupUser> {
+  
   final TextEditingController nameController = TextEditingController();
   final TextEditingController surnameController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
@@ -37,7 +38,7 @@ bool isLoading = false;
 
     
     final Map<String, String> data = {
-      'id': userId,
+      'user_id': userId,
       'name': name,
       'surname': surname,
       'username': username,

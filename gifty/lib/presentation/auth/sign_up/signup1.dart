@@ -9,7 +9,6 @@ import '../../../widgets/rounded_container.dart';
 import '../../../widgets/toggle_button.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../../models/index.dart';
 
 class signup1 extends StatefulWidget {
    @override
@@ -21,6 +20,8 @@ class signup1 extends StatefulWidget {
    final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
+  bool isLoading = false;
+
 
   void toggleCallback(bool selected) {
     setState(() {
@@ -29,6 +30,9 @@ class signup1 extends StatefulWidget {
   }
 
    Future<void> signup() async {
+     setState(() {
+      isLoading = true;
+    });
     final String email = emailController.text;
     final String password = passwordController.text;
     final String confirmPassword = confirmPasswordController.text;
@@ -41,6 +45,9 @@ class signup1 extends StatefulWidget {
           backgroundColor: Colors.red,
         ),
       );
+      setState(() {
+        isLoading = false;
+      });
       return;
     }
 
@@ -52,6 +59,9 @@ class signup1 extends StatefulWidget {
           backgroundColor: Colors.red,
         ),
       );
+      setState(() {
+        isLoading = false;
+      });
       return;
     }
 
@@ -74,10 +84,15 @@ class signup1 extends StatefulWidget {
       if (response.statusCode == 200) {
         // Successful signup
         final Map<String, dynamic> responseData = json.decode(response.body);
-        final String userId = responseData['id'];
-        print(responseData);
+        final String userId = "${responseData['user_id']}";
+        final String providerId = "${responseData['provider_id']}";
+        print("User ID is: $userId");
+        print("Provider ID is: $providerId");
+
         // Navigate to the next screen or perform any other actions
-        Navigator.pushNamed(context,   isUserSelected ? '/signup_user': '/signup_provider', arguments: userId);
+        Navigator.pushNamed(context,   isUserSelected ? '/signup_user': '/signup_provider',
+            arguments: {userId, providerId});
+
       } else {
         // Handle signup errors
         final Map<String, dynamic> responseData = json.decode(response.body);
@@ -89,14 +104,19 @@ class signup1 extends StatefulWidget {
           ),
         );
       }
-    } catch (e) {
-      print('Error during signup: $e');
+    } catch (e,stack) {
+      print('Error during signup: $e $stack');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('An error occurred during signup'),
           backgroundColor: Colors.red,
         ),
       );
+    }
+    finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
   @override
@@ -219,9 +239,16 @@ class signup1 extends StatefulWidget {
                             borderRadius: BorderRadius.circular(30),
                           ),
                         ),
-                        onPressed: signup,
+                        onPressed: (){
+                          isLoading ? null : signup();
+                        },
                         child: Text('Next'),
                       ),
+                    if (isLoading)
+                       CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(AppColor.main),
+                      backgroundColor: Colors.grey[300],
+                    ),
                       TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/login');
