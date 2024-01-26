@@ -148,7 +148,43 @@ class ApiService {
         body: json.encode(newGift['images']),
         headers: {'Content-Type': 'application/json'},
       );
+
       print("\naaaaaaaaaaaaaaaaaaaa7");
+
+      var tags = [];
+
+      if (newGift['tags'] != null && newGift['tags'].isNotEmpty) {
+        newGift['tags'].forEach((tagName, valuesList) {
+          print('aaaaaaaaaaaa tag: ($tagName): ($valuesList)');
+          if (valuesList != null && valuesList.isNotEmpty) {
+            for (var value in valuesList) {
+              tags.add({
+                'gift_id': gift_id,
+                'tag_name': tagName,
+                'tag_value': value
+              });
+            }
+          }
+        });
+      }
+
+      print("\naaaaaaaaaaaaaaaaaaaa8");
+      if (tags.isNotEmpty) {
+        final responseTags = await http.post(
+          Uri.parse('$baseUrl/tags.add'),
+          body: json.encode(tags),
+          headers: {'Content-Type': 'application/json'},
+        );
+      }
+      print("\naaaaaaaaaaaaaaaaaaaa9");
+
+      // print("\naaaaaaaaaaaaaaaaaaaa4");
+
+      // final responseColor = await http.post(
+      //   Uri.parse('$baseUrl/colors.add'),
+      //   body: json.encode(colors),
+      //   headers: {'Content-Type': 'application/json'},
+      // );
     } catch (e) {
       throw Exception('Error: $e');
     }
