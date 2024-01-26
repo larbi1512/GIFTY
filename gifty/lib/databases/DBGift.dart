@@ -69,8 +69,8 @@ class DBGift {
           ''');
 
     if (res == null) return null;
-    Map<String, dynamic> data = Map.of(res[0]);
-    int providerId = data['provider_id'];
+     Map<String, dynamic> data = Map.of(res[0]);
+     int providerId = data['provider_id'];
      Map<String, dynamic> remote_info = await apiService.fetchItemProvider(providerId);
 
     data['providerInfo'] = {
