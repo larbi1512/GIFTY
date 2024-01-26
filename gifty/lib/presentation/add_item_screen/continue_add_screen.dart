@@ -1,20 +1,38 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:gifty/widgets/back_button.dart';
 import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
 import '../../config/font.config.dart';
 import '../../constants/endpoints.dart';
+import '../../controllers/add_item_controller.dart';
 import '../../databases/DBGift.dart';
 import '../../services/api_service.dart';
+import '../../widgets/fields/categoryDropdown.dart';
+import '../../widgets/searchPageWidgets.dart';
+import 'add_item_screen.dart';
 
-class ContinueAddScreen extends StatelessWidget {
-  String iconPicture = Assets.images.iconPicture;
-  String iconDropdown = Assets.images.iconDropdown;
+class ContinueAddScreen extends StatefulWidget {
   Map<String, dynamic> productData;
-
+  static final AddItemController addControllers = Get.put(AddItemController());
   ContinueAddScreen({super.key, required this.productData});
+
+  @override
+  State<ContinueAddScreen> createState() => _ContinueAddScreenState();
+}
+
+class _ContinueAddScreenState extends State<ContinueAddScreen> {
+  bool _loading = false;
+  final AddItemController controller = Get.put(AddItemController());
+  String selectedTag = '1';
+  String iconPicture = Assets.images.iconPicture;
+  Map selectedTags = {
+    'Event type :': [1, 2]
+  };
+
+  String iconDropdown = Assets.images.iconDropdown;
 
   @override
   Widget build(BuildContext context) {
@@ -66,50 +84,79 @@ class ContinueAddScreen extends StatelessWidget {
                           ))),
                 ],
               ),
-              SizedBox(height: 30),
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    "Choose the tags you want to be found in the search:",
-                    style: AppTextStyles.interSubitle.copyWith(
-                      color: Color(0X7F263238),
-                      fontSize: 15,
+              SizedBox(height: 15),
+              if (_loading)
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 150),
+                    CircularProgressIndicator(),
+                    SizedBox(height: 25),
+                    Text(
+                      "adding the product, Please wait",
+                      style: AppTextStyles.interSubitle.copyWith(
+                        color: Color(0X7F263238),
+                        fontSize: 15,
+                      ),
                     ),
-                  )),
-              // Expanded(
-              //   child: SingleChildScrollView(
-              //     child: Column(
-              //       children: [
-              //         // SearchWidget("Event type :", false),
-              //         // SearchWidget("Age :", false),
-              //         // SearchWidget("Position :", false),
-              //         SizedBox(height: 20),
-              //         Align(
-              //             alignment: Alignment.centerLeft,
-              //             child: Padding(
-              //                 padding: EdgeInsets.only(left: 30),
-              //                 child: Text(
-              //                   "Add your tags here",
-              //                   style: TextStyle(
-              //                     fontSize: 14,
-              //                     fontFamily: 'Poppins',
-              //                     fontWeight: FontWeight.w600,
-              //                   ),
-              //                 ))),
-              //         SearchWidget("Additional tags : ", true),
-              //       ],
-              //     ),
-              //   ),
-              // ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: AddButton(context, productData),
-              ),
+                  ],
+                ),
+              if (!_loading)
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            "Choose the ",
+                            style: AppTextStyles.interSubitle.copyWith(
+                              color: Color(0X7F263238),
+                              fontSize: 15,
+                            ),
+                          ),
+                          Text(
+                            "Tags ",
+                            style: AppTextStyles.interTitle.copyWith(
+                              fontSize: 19,
+                            ),
+                          ),
+                          Text(
+                            "of your product",
+                            style: AppTextStyles.interSubitle.copyWith(
+                              color: Color(0X7F263238),
+                              fontSize: 15,
+                            ),
+                          ),
+                        ])),
+              if (!_loading)
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        children: [
+                          SearchWidget("Event type", false),
+                          SearchWidget("Gift’s receiver", false),
+                          SearchWidget("Receiver’s age", false),
+                          SearchWidget("Additional tags", true),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              if (!_loading)
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: AddButton(context, widget.productData, this),
+                ),
             ])));
   }
 }
 
-Widget AddButton(BuildContext context, Map<String, dynamic> productData) {
+Widget AddButton(
+    BuildContext context, Map<String, dynamic> productData, state) {
+  // final AddItemController controller = Get.put(AddItemController());
   final ApiService apiService = ApiService(api_endpoint);
   return OutlinedButton(
     style: ButtonStyle(
@@ -123,15 +170,35 @@ Widget AddButton(BuildContext context, Map<String, dynamic> productData) {
       )),
     ),
     onPressed: () async {
-      print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii $productData");
+      state.setState(() {
+        state._loading = true;
+      });
+      productData['tags'] = Tag.addController.tags ?? {};
+      print("continue add  iiiiiiiiiiiiiiiiiiii $productData");
+      // }
+
       // await DBGift.insertRecord(productData);
-      await apiService.addGift(productData);
+
+      try {
+        await apiService.addGift(productData);
+        // Do something after the operation is complete
+      } catch (error) {
+        // Handle error, if any
+      }
+      ContinueAddScreen.addControllers.productAdded.value = true;
+
+      print(
+          'jjjjjjjjjjjjj ${ContinueAddScreen.addControllers.productAdded.value}');
       Navigator.pop(context);
-      // navBarController.SetPage(1);
-      // Navigator.pop(context);
-      // Navigator.popUntil(context, ModalRoute.withName('/home'));
-      // Navigator.pushNamed(context, '/home');
-      // setState(() {});
+      Tag.addController.doResetTags();
+
+      // show message added succesfuly
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Added succesfuly'),
+          backgroundColor: AppColor.greenLighter,
+        ),
+      );
     },
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,

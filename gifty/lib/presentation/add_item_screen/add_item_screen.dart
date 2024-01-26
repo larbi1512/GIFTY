@@ -10,6 +10,7 @@ import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
 import '../../controllers/add_item_controller.dart';
 import '../../widgets/bottomSheet.dart';
+import '../../widgets/searchPageWidgets.dart';
 import 'colors_input.dart';
 import 'continue_add_screen.dart';
 
@@ -27,7 +28,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
   final _tx_price_controller = TextEditingController();
 
-  final AddItemController controller = Get.put(AddItemController());
+  final AddItemController addcontroller = Get.put(AddItemController());
 
   List<Map<String, dynamic>> imagesItems = [];
 
@@ -51,16 +52,24 @@ class _AddItemScreenState extends State<AddItemScreen> {
       ),
       onPressed: () async {
         // Check if imagesItems is empty and insert a default image if needed
-        if (imagesItems.isEmpty) {
-          // Add a default image to productData['images']
-          productData['images'] = [
-            {
-              'type': 'asset',
-              'imagePath': Assets.images.valentineBouquet,
-              'imageName': 'valentineBouquet'
-            }
-          ];
+        if (_tx_name_controller.text.isEmpty ||
+            _tx_description_controller.text.isEmpty ||
+            _tx_price_controller.text.isEmpty ||
+            imagesItems.isEmpty ||
+            addcontroller.colors.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Please fill all the fields'),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return;
         }
+
+        productData['name'] = _tx_name_controller.text;
+        productData['description'] = _tx_description_controller.text;
+        productData['price'] = _tx_price_controller.text;
+
         print("Here is the data: ${productData}");
 
         await Navigator.push(
@@ -69,21 +78,30 @@ class _AddItemScreenState extends State<AddItemScreen> {
             builder: (context) => ContinueAddScreen(productData: productData),
           ),
         );
-        _tx_name_controller.clear();
-        _tx_description_controller.clear();
-        _tx_price_controller.clear();
+        print(
+            'llllllll ${ContinueAddScreen.addControllers.productAdded.value}');
+        if (ContinueAddScreen.addControllers.productAdded == true) {
+          _tx_name_controller.clear();
+          _tx_description_controller.clear();
+          _tx_price_controller.clear();
 
-        setState(() {
-          imagesItems.clear();
-          controller.doClearColors();
-        });
+          setState(() {
+            imagesItems.clear();
+            addcontroller.doClearColors();
+          });
+          print(
+              'rrrrrrr ${ContinueAddScreen.addControllers.productAdded.value}');
+          ContinueAddScreen.addControllers.productAdded.value = false;
+          print(
+              'rrrrrrr2 ${ContinueAddScreen.addControllers.productAdded.value}');
+        }
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "Continue Add Product",
+            "Next",
             style: TextStyle(
               color: AppColor.peachLightest,
               fontSize: 15,
@@ -490,17 +508,14 @@ class _AddItemScreenState extends State<AddItemScreen> {
               SizedBox(height: 13),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
-                child:
-                    // Obx(() =>
-                    AddButton(context, {
+                child: AddButton(context, {
                   'name': _tx_name_controller.text,
                   'description': _tx_description_controller.text,
                   'price': _tx_price_controller.text,
                   'provider_id': 1,
                   'images': imagesItems,
-                  'colors': controller.colors
+                  'colors': addcontroller.colors
                 }),
-                // )
               ),
             ])),
       ),
@@ -573,7 +588,7 @@ Widget _DescriptionFormField(BuildContext context, controller) {
         fontFamily: 'Poppins',
         fontWeight: FontWeight.w400,
       ),
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.multiline,
       maxLines: 1,
       focusNode: FocusNode(),
       autofocus: true,
@@ -627,7 +642,7 @@ Widget _PriceFormField(BuildContext context, controller) {
         fontFamily: 'Poppins',
         fontWeight: FontWeight.w400,
       ),
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.number,
       maxLines: 1,
       focusNode: FocusNode(),
       autofocus: true,

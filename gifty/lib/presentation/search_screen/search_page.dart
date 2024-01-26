@@ -30,7 +30,7 @@ class _SearchPageState extends State<SearchPage> {
                         padding: EdgeInsets.symmetric(
                             horizontal: mediaQueryData.size.width * 0.03),
                         child: WhiteBlurryBackground(
-                            height: mediaQueryData.size.height * 0.92,
+                            height: mediaQueryData.size.height * 0.78,
                             child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +56,7 @@ class _SearchPageState extends State<SearchPage> {
                                     ),
                                   ]),
                                   Text(
-                                    "Choose the tags to search with, * indicates that it is optional to fill",
+                                    "Choose the tags to search with",
                                     style: AppTextStyles.interSubitle.copyWith(
                                       color: Color(0X8F263238),
                                       fontSize: 13,
@@ -66,21 +66,22 @@ class _SearchPageState extends State<SearchPage> {
                                     child: SingleChildScrollView(
                                       child: Column(
                                         children: [
-                                        SearchWidget("Event type :" ,false ),
-                                        SearchWidget("Gift’s receiver :" ,false ),
-                                        SearchWidget("prefered color :" ,false ),
-                                        SearchWidget("Receiver’s age :" ,false ),
-                                        SearchWidget("Additional tags : " ,true ),
-                                      ],
+                                          SearchWidget("Event type", false),
+                                          SearchWidget(
+                                              "Gift’s receiver", false),
+                                          SearchWidget("prefered color", false),
+                                          SearchWidget("Receiver’s age", false),
+                                          SearchWidget("Additional tags", true),
+                                        ],
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 20),
+                                  SizedBox(height: 10),
                                   Align(
-                                    alignment: Alignment.bottomRight,
+                                    alignment: Alignment.bottomCenter,
                                     child: Container(
-                                      height: 35,
-                                      width: 85,
+                                      height: mediaQueryData.size.height * 0.07,
+                                      width: mediaQueryData.size.width * 0.9,
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.white,
@@ -100,11 +101,11 @@ class _SearchPageState extends State<SearchPage> {
                                               MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              "Search",
+                                              "Search  ",
                                               style: AppTextStyles.interSubitle
                                                   .copyWith(
                                                 color: AppColor.main,
-                                                fontSize: 12,
+                                                fontSize: 15,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -124,7 +125,6 @@ class _SearchPageState extends State<SearchPage> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 15),
                                 ])))))));
   }
 }
