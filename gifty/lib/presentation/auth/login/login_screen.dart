@@ -11,6 +11,7 @@ import '../../../models/index.dart';
 import '../../../constants/endpoints.dart';
 import '../../../providers/role_provider.dart';
 import 'package:provider/provider.dart'; 
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -25,6 +26,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
     bool isLoading = false;
 
+ void storeLoggedInUserId(String userId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('loggedInUserId', userId);
+  }
+
+  Future<String?> getLoggedInUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('loggedInUserId');
+  }
   Future<void> loginUser() async {
     setState(() {
       isLoading = true;
@@ -68,6 +78,8 @@ try {
 
       String role = responseData['data']['role'];
       Provider.of<RoleProvider>(context, listen: false).setRole(role);
+       String userId = "${responseData['data']['user_id']}";
+      storeLoggedInUserId(userId);
       // Navigate to the home screen or perform any other actions
       Navigator.pushNamed(context, '/home');
     } else {

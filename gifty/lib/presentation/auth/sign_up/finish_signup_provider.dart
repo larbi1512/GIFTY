@@ -10,8 +10,12 @@ import '../../../config/colors.config.dart';
 import '../../../widgets/background_image.dart';
 import '../../../widgets/rounded_container.dart';
 
-class signupProviderFinal extends StatelessWidget {
-  const signupProviderFinal({super.key});
+class signupProviderFinal extends StatelessWidget {  
+   signupProviderFinal({super.key});
+
+  String facebookLink = "";
+   String websiteLink = "";
+   String instagramLink = "";
   
 
   @override
@@ -34,19 +38,31 @@ class signupProviderFinal extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                    children: [
                     SizedBox(height: 10),
-                    ProfileImageSetup(hintText: "please upload ur brand logo"),
+                    ProfileImageSetup(hintText: "please upload ur brand logo",
+                    userId: "",
+                    providerId:ModalRoute.of(context)!.settings.arguments.toString(),
+                  ),
                     SizedBox(height: 10),
                     Text("Enter your social media", 
                     style: AppTextStyles.Hello,),
                     SizedBox(height: 10),
                   Socialsfield(
-                      prefixIcon: Icons.facebook, hintText: "Facebook Link"),
+                      prefixIcon: Icons.facebook, hintText: "Facebook Link",
+                       onChanged: (value) {
+                        facebookLink = value;
+                      },),
                       SizedBox(height: 10),
                   Socialsfield(
-                      prefixIcon: Icons.web, hintText: "website Link"),
+                      prefixIcon: Icons.web, hintText: "website Link", onChanged: (value) {
+                      websiteLink = value;
+                    },
+                  ),
                       SizedBox(height: 10),
                   Socialsfield(
-                      prefixIcon: SocialIconsFlutter.instagram, hintText: "Instagram Link"),
+                      prefixIcon: SocialIconsFlutter.instagram, hintText: "Instagram Link", onChanged: (value) {
+                      websiteLink = value;
+                    },
+                  ),
                       SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.only(left: 20, right:20),

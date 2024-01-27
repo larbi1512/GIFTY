@@ -9,6 +9,7 @@ import 'package:gifty/presentation/notificationScreen/notificationPage.dart';
 import 'package:gifty/presentation/onboarding_screen/onboarding_screen.dart';
 import 'package:gifty/providers/role_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'presentation/add_item_screen/add_item_screen.dart';
 import 'presentation/auth/sign_up/finish_signup_provider.dart';
 import 'presentation/card_screen/card_screen.dart';
@@ -56,12 +57,28 @@ class MyApp extends StatelessWidget {
         '/finish_signup_user': (context) => SignupUserFinal(),
         '/finish_signup_provider': (context) => signupProviderFinal(),
 
-        '/user_profile': (context) => UserProfile(),
-        '/provider_contact': (context) => ProviderContact(),
+'/user_profile': (context) {
+          return FutureBuilder<String?>(
+            future: _getLoggedInUserId(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                String? loggedInUserId = snapshot.data;
+                return UserProfile(userId: loggedInUserId ?? '');
+              } else {
+                return CircularProgressIndicator();
+              }
+            },
+          );
+        },        '/provider_contact': (context) => ProviderContact(),
         '/Add_item_screen': (context) => AddItemScreen(),
         '/notifications': (context) => NotificationPage()
       },
     );
+  }
+  
+  Future<String?> _getLoggedInUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('loggedInUserId');
   }
 }
 

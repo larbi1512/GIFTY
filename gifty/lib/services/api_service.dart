@@ -240,6 +240,10 @@ class ApiService {
     return false;
   }
 
+  // Future<bool> finish_signup_user() async {
+
+  // }
+
   // Future<String> uploadImage(imageBytes) async {
   //   try {
   //     print("\nfunction upload was called front");
