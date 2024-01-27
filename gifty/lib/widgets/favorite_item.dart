@@ -6,6 +6,8 @@ import 'package:gifty/config/colors.config.dart';
 import '../config/assets.config.dart';
 import '../databases/DBUser_favorites.dart';
 import '../presentation/card_screen/card_screen.dart';
+import 'package:provider/provider.dart';
+import '../../providers/id_provider.dart';
 
 class LikedItemWidget extends StatelessWidget {
   dynamic widgetState;
@@ -39,6 +41,7 @@ class LikedItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int userid = Provider.of<IdProvider>(context).id;
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -112,7 +115,7 @@ class LikedItemWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  product['name'],
+                  product['name'] ?? "hello",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -157,22 +160,23 @@ class LikedItemWidget extends StatelessWidget {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(5.0),
-                      child:
-                          // InkWell(
-                          //   onTap: () {},
-                          //   child: Icon(
-                          //     Icons.favorite,
-                          //     color: AppColor.main,
-                          //   ),
-                          // ),
-                          InkWell(
+                      child: InkWell(
                         onTap: () {
+                          print('QQQQQQQQQQQQQ ${product['id']}, $userid');
+                          if (product['isFavorite'] == null) {
+                            print('QQQQQQ null');
+                            product['isFavorite'] = false;
+                          }
+                          print('QQQQQQQQQQQQQ2 ${product['isFavorite']}');
                           widgetState.setState(() {
                             if (product['isFavorite']) {
-                              DBUserFavorits.deleteRecord(1, product['id']);
+                              DBUserFavorits.deleteRecord(
+                                  userid, product['remote_id']);
                             } else {
-                              DBUserFavorits.insertRecord(
-                                  {'user_id': 1, 'product_id': product['id']});
+                              DBUserFavorits.insertRecord({
+                                'user_id': userid,
+                                'product_id': product['id']
+                              });
                             }
                             product['isFavorite'] = !product['isFavorite'];
                           });

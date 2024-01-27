@@ -133,13 +133,23 @@ class ApiService {
               if (tag['tag_name'] == mytag['tag_name'] &&
                   tag['tag_value'] == mytag['tag_value']) {
                 gift['count'] = gift['count'] + 1;
-                if (gift['count'] >= tags.length) {
+                if (gift['count'] >= tags.length || gift['count'] >= 3) {
                   print('vvvvvvvvv contains gift count ${gift['count']}');
                   gift['imagePath'] = gift['images'][0]['imagepath'];
                   gift['type'] = gift['images'][0]['type'];
                   gift['remote_id'] = gift['id'];
-                  resultGifts.add(gift);
+                  // resultGifts.add(gift);
+
+                  bool giftAlreadyExists = resultGifts.any((existingGift) =>
+                      existingGift['id'] ==
+                      gift['id']); // Replace 'id' with the actual identifier
+
+                  if (!giftAlreadyExists) {
+                    resultGifts.add(gift);
+                  }
+
                   print('vvvvvvvvv resultGifts: $resultGifts');
+                  break;
                 }
               }
               ;

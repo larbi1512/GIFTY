@@ -76,8 +76,6 @@ class _SearchPageState extends State<SearchPage> {
                                           SearchWidget(
                                               "Gift’s receiver", false, true),
                                           SearchWidget(
-                                              "prefered color", false, true),
-                                          SearchWidget(
                                               "Receiver’s age", false, true),
                                           SearchWidget(
                                               "Additional tags", true, true),

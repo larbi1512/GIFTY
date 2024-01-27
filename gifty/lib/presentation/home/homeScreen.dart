@@ -162,7 +162,8 @@ class SearchScreen extends StatelessWidget {
 class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return wishList(user_id: 1);
+    int userid = Provider.of<IdProvider>(context).id;
+    return wishList(user_id: userid);
   }
 }
 

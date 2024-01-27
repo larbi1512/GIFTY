@@ -4,8 +4,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gifty/databases/DBUser_favorites.dart';
+import 'package:provider/provider.dart';
 import '../../databases/DBGift.dart';
 import '../../databases/DBUsercart.dart';
+import '../../providers/id_provider.dart';
 import '../cartScreen/cartPage.dart';
 import '../profile/provider_contact.dart';
 import '/config/assets.config.dart';
@@ -74,7 +76,7 @@ class _CardScreenState extends State<CardScreen> {
             child: ProductCard(item: item),
           ),
           const SizedBox(height: 20),
-          Provider(providerInfo: item['providerInfo'], item: item),
+          GiftProvider(providerInfo: item['providerInfo'], item: item),
           // const SizedBox(height: 10),
           // OtherProviders(),
           SizedBox(height: 5)
@@ -103,6 +105,7 @@ class _ProductCardState extends State<ProductCard> {
 
   @override
   Widget build(BuildContext context) {
+    int userid = Provider.of<IdProvider>(context).id;
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
@@ -167,21 +170,25 @@ class _ProductCardState extends State<ProductCard> {
                           ),
                           InkWell(
                             onTap: () {
-                              // wishList.widget.setState(() {});
+                              print(
+                                  'RRRRRRR itemid: ${widget.item['id']}, remoteid: ${widget.item['remote_id']},userid: $userid, is favorite: ${widget.item['isFavorite']}');
+                              if (widget.item['isFavorite'] == null) {
+                                print('QQQQQQ null');
+                                widget.item['isFavorite'] = false;
+                              }
                               setState(() {
                                 if (widget.item['isFavorite']) {
                                   DBUserFavorits.deleteRecord(
-                                      1, widget.item['id']);
+                                      userid, widget.item['remote_id']);
                                 } else {
                                   DBUserFavorits.insertRecord({
-                                    'user_id': 1,
-                                    'product_id': widget.item['id']
+                                    'user_id': userid,
+                                    'product_id': widget.item['remote_id']
                                   });
                                 }
                                 widget.item['isFavorite'] =
                                     !widget.item['isFavorite'];
                               });
-                              //       //addToFavorite();
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -310,11 +317,11 @@ class _ProductCardState extends State<ProductCard> {
   }
 }
 
-class Provider extends StatelessWidget {
+class GiftProvider extends StatelessWidget {
   final Map providerInfo;
   final Map item;
 
-  Provider({
+  GiftProvider({
     super.key,
     required this.providerInfo,
     required this.item,
