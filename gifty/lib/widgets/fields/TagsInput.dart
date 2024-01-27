@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:gifty/config/colors.config.dart';
 
 class TagsInput extends StatefulWidget {
+  final TextEditingController controller; 
+  TagsInput({required this.controller});
   @override
   _TagsInputState createState() => _TagsInputState();
 }
 
 class _TagsInputState extends State<TagsInput> {
-  final TextEditingController _controller = TextEditingController();
   List<String> _tags = [];
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +21,7 @@ class _TagsInputState extends State<TagsInput> {
       child: Column(
         children: [
           Wrap(
+
             spacing: 8.0,
             runSpacing: 4.0,
             children: _tags.map((tag) {
@@ -36,7 +35,7 @@ class _TagsInputState extends State<TagsInput> {
           ),
           SizedBox(height: 10),
           TextField(
-            controller: _controller,
+            controller: widget.controller,
             onSubmitted: (value) {
               _addTag(value);
             },
@@ -64,7 +63,7 @@ class _TagsInputState extends State<TagsInput> {
     if (tag.isNotEmpty && !_tags.contains(tag)) {
       setState(() {
         _tags.add(tag);
-        _controller.clear();
+        widget.controller.clear();
       });
     }
   }

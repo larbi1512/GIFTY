@@ -60,7 +60,7 @@ bool isLoading = false;
         final Map<String, dynamic> responseData = json.decode(response.body);
         print(responseData);
         // Navigate to the next screen or perform any other actions
-        Navigator.pushReplacementNamed(context, '/finish_signup_user');
+        Navigator.pushReplacementNamed(context, '/finish_signup_user', arguments: userId);
       } else {
         // Handle errors
         final Map<String, dynamic> responseData = json.decode(response.body);
@@ -200,6 +200,12 @@ bool isLoading = false;
                       },
                       child: Text('Sign up'),
                     ),
+                    if (isLoading)
+                      CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(AppColor.main),
+                        backgroundColor: Colors.grey[300],
+                      ),
                     SizedBox(height: 20,),
 
                   ],

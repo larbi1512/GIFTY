@@ -14,6 +14,9 @@ import '../../widgets/bottom_navbar/user_navbar.dart';
 import '../add_item_screen/add_item_screen.dart';
 import '../profile/user_profile.dart';
 import '../search_screen/search_page.dart';
+import '../../../providers/role_provider.dart'; 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../providers/role_provider.dart';
 
 const user_id = 1;
@@ -41,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final NavBarController navBarController = Get.put(NavBarController());
   // final int _currentIndex = 0;
   bool isProvider = true;
+  String loggedInUserId = ''; 
 
   final List<Widget> _tabs = [
     HomeScreen(),
@@ -70,7 +74,17 @@ class _MyHomePageState extends State<MyHomePage> {
     //   // Add more image paths as needed
     // ] , title:"nb"),
   ];
-
+ @override
+  void initState() {
+    super.initState();
+    getLoggedInUserId(); // Call this method to retrieve user ID
+  }
+  Future<void> getLoggedInUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      loggedInUserId = prefs.getString('loggedInUserId') ?? '';
+    });
+  }
   @override
   Widget build(BuildContext context) {
     String userRole = Provider.of<RoleProvider>(context).role;
@@ -170,7 +184,9 @@ class FavoritesScreen extends StatelessWidget {
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return UserProfile();
+    _MyHomePageState? state = context.findAncestorStateOfType<_MyHomePageState>();
+    // Use the state to access the loggedInUserId
+    return UserProfile(userId: state!.loggedInUserId);
   }
 }
 

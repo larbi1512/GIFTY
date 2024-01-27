@@ -90,8 +90,9 @@ class signup1 extends StatefulWidget {
         print("Provider ID is: $providerId");
 
         // Navigate to the next screen or perform any other actions
-        Navigator.pushNamed(context,   isUserSelected ? '/signup_user': '/signup_provider',
-            arguments: {userId, providerId});
+        Navigator.pushNamed(context,   isUserSelected ? '/signup_user': '/signup_provider', 
+        arguments: isUserSelected ? userId : providerId,
+        );
 
       } else {
         // Handle signup errors
