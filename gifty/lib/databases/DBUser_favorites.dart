@@ -44,8 +44,8 @@ class DBUserFavorits {
         MAX(images.imagePath) as imagePath,
         MAX(images.type) as type
         FROM ${tableName}
-        left join gifts on user_favorits.product_id=gifts.id
-        LEFT JOIN images ON gifts.id = images.product_id
+        left join gifts on user_favorits.product_id=gifts.remote_id
+        LEFT JOIN images ON gifts.remote_id = images.product_id
         where user_favorits.user_id='$user_id'
         GROUP BY gifts.id
         ORDER BY gifts.name ASC
@@ -75,6 +75,8 @@ class DBUserFavorits {
 
   static Future<int> insertRecord(Map<String, dynamic> data) async {
     final database = await DBHelper.getDatabase();
+    print('data in insertRecord : $data');
+
     getIdFavoritsOfUser(1);
     return await database.insert(tableName, data,
         conflictAlgorithm: ConflictAlgorithm.replace);
@@ -82,6 +84,7 @@ class DBUserFavorits {
 
   static Future<bool> deleteRecord(int user_id, int product_id) async {
     final database = await DBHelper.getDatabase();
+    print('data in deleteRecord : $user_id $product_id');
     database.rawQuery(
         """delete from  ${tableName}  where user_id=? and product_id=?""",
         [user_id, product_id]);
