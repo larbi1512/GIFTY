@@ -15,6 +15,7 @@ class wishList extends StatefulWidget {
 class _wishlistState extends State<wishList> {
   @override
   Widget build(BuildContext context) {
+    print('fffffffffffff${widget.user_id}');
     Future<List?> favorites =
         DBUserFavorits.getAllFavoritsOfUser(widget.user_id);
     return Scaffold(
@@ -59,6 +60,7 @@ class _wishlistState extends State<wishList> {
   }
 
   Widget buildGridView(productsList) {
+    print('ppppppppppp  products in favorites${productsList}');
     return GridView.builder(
       shrinkWrap: true,
       padding: EdgeInsets.all(10),

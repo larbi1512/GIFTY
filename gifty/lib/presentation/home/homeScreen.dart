@@ -8,6 +8,7 @@ import 'package:gifty/presentation/home/homeWidgets.dart';
 import 'package:provider/provider.dart';
 
 import '../../controllers/navbar_controller.dart';
+import '../../providers/id_provider.dart';
 import '../../widgets/bottom_navbar/provider_navbar.dart';
 import '../../widgets/bottom_navbar/user_navbar.dart';
 import '../add_item_screen/add_item_screen.dart';
@@ -16,6 +17,7 @@ import '../search_screen/search_page.dart';
 import '../../../providers/role_provider.dart'; 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../providers/role_provider.dart';
 
 const user_id = 1;
 void main() => runApp(Home());
@@ -85,7 +87,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   @override
   Widget build(BuildContext context) {
-  String userRole = Provider.of<RoleProvider>(context).role;
+    String userRole = Provider.of<RoleProvider>(context).role;
+    int userid = Provider.of<IdProvider>(context).id;
 
     return Scaffold(
       appBar: AppBar(
@@ -173,7 +176,8 @@ class SearchScreen extends StatelessWidget {
 class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return wishList(user_id: 1);
+    int userid = Provider.of<IdProvider>(context).id;
+    return wishList(user_id: userid);
   }
 }
 

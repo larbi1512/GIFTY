@@ -19,11 +19,14 @@ import 'presentation/providers_list/providers_list_screen.dart';
 import 'presentation/splash_screen/splash_screen.dart';
 import 'package:gifty/presentation/home/homeScreen.dart';
 
+import 'providers/id_provider.dart';
+
 void main() {
   runApp(
-     MultiProvider(
+    MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => RoleProvider()),
+        ChangeNotifierProvider(create: (_) => IdProvider()),
         // Add other providers if needed
       ],
       child: MyApp(),
@@ -46,7 +49,9 @@ class MyApp extends StatelessWidget {
         '/onboarding': (context) => OnBoardingScreen(),
         '/login': (context) => LoginScreen(),
 
-        '/cart': (context) => CartPage(userId: 1,),
+        '/cart': (context) => CartPage(
+              userId: 1,
+            ),
         '/cart': (context) => CartPage(
               userId: 1,
             ),
