@@ -204,6 +204,7 @@ class _SearchBarAppState extends State<SearchBarApp> {
     // _searchController.clear();
     if (snapshot.hasData) {
       List<Map> search_result = snapshot.data as List<Map>;
+      print('bbbbbbbbbbhhhhhhhhh search_result $search_result');
       return SeeMore(
         title: "result for ${_searchController.text}",
         productsList: search_result,

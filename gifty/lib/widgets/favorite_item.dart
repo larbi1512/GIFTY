@@ -22,7 +22,8 @@ class LikedItemWidget extends StatelessWidget {
       print("nul type or path   $imagePath , $imageType");
       return AssetImage(Assets.images.itemImage);
     }
-    print("\n hhhhhhhhhhhhhhhhhhh $imageType");
+    print("\n hhhhhhhhhhhhhhhhhhh $imageType  $imagePath");
+    print("\n bbbbbbbbbbbbbb $imagePath");
 
     switch (imageType) {
       case 'file':
@@ -180,7 +181,7 @@ class LikedItemWidget extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: (product['isFavorite'])
+                              image: (product['isFavorite'] ?? false)
                                   ? AssetImage(Assets.images.iconHeartActive)
                                   : AssetImage(Assets.images.iconHeart),
                               fit: BoxFit.contain,

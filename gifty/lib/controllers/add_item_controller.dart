@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 class AddItemController extends GetxController {
   final colors = [].obs;
   final tags = {}.obs;
+  final searchTags = {}.obs;
   final productAdded = true.obs;
 
   @override
@@ -28,24 +29,38 @@ class AddItemController extends GetxController {
     colors.clear();
   }
 
-  void doAddInTag(String tagName, String tagValue) {
-    print("aaaaaaaa ${tags[tagName] ?? 0}");
-    if (tags[tagName] != null) {
-      print("bbbbb ${tags[tagName]}");
-      tags[tagName].add(tagValue);
+  void doAddInTag(String tagName, String tagValue, bool isSearch) {
+    if (!isSearch) {
+      print("aaaaaaaa ${tags[tagName] ?? 0}");
+      if (tags[tagName] != null) {
+        print("bbbbb ${tags[tagName]}");
+        tags[tagName].add(tagValue);
+      } else {
+        tags[tagName] = [tagValue];
+      }
+      print("cccc ${tags}");
     } else {
-      tags[tagName] = [tagValue];
+      if (searchTags[tagName] != null) {
+        searchTags[tagName].add(tagValue);
+      } else {
+        searchTags[tagName] = [tagValue];
+      }
     }
-    print("cccc ${tags}");
   }
 
-  void doRemoveInTag(String tagName, String tagValue) {
-    tags[tagName].remove(tagValue);
+  void doRemoveInTag(String tagName, String tagValue, bool isSearch) {
+    if (!isSearch)
+      tags[tagName].remove(tagValue);
+    else
+      searchTags[tagName].remove(tagValue);
     print("cccc2 ${tags}");
   }
 
-  void doClearInTags(String tagName) {
-    tags[tagName].clear();
+  void doClearInTags(String tagName, bool isSearch) {
+    if (!isSearch)
+      tags[tagName].clear();
+    else
+      searchTags[tagName].clear();
   }
 
   void doResetTags() {
