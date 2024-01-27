@@ -240,6 +240,22 @@ class ApiService {
     return false;
   }
 
+  Future<Map<String, dynamic>> fetchItemProvider(int provider_id) async {
+  try {
+    final response = await http.get(Uri.parse('$baseUrl/api/get_item_provider/$provider_id'));
+    if (response.statusCode == 200) {
+      final decodedData = json.decode(response.body);
+      print("deeeeeeeee $decodedData");
+      return decodedData;
+    } else {
+      throw Exception('Failed to load provider data from Supabase');
+    }
+  } catch (e) {
+    throw Exception('Error: $e');
+  }
+}
+
+
   // Future<String> uploadImage(imageBytes) async {
   //   try {
   //     print("\nfunction upload was called front");

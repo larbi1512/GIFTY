@@ -1,4 +1,6 @@
+import 'package:gifty/constants/endpoints.dart';
 import 'package:gifty/databases/DBProductColor.dart';
+import 'package:gifty/services/api_service.dart';
 import 'package:sqflite/sqflite.dart';
 import '../config/assets.config.dart';
 import 'DBHelper.dart';
@@ -7,6 +9,7 @@ import 'DBimage.dart';
 
 class DBGift {
   static const tableName = 'gifts';
+  static ApiService apiService = ApiService(api_endpoint);
 
   static const sql_code = '''CREATE TABLE IF NOT EXISTS gifts (
              id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -93,15 +96,18 @@ class DBGift {
       colors.add(color['color']);
     }
 
-    List<Map<String, dynamic>> providerInfo = await database.rawQuery('''SELECT 
-            id ,
-            store_name,
-            location,
-            brand_pic
-          from providers
-          where id=${data['provider_id']}
-          order by id ASC
-          ''');
+     int providerId = data['provider_id'];
+     Map<String, dynamic> providerInfo = await apiService.fetchItemProvider(providerId);
+
+    // List<Map<String, dynamic>> providerInfo = await database.rawQuery('''SELECT 
+    //         id ,
+    //         store_name,
+    //         location,
+    //         brand_pic
+    //       from providers
+    //       where id=${data['provider_id']}
+    //       order by id ASC
+    //       ''');
 
     print("*****************$providerInfo");
 
@@ -118,7 +124,7 @@ class DBGift {
     data['providerInfo'] = {
       'brand_pic': Assets.images.providerImage,
       'store_name': "Bahdja telecom",
-      'location': "Baba hsen, Algiers"
+      'location': "Babaaa hsen, Algiers"
     };
 
     // data['providerInfo'] = Map.of(providerInfo[0]);
