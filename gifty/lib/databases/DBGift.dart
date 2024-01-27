@@ -97,7 +97,11 @@ class DBGift {
     }
 
      int providerId = data['provider_id'];
+     print("before : ");
+     print(providerId);
      Map<String, dynamic> providerInfo = await apiService.fetchItemProvider(providerId);
+     print("after : ");
+
 
     // List<Map<String, dynamic>> providerInfo = await database.rawQuery('''SELECT 
     //         id ,
@@ -108,8 +112,8 @@ class DBGift {
     //       where id=${data['provider_id']}
     //       order by id ASC
     //       ''');
-
-    print("*****************$providerInfo");
+    print("   ");
+    print("**********************************$providerInfo");
 
     // data['providerInfo'] = {
     //   'brand_pic': providerInfo['brand_pic'],
@@ -122,12 +126,13 @@ class DBGift {
     data['colorsList'] = colors;
     data['isFavorite'] = await DBUserFavorits.isInUserFavorites(data['id'], 1);
     data['providerInfo'] = {
-      'brand_pic': Assets.images.providerImage,
-      'store_name': "Bahdja telecom",
-      'location': "Babaaa hsen, Algiers"
+      'brand_pic': providerInfo['provider_info']['brand_pic'],
+      'store_name': providerInfo['provider_info']['store_name'],
+      'location': providerInfo['provider_info']['location']
     };
 
     // data['providerInfo'] = Map.of(providerInfo[0]);
+    print("data : ");
     print("\n******************$data \n");
     return data;
   }

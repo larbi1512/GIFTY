@@ -18,10 +18,29 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   late Future<List<Map<String, dynamic>>> futureCartItems;
     int cartnbr = 0;
+    double totalSum = 0;
 
  void initState() {
     super.initState();
     futureCartItems = DBUserCart.getAllCarItemsOfUser(widget.userId);
+    _calculateTotal();
+  }
+    void _calculateTotal() async {
+    final cartItems = await futureCartItems;
+    double sum = 0;
+    for (var cartItem in cartItems) {
+      int price = cartItem['price'];
+      int amount = cartItem['amount'];
+      sum += price * amount;
+    }
+    setState(() {
+      totalSum = sum;
+    });
+  }
+  void _updateTotal(int newAmount, int oldAmount, int price) {
+    setState(() {
+      totalSum += (newAmount - oldAmount) * price;
+    });
   }
 
   Future<void> _testInsert(int id , int prid) async {
@@ -97,7 +116,7 @@ class _CartPageState extends State<CartPage> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
-                 
+                 double total = 0;  
                  List<Widget> cartWidgets = [];
 
                 for (var cartItem in snapshot.data!) {  
@@ -106,6 +125,8 @@ class _CartPageState extends State<CartPage> {
                   int amount = cartItem['amount'];
                   int productID = cartItem['product_id'];
 
+
+                  total += price * amount;
                   cartWidgets.add(
                     CartWidget(
                       title: title,
@@ -114,6 +135,13 @@ class _CartPageState extends State<CartPage> {
                       product_id: productID ,
                       amount: amount,
                       widgetState : this,
+                      onAmountChanged: (int newAmount) {
+                      setState(() {
+                        totalSum += (newAmount - amount) * price; 
+                         _updateTotal(newAmount, amount, price);
+                        cartItem['amount'] = newAmount; 
+                      });
+                    }
                     ),
                   );
                 }
@@ -153,7 +181,7 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ),
                       Text(
-                        "200.00 Da",
+                        totalSum.toString(),
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,

@@ -24,11 +24,6 @@ class CardScreen extends StatefulWidget {
 }
 
 class _CardScreenState extends State<CardScreen> {
-  String Provider_imagePath = Assets.images.providerImage;
-  String Provider_name = "Flower paradise Event";
-  String Provider_storePlace = "Baba hsen, Algiers";
-  String Provider_storeName = "Store";
-
   @override
   Widget build(BuildContext context) {
     Future<Map<String, dynamic>?> productInfo =
@@ -310,6 +305,7 @@ class _ProductCardState extends State<ProductCard> {
   }
 }
 
+  
 class Provider extends StatelessWidget {
   final Map providerInfo;
   final Map item;
@@ -319,14 +315,14 @@ class Provider extends StatelessWidget {
     required this.providerInfo,
     required this.item,
   });
-  Future<void> _testInsert(int id, int prid) async {
+  Future<void> _testInsert(int id, int prid, String name, int remote_id , int price ) async {
     Map<String, dynamic> testData = {
       'user_id': id,
       'product_id': prid,
-      'title': 'Test Product',
-      'remote_id': 123,
+      'title': name,
+      'remote_id': remote_id,
       'amount': 1,
-      'price': prid,
+      'price': price,
     };
     await DBUserCart.insertRecord(testData);
     // setState(() {});
@@ -338,8 +334,9 @@ class Provider extends StatelessWidget {
         providerInfo['brand_pic'] ?? Assets.images.providerImage;
     String Provider_name = providerInfo['store_name'] ?? "Bahdja telecom";
     String Provider_storePlace =
-        providerInfo['location'] ?? "Baba hsen, Algiers";
-    String Provider_storeName = "Store";
+        providerInfo['location'] ?? "Babaa hsen, Algiers";
+    String Provider_storeName = providerInfo['store_name'];
+    
     return Container(
       decoration: BoxDecoration(
         color: AppColor.main,
@@ -399,17 +396,22 @@ class Provider extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(27)),
                     child: Container(
+                      width: 27,
+                      height: 27,
                       decoration: BoxDecoration(
                         //border: border,
                         borderRadius: BorderRadius.circular(27),
                       ),
-                      child: Image.asset(
-                        Provider_imagePath,
-                        height: 47,
-                        width: 47,
-                        fit: BoxFit.cover,
-                        //color: color,
-                      ),
+                      child: Container(
+              decoration: BoxDecoration(
+                color: AppColor.main,
+                image: DecorationImage(
+                  image: NetworkImage(Provider_imagePath),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              alignment: Alignment.center,
+            )
                     ),
                   ),
                   Padding(
@@ -482,7 +484,9 @@ class Provider extends StatelessWidget {
                           horizontal: 5, vertical: 0),
                     ),
                     onPressed: () async {
-                      await _testInsert(1, item['id']);
+                      print("before test insert : ");
+                      await _testInsert(1, item['id'] , item['name'] , 123 , item['price'].toInt());
+                      print("after test insert : ");
                       Navigator.pop(context);
 
                       Navigator.push(
@@ -511,6 +515,7 @@ class Provider extends StatelessWidget {
       ),
     );
   }
+
 }
 
 class OtherProviders extends StatelessWidget {

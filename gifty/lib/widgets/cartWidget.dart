@@ -15,6 +15,8 @@ class CartWidget extends StatefulWidget {
   final int amount;
   final int user_id;
   final int product_id;
+  // final String store_name;
+  final Function(int) onAmountChanged;
   var widgetState ;
 
  
@@ -24,7 +26,9 @@ class CartWidget extends StatefulWidget {
     required this.amount,
     required this.user_id,
     required this.product_id,
-     required this.widgetState,
+    required this.onAmountChanged,
+    // required this.store_name,
+    required this.widgetState,
     Key? key,
   }) : super(key: key);
   
@@ -47,30 +51,49 @@ class _CartWidgetState extends State<CartWidget> {
     _currentAmount = widget.amount;
   }
 
-   void _incrementAmount(int user_id , int product_id , new_data) {
-        setState(() {
-          _currentAmount++;
-          newData['amount'] = _currentAmount;
-            DBUserCart.updateRecord(user_id, product_id, new_data);
-        });
-  }
-   void _decrementAmount(int user_id , int product_id , new_data) {
-        setState(() {
-          _currentAmount--;
-          newData['amount'] = _currentAmount;
-            DBUserCart.updateRecord(user_id, product_id, new_data);
-        });
-  }
-   
-       Map<String, dynamic> newData = {
-    'amount': 1, // Update the amount to 5
-    'price': 20, // Update the price to 20
-  };
+  //  void _incrementAmount(int user_id , int product_id , new_data) {
+  //       setState(() {
+  //         _currentAmount++;
+  //         newData['amount'] = _currentAmount;
+  //           DBUserCart.updateRecord(user_id, product_id, new_data);
+  //       });
+  // }
+  //  void _decrementAmount(int user_id , int product_id , new_data) {
+  //       setState(() {
+  //         _currentAmount--;
+  //         newData['amount'] = _currentAmount;
+  //           DBUserCart.updateRecord(user_id, product_id, new_data);
+  //       });
+  // }
+  void _incrementAmount(int user_id, int product_id, Map<String, dynamic> newData) {
+  setState(() {
+    _currentAmount++;
+    newData['amount'] = _currentAmount;
+    widget.onAmountChanged(_currentAmount);
+    DBUserCart.updateRecord(user_id, product_id, newData);
+  });
+}
 
+void _decrementAmount(int user_id, int product_id, Map<String, dynamic> newData) {
+  setState(() {
+    if (_currentAmount > 0) {
+      _currentAmount--;
+      newData['amount'] = _currentAmount;
+      widget.onAmountChanged(_currentAmount); 
+      DBUserCart.updateRecord(user_id, product_id, newData);
+    }
+  });
+}
 
   
   @override
   Widget build(BuildContext context) {
+       
+       Map<String, dynamic> newData = {
+      'amount': widget.amount , 
+      'price': 20,
+      };
+
     return Stack(
       children: <Widget>[
         Container(
@@ -104,7 +127,7 @@ class _CartWidgetState extends State<CartWidget> {
                         ),
                       
                         Text(
-                          widget.price.toString(),
+                          "Usatownmarket",
                           style:  TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -116,7 +139,7 @@ class _CartWidgetState extends State<CartWidget> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                "Size : US 7",
+                               widget.price.toString(),
                                
                               ),
                               

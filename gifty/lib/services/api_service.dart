@@ -336,7 +336,7 @@ class ApiService {
 
   Future<Map<String, dynamic>> fetchItemProvider(int provider_id) async {
   try {
-    final response = await http.get(Uri.parse('$baseUrl/api/get_item_provider/$provider_id'));
+    final response = await http.get(Uri.parse('$baseUrl/get_item_provider/$provider_id'));
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body);
       print("deeeeeeeee $decodedData");
