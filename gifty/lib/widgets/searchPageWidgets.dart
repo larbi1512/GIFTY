@@ -7,8 +7,9 @@ import '../controllers/add_item_controller.dart';
 class SearchWidget extends StatelessWidget {
   ScrollController scrollController = ScrollController();
   final String title;
+  final bool isSearch;
   final bool additional;
-  SearchWidget(this.title, this.additional, {super.key});
+  SearchWidget(this.title, this.additional, this.isSearch, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,62 +60,62 @@ class SearchWidget extends StatelessWidget {
                         switch (title) {
                           case 'Event type':
                             return <Widget>[
-                              Tag("Birthday", title),
-                              Tag("Anniversary", title),
-                              Tag("Holiday", title),
-                              Tag("Mother’s day", title),
-                              Tag("Special Event", title),
-                              Tag("Wedding", title),
-                              Tag("Graduation", title),
-                              Tag("Baby Shower", title),
-                              Tag("other", title),
+                              Tag("Birthday", title, isSearch),
+                              Tag("Anniversary", title, isSearch),
+                              Tag("Holiday", title, isSearch),
+                              Tag("Mother’s day", title, isSearch),
+                              Tag("Special Event", title, isSearch),
+                              Tag("Wedding", title, isSearch),
+                              Tag("Graduation", title, isSearch),
+                              Tag("Baby Shower", title, isSearch),
+                              Tag("other", title, isSearch),
                             ];
                           case 'Gift’s receiver':
                             return <Widget>[
-                              Tag("Male", title),
-                              Tag("Female", title),
-                              Tag("formal relative", title),
-                              Tag("friend", title),
-                              Tag("Mother", title),
-                              Tag("Father", title),
-                              Tag("sister", title),
-                              Tag("brother", title),
-                              Tag("son", title),
-                              Tag("doghter", title),
-                              Tag("other", title),
+                              Tag("Male", title, isSearch),
+                              Tag("Female", title, isSearch),
+                              Tag("formal relative", title, isSearch),
+                              Tag("friend", title, isSearch),
+                              Tag("Mother", title, isSearch),
+                              Tag("Father", title, isSearch),
+                              Tag("sister", title, isSearch),
+                              Tag("brother", title, isSearch),
+                              Tag("son", title, isSearch),
+                              Tag("doghter", title, isSearch),
+                              Tag("other", title, isSearch),
                             ];
                           case 'prefered color':
                             return <Widget>[
-                              Tag("dark", title),
-                              Tag("light", title),
-                              Tag("white", title),
-                              Tag("black", title),
-                              Tag("grey", title),
-                              Tag("pink", title),
-                              Tag("yellow", title),
-                              Tag("red", title),
-                              Tag("green", title),
-                              Tag("blue", title),
-                              Tag("other", title),
+                              Tag("dark", title, isSearch),
+                              Tag("light", title, isSearch),
+                              Tag("white", title, isSearch),
+                              Tag("black", title, isSearch),
+                              Tag("grey", title, isSearch),
+                              Tag("pink", title, isSearch),
+                              Tag("yellow", title, isSearch),
+                              Tag("red", title, isSearch),
+                              Tag("green", title, isSearch),
+                              Tag("blue", title, isSearch),
+                              Tag("other", title, isSearch),
                             ];
                           case 'Receiver’s age':
                             return <Widget>[
-                              Tag("younger than 5 yo", title),
-                              Tag("5-10", title),
-                              Tag("10-15", title),
-                              Tag("15-20", title),
-                              Tag("20-30", title),
-                              Tag("30-40", title),
-                              Tag("40-60", title),
-                              Tag("more than 60 yo", title),
+                              Tag("younger than 5 yo", title, isSearch),
+                              Tag("5-10", title, isSearch),
+                              Tag("10-15", title, isSearch),
+                              Tag("15-20", title, isSearch),
+                              Tag("20-30", title, isSearch),
+                              Tag("30-40", title, isSearch),
+                              Tag("40-60", title, isSearch),
+                              Tag("more than 60 yo", title, isSearch),
                             ];
                           default: //additional tags
                             return <Widget>[
-                              Tag("Handmade", title),
-                              Tag("Personalized", title),
-                              Tag("Eco-friendly", title),
-                              Tag("Organic", title),
-                              Tag("Gift Wrap Available", title),
+                              Tag("Handmade", title, isSearch),
+                              Tag("Personalized", title, isSearch),
+                              Tag("Eco-friendly", title, isSearch),
+                              Tag("Organic", title, isSearch),
+                              Tag("Gift Wrap Available", title, isSearch),
                             ];
                         }
                       }(),
@@ -131,9 +132,11 @@ class SearchWidget extends StatelessWidget {
 class Tag extends StatefulWidget {
   final String label;
   final String title;
+  final bool isSearch;
   static final AddItemController addController = Get.put(AddItemController());
 
-  const Tag(this.label, this.title, {Key? key}) : super(key: key);
+  const Tag(this.label, this.title, this.isSearch, {Key? key})
+      : super(key: key);
 
   @override
   _TagState createState() => _TagState();
@@ -169,11 +172,16 @@ class _TagState extends State<Tag> {
             print(" ${widget.title} ${widget.label} $isClicked");
             if (isClicked == true) {
               print(" clicked");
-              Tag.addController.doAddInTag(widget.title, widget.label);
+              Tag.addController
+                  .doAddInTag(widget.title, widget.label, widget.isSearch);
             } else {
               print(" not clicked");
-              Tag.addController.doRemoveInTag(widget.title, widget.label);
+              Tag.addController
+                  .doRemoveInTag(widget.title, widget.label, widget.isSearch);
             }
+            print("search ${widget.isSearch}");
+            print("tag of search ${Tag.addController.searchTags}");
+            print("tag of add ${Tag.addController.tags}");
           });
         },
         child: Text(

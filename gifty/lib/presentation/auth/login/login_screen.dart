@@ -3,6 +3,7 @@ import 'package:gifty/config/assets.config.dart';
 import 'package:gifty/widgets/background_image.dart';
 import '../../../config/colors.config.dart';
 import '../../../config/font.config.dart';
+import '../../../providers/id_provider.dart';
 import '../../../widgets/rounded_container.dart';
 import 'dart:convert';
 import 'dart:core';
@@ -10,26 +11,24 @@ import 'package:http/http.dart' as http;
 import '../../../models/index.dart';
 import '../../../constants/endpoints.dart';
 import '../../../providers/role_provider.dart';
-import 'package:provider/provider.dart'; 
-
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
-   @override
+  @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-    bool isLoading = false;
+  bool isLoading = false;
 
   Future<void> loginUser() async {
     setState(() {
       isLoading = true;
     });
-    
+
     final String email = emailController.text;
     final String password = passwordController.text;
 
@@ -52,51 +51,51 @@ class _LoginScreenState extends State<LoginScreen> {
       'password': password,
     };
 
-try {
-    final response = await http.post(
-      Uri.parse(api_endpoint_user_login),
-      body: data,
-    );
+    try {
+      final response = await http.post(
+        Uri.parse(api_endpoint_user_login),
+        body: data,
+      );
 
-     print('Response status code: ${response.statusCode}');
+      print('Response status code: ${response.statusCode}');
       print('Response body: ${response.body}');
 
-    if (response.statusCode == 200) {
-      // Successful login
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      print(responseData);
+      if (response.statusCode == 200) {
+        // Successful login
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        print(responseData);
 
-      String role = responseData['data']['role'];
-      Provider.of<RoleProvider>(context, listen: false).setRole(role);
-      // Navigate to the home screen or perform any other actions
-      Navigator.pushNamed(context, '/home');
-    } else {
-      // Handle errors
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      final String errorMessage = responseData['message'];
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(errorMessage),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-} catch (e) {
-  print('Error during login: $e');
+        String role = responseData['data']['role'];
+        int id = responseData['data']['user_id'];
+        Provider.of<RoleProvider>(context, listen: false).setRole(role);
+        Provider.of<IdProvider>(context, listen: false).setId(id);
+        // Navigate to the home screen or perform any other actions
+        Navigator.pushNamed(context, '/home');
+      } else {
+        // Handle errors
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        final String errorMessage = responseData['message'];
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error during login: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('An error occurred during login'),
           backgroundColor: Colors.red,
         ),
       );
-    }
-    finally {
-     setState(() {
-      isLoading = false;
-    });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -175,10 +174,10 @@ try {
                   child: Text('Login'),
                 ),
                 if (isLoading)
-        CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(AppColor.main),
-          backgroundColor: Colors.grey[300],
-        ),
+                  CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(AppColor.main),
+                    backgroundColor: Colors.grey[300],
+                  ),
                 TextButton(
                   onPressed: () {},
                   child: Text('Forgot Password?'),

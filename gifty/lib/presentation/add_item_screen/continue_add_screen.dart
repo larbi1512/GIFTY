@@ -25,13 +25,8 @@ class ContinueAddScreen extends StatefulWidget {
 
 class _ContinueAddScreenState extends State<ContinueAddScreen> {
   bool _loading = false;
-  final AddItemController controller = Get.put(AddItemController());
-  String selectedTag = '1';
+  // final AddItemController controller = Get.put(AddItemController());
   String iconPicture = Assets.images.iconPicture;
-  Map selectedTags = {
-    'Event type :': [1, 2]
-  };
-
   String iconDropdown = Assets.images.iconDropdown;
 
   @override
@@ -136,10 +131,10 @@ class _ContinueAddScreenState extends State<ContinueAddScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
                         children: [
-                          SearchWidget("Event type", false),
-                          SearchWidget("Gift’s receiver", false),
-                          SearchWidget("Receiver’s age", false),
-                          SearchWidget("Additional tags", true),
+                          SearchWidget("Event type", false, false),
+                          SearchWidget("Gift’s receiver", false, false),
+                          SearchWidget("Receiver’s age", false, false),
+                          SearchWidget("Additional tags", true, false),
                         ],
                       ),
                     ),

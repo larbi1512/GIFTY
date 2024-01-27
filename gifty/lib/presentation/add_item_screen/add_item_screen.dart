@@ -6,9 +6,11 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
 import '../../controllers/add_item_controller.dart';
+import '../../providers/id_provider.dart';
 import '../../widgets/bottomSheet.dart';
 import '../../widgets/searchPageWidgets.dart';
 import 'colors_input.dart';
@@ -512,7 +514,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   'name': _tx_name_controller.text,
                   'description': _tx_description_controller.text,
                   'price': _tx_price_controller.text,
-                  'provider_id': 1,
+                  'provider_id': Provider.of<IdProvider>(context).id,
                   'images': imagesItems,
                   'colors': addcontroller.colors
                 }),

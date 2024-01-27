@@ -147,10 +147,11 @@ class DBGift {
         gifts.price,
         gifts.category,
         product_color.color,
-        MAX(images.imagePath) as imagePath
+        MAX(images.imagePath) as imagePath,
+        MAX(images.type) as type
         FROM ${tableName}
-        LEFT JOIN images ON gifts.id = images.product_id
-        LEFT JOIN product_color ON gifts.id = product_color.product_id
+        LEFT JOIN images ON gifts.remote_id = images.product_id
+        LEFT JOIN product_color ON gifts.remote_id = product_color.product_id
         where LOWER(gifts.name) like '%${keyword.toLowerCase()}%' 
         OR LOWER(gifts.description) LIKE '%${keyword.toLowerCase()}%'
         OR LOWER(gifts.category) LIKE '%${keyword.toLowerCase()}%'
@@ -165,6 +166,7 @@ class DBGift {
       data[i]['isFavorite'] =
           await DBUserFavorits.isInUserFavorites(res[i]['id'], 1);
     }
+    print("data in get by keyword: $data");
     return data;
   }
 
