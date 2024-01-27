@@ -63,6 +63,98 @@ class ApiService {
     }
   }
 
+  Future<List<dynamic>> advanced_search(
+      Map<dynamic, dynamic> searchTags) async {
+    var tags = [];
+
+    if (searchTags != null && searchTags.isNotEmpty) {
+      searchTags.forEach((tagName, valuesList) {
+        print('aaaaaaaaaaaa tag: ($tagName): ($valuesList)');
+        if (valuesList != null && valuesList.isNotEmpty) {
+          // get gift_id from gift_tags where tag_name = tagName and tag_value in valuesList that have
+          for (var value in valuesList) {
+            tags.add({'tag_name': tagName, 'tag_value': value});
+          }
+        }
+      });
+    }
+
+    print("\naaaaaaaaaaaaaaaaaaaa80");
+    if (tags.isNotEmpty) {
+      // final searchResealt = await http.post(
+      //   Uri.parse('$baseUrl/gifts.getSearchResult'),
+      //   body: json.encode(tags),
+      //   headers: {'Content-Type': 'application/json'},
+      // );
+      // print('ssssss searchResealt: $searchResealt');
+      // if (searchResealt.statusCode == 200) {
+      //   // If the server returns a 200 OK response, parse the data
+      //   print(
+      //       'ssssss decoded result: ${json.decode(searchResealt.body)['gifts']}');
+      //   return json.decode(searchResealt.body)['gifts'] ??
+      //       [
+      //         {
+      //           'id': 68,
+      //           'name': 'gidt dok',
+      //           'remote_id': 34,
+      //           'description': 'desc dok',
+      //           'price': 234.0,
+      //           'category': 'gifts',
+      //           'imagePath': null,
+      //           'type': null,
+      //           'isFavorite': false
+      //         }
+      //       ] as List<Map<String, dynamic>>;
+      // } else {
+      //   // If the server did not return a 200 OK response,
+      //   // throw an exception.
+      //   throw Exception('Failed to load data');
+      // }
+
+      final allGifts = await fetchGifts();
+
+      print('vvvvvvvvv allGifts: $allGifts');
+      var resultGifts = [];
+      for (var gift in allGifts) {
+        gift['count'] = 0;
+        print('vvvvvvvvv gift: $gift');
+        if (gift['tags'].isNotEmpty) {
+          for (var tag in gift['tags']) {
+            print('vvvvvvvvv tag: $tag');
+            print('vvvvvvvvv tags: $tags');
+            // if (tags.contains(
+            //     {'tag_name': tag['tag_name'], 'tag_value': tag['tag_value']}))
+            //     searchTags.forEach((tagName, valuesList)
+            for (var mytag in tags) {
+              print(
+                  'vvvvvvvvv tags.length: ${tags.length} tags: ${mytag['tag_name']}   ${mytag['tag_value']}');
+              print('vvvvvvvvv tag: ${tag['tag_name']}   ${tag['tag_value']}');
+
+              if (tag['tag_name'] == mytag['tag_name'] &&
+                  tag['tag_value'] == mytag['tag_value']) {
+                gift['count'] = gift['count'] + 1;
+                if (gift['count'] >= tags.length) {
+                  print('vvvvvvvvv contains gift count ${gift['count']}');
+                  gift['imagePath'] = gift['images'][0]['imagepath'];
+                  gift['type'] = gift['images'][0]['type'];
+                  gift['remote_id'] = gift['id'];
+                  resultGifts.add(gift);
+                  print('vvvvvvvvv resultGifts: $resultGifts');
+                }
+              }
+              ;
+            }
+          }
+        }
+      }
+      print('vvvvvvvvv resultGifts: $resultGifts');
+      return resultGifts;
+    } else {
+      // If no result
+      return [];
+    }
+  }
+
   Future<Map<String, dynamic>> sendData(Map<String, dynamic> data) async {
     final response = await http.post(
       Uri.parse('$baseUrl/api/data'),
@@ -79,8 +171,10 @@ class ApiService {
 
   Future<List<dynamic>> fetchGifts() async {
     final response = await http.get(Uri.parse('$baseUrl/gifts.get'));
+    print("vvvvvvvvvvvvv${response.statusCode}");
 
     if (response.statusCode == 200) {
+      print("uuuuuuuuuuuuuuuuuuuuuuu${json.decode(response.body)['gifts']}");
       return json.decode(response.body)['gifts'];
     } else {
       throw Exception('Failed to load gifts');

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:gifty/constants/endpoints.dart';
 import '../../config/assets.config.dart';
 import '../../config/colors.config.dart';
 import '../../config/font.config.dart';
+import '../../databases/DBGift.dart';
+import '../../services/api_service.dart';
 import '../../widgets/background_image_no_logo.dart';
 import '../../widgets/white_blurry_background.dart';
 import '../../widgets/searchPageWidgets.dart';
+import '../home/SeeMore.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -17,6 +21,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     var mediaQueryData = MediaQuery.of(context);
+    final ApiService apiService = ApiService(api_endpoint);
     return SafeArea(
         child: Scaffold(
             body: BackgroundImageNoLogo(
@@ -66,12 +71,16 @@ class _SearchPageState extends State<SearchPage> {
                                     child: SingleChildScrollView(
                                       child: Column(
                                         children: [
-                                          SearchWidget("Event type", false),
                                           SearchWidget(
-                                              "Gift’s receiver", false),
-                                          SearchWidget("prefered color", false),
-                                          SearchWidget("Receiver’s age", false),
-                                          SearchWidget("Additional tags", true),
+                                              "Event type", false, true),
+                                          SearchWidget(
+                                              "Gift’s receiver", false, true),
+                                          SearchWidget(
+                                              "prefered color", false, true),
+                                          SearchWidget(
+                                              "Receiver’s age", false, true),
+                                          SearchWidget(
+                                              "Additional tags", true, true),
                                         ],
                                       ),
                                     ),
@@ -95,7 +104,22 @@ class _SearchPageState extends State<SearchPage> {
                                                 BorderRadius.circular(30),
                                           ),
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Map<dynamic, dynamic> tags = Tag
+                                              .addController.searchTags.value;
+                                          Future<List<dynamic>> search_result =
+                                              apiService.advanced_search(tags);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  FutureBuilder(
+                                                future: search_result,
+                                                builder: _build_search_result,
+                                              ),
+                                            ),
+                                          );
+                                        },
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -126,5 +150,39 @@ class _SearchPageState extends State<SearchPage> {
                                     ),
                                   ),
                                 ])))))));
+  }
+
+  Widget _build_search_result(BuildContext context, AsyncSnapshot snapshot) {
+    // _searchController.clear();
+    if (snapshot.hasData) {
+      var search_result = snapshot.data;
+      print('wwwwwwwwwww search_result $search_result');
+      return SeeMore(
+        title: "results",
+        productsList: search_result,
+      );
+    } else if (snapshot.hasError) {
+      return Text("${snapshot.error}");
+    }
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 150),
+            CircularProgressIndicator(),
+            SizedBox(height: 25),
+            Text(
+              "Please wait",
+              style: AppTextStyles.interSubitle.copyWith(
+                color: Color(0X7F263238),
+                fontSize: 15,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
