@@ -107,6 +107,8 @@ class _SearchPageState extends State<SearchPage> {
                                               .addController.searchTags.value;
                                           Future<List<dynamic>> search_result =
                                               apiService.advanced_search(tags);
+                                          print(
+                                              'aaaaaaaaaaaa search_result: $search_result');
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(

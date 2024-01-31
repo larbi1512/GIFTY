@@ -13,7 +13,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../../../constants/endpoints.dart';
 
-
 class signupProvider extends StatefulWidget {
   @override
   _SignupProviderState createState() => _SignupProviderState();
@@ -27,8 +26,7 @@ class _SignupProviderState extends State<signupProvider> {
   final TextEditingController tagsController = TextEditingController();
 
   bool isLoading = false;
-  
-  
+
   Future<void> signupProviderPart1(String providerId) async {
     setState(() {
       isLoading = true;
@@ -40,7 +38,7 @@ class _SignupProviderState extends State<signupProvider> {
     final String selectedCategory = this.selectedCategory;
     final String tags = tagsController.text;
 
-     final Map<String, String> data = {
+    final Map<String, String> data = {
       'provider_id': providerId,
       'username': username,
       'wilaya': wilaya,
@@ -50,14 +48,16 @@ class _SignupProviderState extends State<signupProvider> {
     };
     try {
       final response = await http.post(
-       Uri.parse(api_endpoint_provider_signup_1,),
+        Uri.parse(
+          api_endpoint_provider_signup_1,
+        ),
         body: data,
       );
 
       print('Response status code: ${response.statusCode}');
       print('Response body: ${response.body}');
-    
-     if (response.statusCode == 200) {
+
+      if (response.statusCode == 200) {
         // Successful signup part 1
         final Map<String, dynamic> responseData = json.decode(response.body);
         print(responseData);
@@ -91,8 +91,8 @@ class _SignupProviderState extends State<signupProvider> {
 
   @override
   Widget build(BuildContext context) {
-      List<String> categories = [
-        "Categories",
+    List<String> categories = [
+      "Categories",
       'Beauty',
       'Accessories',
       'Home',
@@ -101,7 +101,7 @@ class _SignupProviderState extends State<signupProvider> {
       'Clothings',
       'Handicrafts',
     ];
-return Scaffold(
+    return Scaffold(
       body: BackgroundImage(
         imagePathTopRight: Assets.images.flowersUpper,
         imagePathBottomLeft: Assets.images.flowersLower,
@@ -135,12 +135,23 @@ return Scaffold(
                       ),
                     ),
                     SizedBox(height: 30),
-                    WilayaField(controller: wilayaController,),
+                    WilayaField(
+                      controller: wilayaController,
+                    ),
                     SizedBox(height: 10),
-                    PhoneNumberField(controller: phoneNumberController,),
-                    SizedBox(height: 10,),
-                    UsernameField(hintText: "Store name", controller: usernameController,),
-                    SizedBox(height: 10,),
+                    PhoneNumberField(
+                      controller: phoneNumberController,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    UsernameField(
+                      hintText: "Store name",
+                      controller: usernameController,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     CategoryDropdown(
                       categories: categories,
                       selectedCategory: selectedCategory,
@@ -152,7 +163,7 @@ return Scaffold(
                     ),
                     TagsInput(),
                     SizedBox(height: 30),
-                     ElevatedButton(
+                    ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: AppColor.mainLighter,
                         onPrimary: Colors.white,
@@ -164,7 +175,10 @@ return Scaffold(
                       onPressed: () {
                         isLoading
                             ? null
-                            : signupProviderPart1(ModalRoute.of(context)!.settings.arguments.toString());
+                            : signupProviderPart1(ModalRoute.of(context)!
+                                .settings
+                                .arguments
+                                .toString());
                       },
                       child: Text('Sign up'),
                     ),
@@ -177,8 +191,7 @@ return Scaffold(
             ),
           ],
         ),
-          ),
-                    );
-                    
-                      }
+      ),
+    );
+  }
 }
