@@ -57,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
         body: data,
       );
 
+      print('data: $data');
       print('Response status code: ${response.statusCode}');
       print('Response body: ${response.body}');
 

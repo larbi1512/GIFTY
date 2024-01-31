@@ -12,18 +12,17 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class signupUser extends StatefulWidget {
-   @override
+  @override
   _SignupUserState createState() => _SignupUserState();
 }
+
 class _SignupUserState extends State<signupUser> {
-  
   final TextEditingController nameController = TextEditingController();
   final TextEditingController surnameController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController wilayaController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
-bool isLoading = false;
-
+  bool isLoading = false;
 
   Future<void> signupUserPart1(String userId) async {
     setState(() {
@@ -36,7 +35,6 @@ bool isLoading = false;
     final String wilaya = wilayaController.text;
     final String phoneNumber = phoneNumberController.text;
 
-    
     final Map<String, String> data = {
       'user_id': userId,
       'name': name,
@@ -48,7 +46,9 @@ bool isLoading = false;
 
     try {
       final response = await http.post(
-       Uri.parse(api_endpoint_user_signup_1,),
+        Uri.parse(
+          api_endpoint_user_signup_1,
+        ),
         body: data,
       );
 
@@ -86,6 +86,7 @@ bool isLoading = false;
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,7 +128,9 @@ bool isLoading = false;
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width * .35,
-                          padding: EdgeInsets.only(left: 20, ),
+                          padding: EdgeInsets.only(
+                            left: 20,
+                          ),
                           child: TextField(
                             controller: nameController,
                             decoration: InputDecoration(
@@ -145,13 +148,12 @@ bool isLoading = false;
                               contentPadding: EdgeInsets.all(10),
                             ),
                           ),
-                          
                         ),
                         Container(
                           width: MediaQuery.of(context).size.width * .35,
                           padding: EdgeInsets.only(
                             right: 10,
-                            left : 5,
+                            left: 5,
                           ),
                           child: TextField(
                             controller: surnameController,
@@ -173,19 +175,29 @@ bool isLoading = false;
                         ),
                       ],
                     ),
-                    SizedBox(height: 10,),
-                     UsernameField(hintText: "enter your username",
-                      controller: usernameController,),
-                      SizedBox(height: 10,),
-                      WilayaField(
-                        controller: wilayaController,
-                      ),
-                      SizedBox(height: 10,),
-                      PhoneNumberField(
-                        controller: phoneNumberController,
-                      ),
-                      SizedBox(height: 30,),
-                      ElevatedButton(
+                    SizedBox(
+                      height: 10,
+                    ),
+                    UsernameField(
+                      hintText: "enter your username",
+                      controller: usernameController,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    WilayaField(
+                      controller: wilayaController,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    PhoneNumberField(
+                      controller: phoneNumberController,
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: AppColor.mainLighter,
                         onPrimary: Colors.white,
@@ -195,13 +207,18 @@ bool isLoading = false;
                         ),
                       ),
                       onPressed: () {
-                       isLoading ? null : signupUserPart1(ModalRoute.of(context)!.settings.arguments.toString());
-
+                        isLoading
+                            ? null
+                            : signupUserPart1(ModalRoute.of(context)!
+                                .settings
+                                .arguments
+                                .toString());
                       },
                       child: Text('Sign up'),
                     ),
-                    SizedBox(height: 20,),
-
+                    SizedBox(
+                      height: 20,
+                    ),
                   ],
                 ),
               ),

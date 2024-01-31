@@ -132,17 +132,25 @@ class ApiService {
 
               if (tag['tag_name'] == mytag['tag_name'] &&
                   tag['tag_value'] == mytag['tag_value']) {
+                print('vvvvvvvvv0 contains gift count ${gift['count']}');
                 gift['count'] = gift['count'] + 1;
+                print(
+                    'vvvvvvvvv1 contains gift count ${gift['count']}  ${tags.length}');
                 if (gift['count'] >= tags.length || gift['count'] >= 3) {
+                  print('vvvvvvvvv resultGifts2: $resultGifts');
                   print('vvvvvvvvv contains gift count ${gift['count']}');
+                  print('vvvvvvvvv gift[images] ${gift['images']}');
                   gift['imagePath'] = gift['images'][0]['imagepath'];
                   gift['type'] = gift['images'][0]['type'];
                   gift['remote_id'] = gift['id'];
                   // resultGifts.add(gift);
+                  print('vvvvvvvvv gift 2 ${gift}');
 
                   bool giftAlreadyExists = resultGifts.any((existingGift) =>
                       existingGift['id'] ==
                       gift['id']); // Replace 'id' with the actual identifier
+
+                  print('vvvvvvvvv giftAlreadyExists ${giftAlreadyExists}');
 
                   if (!giftAlreadyExists) {
                     resultGifts.add(gift);
