@@ -5,6 +5,8 @@ import 'package:gifty/widgets/profile_image_setup.dart';
 import '../../../config/assets.config.dart';
 import '../../../config/colors.config.dart';
 import '../../../widgets/background_image.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class SignupUserFinal extends StatelessWidget {
   const SignupUserFinal({super.key});
@@ -28,14 +30,21 @@ class SignupUserFinal extends StatelessWidget {
                   children: [
                     Container(
                       child: Text(
-                        'hello, soumia',
+                        'hello, ',
                         style: AppTextStyles.Hello,
                       ),
                       alignment: Alignment.topLeft,
                     ),
                     SizedBox(height: 40),
                     Center(
-                      child: ProfileImageSetup(hintText: "Please upload a profile pic"),
+                      child: ProfileImageSetup(
+                        hintText: "Please upload a profile pic",
+                        userId: ModalRoute.of(context)!
+                            .settings
+                            .arguments
+                            .toString(),
+                        providerId: "",
+                      ),
                     ),
                   ],
                 ),
@@ -50,7 +59,7 @@ class SignupUserFinal extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ElevatedButton(
-                         style: ElevatedButton.styleFrom(
+                        style: ElevatedButton.styleFrom(
                           primary: AppColor.peachLighter,
                           onPrimary: AppColor.mainLighter,
                           shape: RoundedRectangleBorder(
@@ -63,7 +72,7 @@ class SignupUserFinal extends StatelessWidget {
                         child: Text('Skip'),
                       ),
                       ElevatedButton(
-                         style: ElevatedButton.styleFrom(
+                        style: ElevatedButton.styleFrom(
                           primary: AppColor.mainLighter,
                           onPrimary: Colors.white,
                           shape: RoundedRectangleBorder(

@@ -11,17 +11,17 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class signup1 extends StatefulWidget {
-   @override
+  @override
   _Signup1State createState() => _Signup1State();
 }
-  
-  class _Signup1State extends State<signup1> {
-  bool isUserSelected = true;
-   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
-  bool isLoading = false;
 
+class _Signup1State extends State<signup1> {
+  bool isUserSelected = true;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+  bool isLoading = false;
 
   void toggleCallback(bool selected) {
     setState(() {
@@ -29,8 +29,8 @@ class signup1 extends StatefulWidget {
     });
   }
 
-   Future<void> signup() async {
-     setState(() {
+  Future<void> signup() async {
+    setState(() {
       isLoading = true;
     });
     final String email = emailController.text;
@@ -67,9 +67,10 @@ class signup1 extends StatefulWidget {
 
     // Choose the appropriate signup endpoint based on user or provider
     final String signupEndpoint = isUserSelected
-        ? api_endpoint_user_signup: api_endpoint_provider_signup;
+        ? api_endpoint_user_signup
+        : api_endpoint_provider_signup;
 
-     try {
+    try {
       final response = await http.post(
         Uri.parse(signupEndpoint),
         body: {
@@ -78,7 +79,7 @@ class signup1 extends StatefulWidget {
           'confirm_password': confirmPassword,
         },
       );
-  print('Signup Response status code: ${response.statusCode}');
+      print('Signup Response status code: ${response.statusCode}');
       print('Signup Response body: ${response.body}');
 
       if (response.statusCode == 200) {
@@ -90,9 +91,11 @@ class signup1 extends StatefulWidget {
         print("Provider ID is: $providerId");
 
         // Navigate to the next screen or perform any other actions
-        Navigator.pushNamed(context,   isUserSelected ? '/signup_user': '/signup_provider',
-            arguments: {userId, providerId});
-
+        Navigator.pushNamed(
+          context,
+          isUserSelected ? '/signup_user' : '/signup_provider',
+          arguments: isUserSelected ? userId : providerId,
+        );
       } else {
         // Handle signup errors
         final Map<String, dynamic> responseData = json.decode(response.body);
@@ -104,7 +107,7 @@ class signup1 extends StatefulWidget {
           ),
         );
       }
-    } catch (e,stack) {
+    } catch (e, stack) {
       print('Error during signup: $e $stack');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -112,13 +115,13 @@ class signup1 extends StatefulWidget {
           backgroundColor: Colors.red,
         ),
       );
-    }
-    finally {
+    } finally {
       setState(() {
         isLoading = false;
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,158 +132,156 @@ class signup1 extends StatefulWidget {
         child: Stack(
           children: [
             SingleChildScrollView(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * .25, left: MediaQuery.of(context).size.width * .08),
-                child: RoundedContainer(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(height: 10),
-                      Container(
-                        alignment: Alignment.topLeft,
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text(
-                          'Sign Up',
-                          style: AppTextStyles.loginText,
-                        ),
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * .25,
+                  left: MediaQuery.of(context).size.width * .08),
+              child: RoundedContainer(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 10),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      padding: EdgeInsets.only(left: 20),
+                      child: Text(
+                        'Sign Up',
+                        style: AppTextStyles.loginText,
                       ),
-                      SizedBox(height: 20),
-                      Container(
-                        alignment: Alignment.topLeft,
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text(
-                          'join to find your favorite flowers and gifts',
-                          style: AppTextStyles.text,
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      ToggleButton(
-                        onToggle: toggleCallback,
-                      ),
-                      SizedBox(height: 5),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: TextField(
-                          controller: emailController,
-                          decoration: InputDecoration(
-                            prefixIcon:
-                                Icon(Icons.email_rounded, color: AppColor.main),
-                            fillColor: Colors.white,
-                            filled: true,
-                            hintText: 'Email',
-                            border: const OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColor.main),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(25)),
-                            ),
-                            isDense: true,
-                            contentPadding: EdgeInsets.all(8),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: TextField(
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            prefixIcon:
-                                Icon(Icons.lock_rounded, color: AppColor.main),
-                            hintText: 'Password',
-                            suffixIcon: IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.visibility_off_rounded),
-                            ),
-                            border: const OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColor.main),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(25)),
-                            ),
-                            isDense: true,
-                            contentPadding: EdgeInsets.all(8),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: TextField(
-                          controller: confirmPasswordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            prefixIcon:
-                                Icon(Icons.lock_rounded, color: AppColor.main),
-                            hintText: 'Confirm Password',
-                            suffixIcon: IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.visibility_off_rounded),
-                            ),
-                            border: const OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColor.main),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(25)),
-                            ),
-                            isDense: true,
-                            contentPadding: EdgeInsets.all(8),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: AppColor.mainLighter,
-                          onPrimary: Colors.white,
-                          minimumSize: Size(250, 40),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        onPressed: (){
-                          isLoading ? null : signup();
-                        },
-                        child: Text('Next'),
-                      ),
-                    if (isLoading)
-                       CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(AppColor.main),
-                      backgroundColor: Colors.grey[300],
                     ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/login');
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Already have an account? ',
-                              style: AppTextStyles.loginText2,
-                            ),
-                            Text(
-                              'Login here',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: AppColor.main,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ],
+                    SizedBox(height: 20),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      padding: EdgeInsets.only(left: 20),
+                      child: Text(
+                        'join to find your favorite flowers and gifts',
+                        style: AppTextStyles.text,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    ToggleButton(
+                      onToggle: toggleCallback,
+                    ),
+                    SizedBox(height: 5),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: TextField(
+                        controller: emailController,
+                        decoration: InputDecoration(
+                          prefixIcon:
+                              Icon(Icons.email_rounded, color: AppColor.main),
+                          fillColor: Colors.white,
+                          filled: true,
+                          hintText: 'Email',
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.main),
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                          ),
+                          isDense: true,
+                          contentPadding: EdgeInsets.all(8),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: TextField(
+                        controller: passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          filled: true,
+                          prefixIcon:
+                              Icon(Icons.lock_rounded, color: AppColor.main),
+                          hintText: 'Password',
+                          suffixIcon: IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.visibility_off_rounded),
+                          ),
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.main),
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                          ),
+                          isDense: true,
+                          contentPadding: EdgeInsets.all(8),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: TextField(
+                        controller: confirmPasswordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          filled: true,
+                          prefixIcon:
+                              Icon(Icons.lock_rounded, color: AppColor.main),
+                          hintText: 'Confirm Password',
+                          suffixIcon: IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.visibility_off_rounded),
+                          ),
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.main),
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                          ),
+                          isDense: true,
+                          contentPadding: EdgeInsets.all(8),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColor.mainLighter,
+                        onPrimary: Colors.white,
+                        minimumSize: Size(250, 40),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      onPressed: () {
+                        isLoading ? null : signup();
+                      },
+                      child: Text('Next'),
+                    ),
+                    if (isLoading)
+                      CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(AppColor.main),
+                        backgroundColor: Colors.grey[300],
+                      ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/login');
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Already have an account? ',
+                            style: AppTextStyles.loginText2,
+                          ),
+                          Text(
+                            'Login here',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: AppColor.main,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            
+            ),
           ],
         ),
       ),
     );
   }
-  
 }

@@ -5,7 +5,7 @@ class Socialsfield extends StatelessWidget {
   final IconData prefixIcon;
   final String hintText;
 
-  Socialsfield({required this.prefixIcon, required this.hintText});
+  Socialsfield({required this.prefixIcon, required this.hintText, required Null Function(dynamic value) onChanged});
 
   @override
   Widget build(BuildContext context) {

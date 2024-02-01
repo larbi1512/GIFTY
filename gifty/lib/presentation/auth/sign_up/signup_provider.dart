@@ -5,7 +5,6 @@ import 'package:gifty/widgets/fields/phone_number_field.dart';
 import 'package:gifty/widgets/fields/username_field.dart';
 import 'package:gifty/widgets/fields/wilaya_field.dart';
 import '../../../config/assets.config.dart';
-import '../../../widgets/fields/TagsInput.dart';
 import '../../../widgets/background_image.dart';
 import '../../../widgets/fields/categoryDropdown.dart';
 import '../../../widgets/rounded_container.dart';
@@ -20,10 +19,9 @@ class signupProvider extends StatefulWidget {
 
 class _SignupProviderState extends State<signupProvider> {
   String selectedCategory = 'Categories';
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController wilayaController = TextEditingController();
+  final TextEditingController storenameController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
-  final TextEditingController tagsController = TextEditingController();
 
   bool isLoading = false;
 
@@ -32,19 +30,17 @@ class _SignupProviderState extends State<signupProvider> {
       isLoading = true;
     });
 
-    final String username = usernameController.text;
-    final String wilaya = wilayaController.text;
+    final String storename = storenameController.text;
+    final String location = locationController.text;
     final String phoneNumber = phoneNumberController.text;
     final String selectedCategory = this.selectedCategory;
-    final String tags = tagsController.text;
 
     final Map<String, String> data = {
       'provider_id': providerId,
-      'username': username,
-      'wilaya': wilaya,
+      'store_name': storename,
+      'location': location,
       'phone_number': phoneNumber,
       'category': selectedCategory,
-      'tags': tags,
     };
     try {
       final response = await http.post(
@@ -62,7 +58,8 @@ class _SignupProviderState extends State<signupProvider> {
         final Map<String, dynamic> responseData = json.decode(response.body);
         print(responseData);
         // Navigate to the next screen or perform any other actions
-        Navigator.pushReplacementNamed(context, '/finish_signup_provider');
+        Navigator.pushReplacementNamed(context, '/finish_signup_provider',
+            arguments: providerId);
       } else {
         // Handle errors
         final Map<String, dynamic> responseData = json.decode(response.body);
@@ -74,8 +71,8 @@ class _SignupProviderState extends State<signupProvider> {
           ),
         );
       }
-    } catch (e) {
-      print('Error during signup part 1: $e');
+    } catch (e, stack) {
+      print('Error during signup part 1: $e $stack');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('An error occurred during signup part 1'),
@@ -136,7 +133,7 @@ class _SignupProviderState extends State<signupProvider> {
                     ),
                     SizedBox(height: 30),
                     WilayaField(
-                      controller: wilayaController,
+                      controller: locationController,
                     ),
                     SizedBox(height: 10),
                     PhoneNumberField(
@@ -147,7 +144,7 @@ class _SignupProviderState extends State<signupProvider> {
                     ),
                     UsernameField(
                       hintText: "Store name",
-                      controller: usernameController,
+                      controller: storenameController,
                     ),
                     SizedBox(
                       height: 10,
@@ -161,7 +158,6 @@ class _SignupProviderState extends State<signupProvider> {
                         });
                       },
                     ),
-                    TagsInput(),
                     SizedBox(height: 30),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -182,6 +178,12 @@ class _SignupProviderState extends State<signupProvider> {
                       },
                       child: Text('Sign up'),
                     ),
+                    if (isLoading)
+                      CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(AppColor.main),
+                        backgroundColor: Colors.grey[300],
+                      ),
                     SizedBox(
                       height: 20,
                     ),
