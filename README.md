@@ -9,4 +9,9 @@ This mobile application, built with Flutter, aims to seamlessly connect gift and
 - Flutter: For cross-platform mobile development with native-like performance.
 - Supabase and Flask: For backend services, authentication, and real-time database.
 
+## Contributors:
+- [Larbi SAIDCHIKH](https://github.com/larbi1512)
+- [Sumia BOUAOUINA](https://github.com/Su-mia)
+- [Soumia BOUYAHIAOUI](https://github.com/Soumia-Bouyh)
+
   
